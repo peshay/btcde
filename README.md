@@ -6,7 +6,7 @@ Requires: requests
 
 ## Install btcde.py
 
-You can install the btcde module via pip
+You can (not yet) install the btcde module via pip
 
     pip install btcde
 
