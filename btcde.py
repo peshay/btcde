@@ -17,7 +17,11 @@ class Connection:
         self.api_secret = api_secret
 
 # Bitcoin.de API URI
-uri = 'https://api.bitcoin.de/v1/orders'
+apihost = 'https://api.bitcoin.de'
+apiversion = 'v1'
+orderuri = apihost + '/' + apiversion + '/' + 'orders'
+tradeuri = apihost + '/' + apiversion + '/' + 'trades'
+accounturi = apihost + '/' + apiversion + '/' + 'account'
 # set initial nonce
 nonce = int(time.time())
 # disable unsecure SSL warning
@@ -43,47 +47,8 @@ def HandleAPIErrors(r):
         return True
 
 
-def getQuery(conn, params):
+def APIConnect(conn, method, params, uri=orderuri):
     """Transform Parameters to URL"""
-    global uri
-    global nonce
-    # set header
-    header = {'content-type': 'application/json; charset=utf-8'}
-    encoded_string = ''
-    for key, value in sorted(params.iteritems()):
-        encoded_string += str(key) + '=' + str(value) + '&'
-    encoded_string = encoded_string[:-1]
-    url = uri + '?' + encoded_string
-    md5_encoded_query_string = hashlib.md5("").hexdigest()
-    # raise nonce before using
-    nonce += 1
-    # build the signature
-    hmac_data = 'GET' + '#' \
-                + url + '#' + conn.api_key \
-                + '#' + str(nonce) + '#' + md5_encoded_query_string
-    hmac_signed = hmac.new(conn.api_secret,
-                           digestmod=hashlib.sha256, msg=hmac_data).hexdigest()
-    # set values for header
-    header.update({'X-API-KEY': conn.api_key,
-                   'X-API-NONCE': nonce,
-                   'X-API-SIGNATURE': hmac_signed})
-    # try to connect and handle errors
-    try:
-        r = requests.get(url, headers=(header), stream=True, verify=False)
-        # Handle API Errors
-        if HandleAPIErrors(r):
-            # get results
-            result = r.json()
-        else:
-            result = {}
-    except requests.exceptions.RequestException as e:
-        HandleRequestsException(e)
-    return result
-
-
-def postQuery(conn, params):
-    """Transform Parameters to URL"""
-    global uri
     global nonce
     # set header
     header = {'content-type': 'application/json; charset=utf-8'}
@@ -92,17 +57,32 @@ def postQuery(conn, params):
         encoded_string += str(key) + '=' + str(value) + '&'
     encoded_string = encoded_string[:-1]
     print (encoded_string)
-    url = uri + '?' + encoded_string
+    url = orderuri + '?' + encoded_string
     print (url)
-    md5_encoded_query_string = hashlib.md5(encoded_string).hexdigest()
-    print (md5_encoded_query_string)
     # raise nonce before using
     nonce += 1
     print (nonce)
-    # build the signature
-    hmac_data = 'POST' + '#' \
-                + uri + '#' + conn.api_key \
-                + '#' + str(nonce) + '#' + md5_encoded_query_string
+    if method == 'GET':
+        md5_encoded_query_string = hashlib.md5("").hexdigest()
+        # build the signature
+        hmac_data = method + '#' + \
+            url + '#' + conn.api_key + \
+            '#' + str(nonce) + '#' + md5_encoded_query_string
+    elif method == 'POST':
+        md5_encoded_query_string = hashlib.md5(encoded_string).hexdigest()
+        # build the signature
+        hmac_data = method + '#' + \
+            orderuri + '#' + conn.api_key + \
+            '#' + str(nonce) + '#' + md5_encoded_query_string
+    elif method == 'DELETE':
+        md5_encoded_query_string = hashlib.md5(encoded_string).hexdigest()
+        # build the signature
+        hmac_data = method + '#' + \
+            orderuri + '#' + conn.api_key + \
+            '#' + str(nonce) + '#' + md5_encoded_query_string
+    else:
+        print ('Error')
+    print (md5_encoded_query_string)
     print (hmac_data)
     hmac_signed = hmac.new(conn.api_secret,
                            digestmod=hashlib.sha256, msg=hmac_data).hexdigest()
@@ -112,13 +92,17 @@ def postQuery(conn, params):
                    'X-API-NONCE': nonce,
                    'X-API-SIGNATURE': hmac_signed})
     print (header)
-    # transform params to json
+    # try to connect and handle errors
     DATA = json.dumps(params)
     print (DATA)
-    # try to connect and handle errors
     try:
-        r = requests.post(url, data=DATA, headers=(header),
-                          stream=True, verify=False)
+        if method == 'GET':
+            r = requests.get(url, headers=(header), stream=True, verify=False)
+        elif method == 'POST':
+            r = requests.post(url, headers=(header), stream=True, verify=False)
+        elif method == 'DELETE':
+            r = requests.delete(url, headers=(header), stream=True,
+                                verify=False)
         # Handle API Errors
         if HandleAPIErrors(r):
             # get results
@@ -128,3 +112,93 @@ def postQuery(conn, params):
     except requests.exceptions.RequestException as e:
         HandleRequestsException(e)
     return result
+
+
+def showOrderbook(conn, OrderType, **args):
+    """Search Orderbook for offers."""
+    # Build parameters
+    if OrderType == 'buy' or OrderType == 'sell':
+        params = {'type': OrderType}
+    else:
+        print ('problem')
+    params.update(args)
+    return APIConnect(conn, 'GET', params)
+
+
+def createOrder(conn, OrderType, max_amount, price, **args):
+    """Create a new Order."""
+    # Build parameters
+    params = {'type': OrderType, 'max_amount': max_amount, 'price': price}
+    params.update(args)
+    return APIConnect(conn, 'POST', params)
+
+
+def deleteOrder(conn, order_id):
+    """Delete an Order."""
+    newuri = orderuri + ":" + order_id
+    return APIConnect(conn, 'DELETE', order_id, newuri)
+
+
+def showMyOrders(conn, **args):
+    """Query and Filter own Orders."""
+    newuri = orderuri + '/my_own'
+    return APIConnect(conn, 'GET', args, newuri)
+
+
+def showMyOrderDetails(conn, order_id):
+    """Details to an own Order."""
+    newuri = orderuri + '/:' + order_id
+    params = {'order_id': order_id}
+    return APIConnect(conn, 'GET', params, newuri)
+
+
+def executeTrade(conn, order_id, OrderType, amount):
+    """Buy/Sell on a specific Order."""
+    newuri = tradeuri + '/:' + order_id
+    params = {'order_id': order_id, 'type': OrderType, 'amount': amount}
+    return APIConnect(conn, 'POST', params, newuri)
+
+
+def showMyTrades(conn, **args):
+    """Query and Filter on past Trades."""
+    return APIConnect(conn, 'GET', args, tradeuri)
+
+
+def showMyTradeDetails(conn, trade_id):
+    """Details to a specific Trade."""
+    newuri = tradeuri + '/:' + trade_id
+    params = {'trade_id': trade_id}
+    return APIConnect(conn, 'GET', params, newuri)
+
+
+def showAccountInfo(conn):
+    """Query on Account Infos."""
+    params = {}
+    return APIConnect(conn, 'GET', params, accounturi)
+
+
+def showOrderbookCompact(conn):
+    """Bids and Asks in compact format."""
+    params = {}
+    return APIConnect(conn, 'GET', params, orderuri + '/compact')
+
+
+def showPublicTradeHistory(conn, since_tid=None):
+    """All successful trades of the las 7 days."""
+    if since_tid is not None:
+        params = {'since_tid': since_tid}
+    else:
+        params = {}
+    return APIConnect(conn, 'GET', params, tradeuri + '/history')
+
+
+def showRates(conn):
+    """Query of the average rate last 3 and 12 hours."""
+    newuri = apihost + '/' + apiversion + '/rates'
+    params = {}
+    return APIConnect(conn, 'GET', params, newuri)
+
+
+def showAccountLedger(conn, **args):
+    """Query on Account statement."""
+    return APIConnect(conn, 'GET', args, accounturi + '/ledger')
