@@ -27,60 +27,60 @@ for Order in Orders:
     print ('Order ID: %s\tPrice: %s EUR') % (Order.get('order_id'),
                                            Order.get('price'))
 ```
-
+---
 ## API Methods
 
 For more Details on the API Methods, please read [bitcoin.de API Documentation](https://www.bitcoin.de/de/api/tapi/v1/docu)
 All mandatory parameters have to be passed to a function, all optional are resolved via ```**args```
 
-### showOrderbook(conn, OrderType, **args)
+#### showOrderbook(conn, OrderType, **args)
 
-API Credits Cost: 2
+*API Credits Cost: 2*
 
-### createOrder(conn, OrderType, max_amount, price, **args)
+#### createOrder(conn, OrderType, max_amount, price, **args)
 
-API Credits Cost: 1
+*API Credits Cost: 1*
 
-### deleteOrder(conn, order_id)
+#### deleteOrder(conn, order_id)
 
-API Credits Cost: 2
+*API Credits Cost: 2*
 
-### showMyOrders(conn, **args)
+#### showMyOrders(conn, **args)
 
-API Credits Cost: 2
+*API Credits Cost: 2*
 
-### showMyOrderDetails(conn, order_id)
+#### showMyOrderDetails(conn, order_id)
 
-API Credits Cost: 2
+*API Credits Cost: 2*
 
-### executeTrade(conn, order_id, OrderType, amount)
+#### executeTrade(conn, order_id, OrderType, amount)
 
-API Credits Cost: 1
+*API Credits Cost: 1*
 
-### showMyTrades(conn, **args)
+#### showMyTrades(conn, **args)
 
-API Credits Cost: 3
+*API Credits Cost: 3*
 
-### showMyTradeDetails(conn, trade_id)
+#### showMyTradeDetails(conn, trade_id)
 
-API Credits Cost: 3
+*API Credits Cost: 3*
 
-### showAccountInfo(conn)
+#### showAccountInfo(conn)
 
-API Credits Cost: 2
+*API Credits Cost: 2*
 
-### showOrderbookCompact(conn)
+#### showOrderbookCompact(conn)
 
-API Credits Cost: 3
+*API Credits Cost: 3*
 
-### showPublicTradeHistory(conn, since_tid=None)
+#### showPublicTradeHistory(conn, since_tid=None)
 
-API Credits Cost: 3
+*API Credits Cost: 3*
 
-### showRates(conn)
+#### showRates(conn)
 
-API Credits Cost: 3
+*API Credits Cost: 3*
 
-### showAccountLedger(conn, **args)
+#### showAccountLedger(conn, **args)
 
-API Credits Cost: 3
+*API Credits Cost: 3*
