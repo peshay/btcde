@@ -47,38 +47,34 @@ def HandleAPIErrors(r):
         return True
 
 
-def APIConnect(conn, method, params, uri=orderuri):
+def APIConnect(conn, method, params, uri):
     """Transform Parameters to URL"""
     global nonce
     # set header
     header = {'content-type': 'application/json; charset=utf-8'}
     encoded_string = ''
-    for key, value in sorted(params.iteritems()):
-        encoded_string += str(key) + '=' + str(value) + '&'
-    encoded_string = encoded_string[:-1]
+    if params:
+        for key, value in sorted(params.iteritems()):
+            encoded_string += str(key) + '=' + str(value) + '&'
+        encoded_string = encoded_string[:-1]
+        url = uri + '?' + encoded_string
+    else:
+        url = uri
     print (encoded_string)
-    url = orderuri + '?' + encoded_string
     print (url)
     # raise nonce before using
     nonce += 1
     print (nonce)
-    if method == 'GET':
-        md5_encoded_query_string = hashlib.md5("").hexdigest()
+    md5_encoded_query_string = hashlib.md5(encoded_string).hexdigest()
+    if method == 'GET' or method == 'DELETE':
         # build the signature
         hmac_data = method + '#' + \
             url + '#' + conn.api_key + \
             '#' + str(nonce) + '#' + md5_encoded_query_string
     elif method == 'POST':
-        md5_encoded_query_string = hashlib.md5(encoded_string).hexdigest()
         # build the signature
         hmac_data = method + '#' + \
-            orderuri + '#' + conn.api_key + \
-            '#' + str(nonce) + '#' + md5_encoded_query_string
-    elif method == 'DELETE':
-        md5_encoded_query_string = hashlib.md5(encoded_string).hexdigest()
-        # build the signature
-        hmac_data = method + '#' + \
-            orderuri + '#' + conn.api_key + \
+            uri + '#' + conn.api_key + \
             '#' + str(nonce) + '#' + md5_encoded_query_string
     else:
         print ('Error')
@@ -93,16 +89,18 @@ def APIConnect(conn, method, params, uri=orderuri):
                    'X-API-SIGNATURE': hmac_signed})
     print (header)
     # try to connect and handle errors
-    DATA = json.dumps(params)
+    DATA = json.dumps(params, sort_keys=True)
     print (DATA)
     try:
         if method == 'GET':
-            r = requests.get(url, headers=(header), stream=True, verify=False)
+            r = requests.get(url, headers=(header),
+                             stream=True, verify=False)
         elif method == 'POST':
-            r = requests.post(url, headers=(header), stream=True, verify=False)
+            r = requests.post(url, headers=(header), data=DATA,
+                              stream=True, verify=False)
         elif method == 'DELETE':
-            r = requests.delete(url, headers=(header), stream=True,
-                                verify=False)
+            r = requests.delete(url, headers=(header),
+                                stream=True, verify=False)
         # Handle API Errors
         if HandleAPIErrors(r):
             # get results
@@ -122,7 +120,7 @@ def showOrderbook(conn, OrderType, **args):
     else:
         print ('problem')
     params.update(args)
-    return APIConnect(conn, 'GET', params)
+    return APIConnect(conn, 'GET', params, orderuri)
 
 
 def createOrder(conn, OrderType, max_amount, price, **args):
@@ -130,7 +128,7 @@ def createOrder(conn, OrderType, max_amount, price, **args):
     # Build parameters
     params = {'type': OrderType, 'max_amount': max_amount, 'price': price}
     params.update(args)
-    return APIConnect(conn, 'POST', params)
+    return APIConnect(conn, 'POST', params, orderuri)
 
 
 def deleteOrder(conn, order_id):
