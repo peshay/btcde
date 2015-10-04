@@ -60,37 +60,31 @@ def APIConnect(conn, method, params, uri):
         url = uri + '?' + encoded_string
     else:
         url = uri
-    print (encoded_string)
-    print (url)
+    print ('Encoded String: %s') % encoded_string
+    print ('URL: %s') % url
     # raise nonce before using
     nonce += 1
-    print (nonce)
-    md5_encoded_query_string = hashlib.md5(encoded_string).hexdigest()
-    if method == 'GET' or method == 'DELETE':
-        # build the signature
-        hmac_data = method + '#' + \
-            url + '#' + conn.api_key + \
-            '#' + str(nonce) + '#' + md5_encoded_query_string
-    elif method == 'POST':
-        # build the signature
-        hmac_data = method + '#' + \
-            uri + '#' + conn.api_key + \
-            '#' + str(nonce) + '#' + md5_encoded_query_string
+    print ('Nonce: %s') % nonce
+    if method == 'POST':
+        md5_encoded_query_string = hashlib.md5(encoded_string).hexdigest()
     else:
-        print ('Error')
-    print (md5_encoded_query_string)
-    print (hmac_data)
+        md5_encoded_query_string = hashlib.md5('').hexdigest()
+    print ('Encoded String MD5: %s') % md5_encoded_query_string
+    hmac_data = method + '#' + \
+        url + '#' + conn.api_key + \
+        '#' + str(nonce) + '#' + md5_encoded_query_string
+    print ('HMAC Data: %s') % hmac_data
     hmac_signed = hmac.new(conn.api_secret,
                            digestmod=hashlib.sha256, msg=hmac_data).hexdigest()
-    print (hmac_signed)
+    print ('HMAC Signed: %s') % hmac_signed
     # set values for header
     header.update({'X-API-KEY': conn.api_key,
                    'X-API-NONCE': nonce,
                    'X-API-SIGNATURE': hmac_signed})
-    print (header)
+    print ('Header: %s') % str(header)
     # try to connect and handle errors
     DATA = json.dumps(params, sort_keys=True)
-    print (DATA)
+    print ('Post Data: %s') % str(DATA)
     try:
         if method == 'GET':
             r = requests.get(url, headers=(header),
