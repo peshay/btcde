@@ -6,6 +6,23 @@ import time
 import json
 import hmac
 import hashlib
+import logging
+
+
+# these two lines enable debugging at httplib level
+# (requests->urllib3->httplib)
+# you will see the REQUEST, including HEADERS and DATA, and RESPONSE with
+# HEADERS but without DATA.
+# the only thing missing will be the response.body which is not logged.
+import httplib
+httplib.HTTPConnection.debuglevel = 1
+
+
+logging.basicConfig()
+logging.getLogger().setLevel(logging.DEBUG)
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.DEBUG)
+requests_log.propagate = True
 
 __version__ = '0.1'
 
@@ -51,7 +68,7 @@ def APIConnect(conn, method, params, uri):
     """Transform Parameters to URL"""
     global nonce
     # set header
-    header = {'content-type': 'application/json; charset=utf-8'}
+    header = {'content-type': 'application/x-www-form-urlencoded; charset=utf-8'}
     encoded_string = ''
     if params:
         for key, value in sorted(params.iteritems()):
@@ -90,7 +107,7 @@ def APIConnect(conn, method, params, uri):
             r = requests.get(url, headers=(header),
                              stream=True, verify=False)
         elif method == 'POST':
-            r = requests.post(url, headers=(header), data=DATA,
+            r = requests.post(url, headers=(header), data=encoded_string,
                               stream=True, verify=False)
         elif method == 'DELETE':
             r = requests.delete(url, headers=(header),
