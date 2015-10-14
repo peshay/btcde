@@ -68,7 +68,8 @@ def APIConnect(conn, method, params, uri):
     """Transform Parameters to URL"""
     global nonce
     # set header
-    header = {'content-type': 'application/x-www-form-urlencoded; charset=utf-8'}
+    header = {'content-type':
+              'application/x-www-form-urlencoded; charset=utf-8'}
     encoded_string = ''
     if params:
         for key, value in sorted(params.iteritems()):
