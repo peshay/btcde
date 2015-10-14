@@ -2,7 +2,7 @@
 """Setup to install Bitcoin.de API Python Module."""
 from distutils.core import setup
 setup(name='btcde',
-      version='0.1',
+      version='1.0',
       py_modules=['btcde'],
       install_requires=['requests'],
       description='Provides functions to work with Bitcoin.de Trading API.',
