@@ -21,11 +21,10 @@ api_key = <YourAPIKey>
 api_secret = <YourAPISecret>
 conn = btcde.Connection(api_key, api_secret)
 Orderbook = btcde.showOrderbook(conn, 'buy')
-print ('API Credits Left: %s') % Orderbook.get('credits')
+print('API Credits Left: ' + str(orderbook.get('credits')))
 Orders = Orderbook.get('orders')
 for Order in Orders:
-    print ('Order ID: %s\tPrice: %s EUR') % (Order.get('order_id'),
-                                           Order.get('price'))
+    print('Order ID: ' + str(order.get('order_id')) + '\tPrice: ' + str(order.get('price')) + ' EUR')
 ```
 ---
 ## API Methods
