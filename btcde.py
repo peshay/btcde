@@ -14,8 +14,8 @@ import logging
 # you will see the REQUEST, including HEADERS and DATA, and RESPONSE with
 # HEADERS but without DATA.
 # the only thing missing will be the response.body which is not logged.
-import httplib
-httplib.HTTPConnection.debuglevel = 1
+import http.client
+http.client.HTTPConnection.debuglevel = 1
 
 
 logging.basicConfig()
@@ -72,7 +72,7 @@ def APIConnect(conn, method, params, uri):
               'application/x-www-form-urlencoded; charset=utf-8'}
     encoded_string = ''
     if params:
-        for key, value in sorted(params.iteritems()):
+        for key, value in sorted(params.items()):
             encoded_string += str(key) + '=' + str(value) + '&'
         encoded_string = encoded_string[:-1]
         url = uri + '?' + encoded_string
@@ -81,14 +81,13 @@ def APIConnect(conn, method, params, uri):
     # raise nonce before using
     nonce += 1
     if method == 'POST':
-        md5_encoded_query_string = hashlib.md5(encoded_string).hexdigest()
+        md5_encoded_query_string = hashlib.md5(encoded_string.encode()).hexdigest()
     else:
-        md5_encoded_query_string = hashlib.md5('').hexdigest()
+        md5_encoded_query_string = hashlib.md5(b'').hexdigest()
     hmac_data = method + '#' + \
         url + '#' + conn.api_key + \
         '#' + str(nonce) + '#' + md5_encoded_query_string
-    hmac_signed = hmac.new(conn.api_secret,
-                           digestmod=hashlib.sha256, msg=hmac_data).hexdigest()
+    hmac_signed = hmac.new(bytearray(conn.api_secret.encode()), msg=hmac_data.encode(), digestmod=hashlib.sha256).hexdigest()
     # set values for header
     header.update({'X-API-KEY': conn.api_key,
                    'X-API-NONCE': nonce,
@@ -120,7 +119,7 @@ def showOrderbook(conn, OrderType, **args):
     if OrderType == 'buy' or OrderType == 'sell':
         params = {'type': OrderType}
     else:
-        print ('problem')
+        print('problem')
     params.update(args)
     return APIConnect(conn, 'GET', params, orderuri)
 
