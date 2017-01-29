@@ -7,7 +7,7 @@ import json
 import hmac
 import hashlib
 import logging
-
+import codecs
 
 # these two lines enable debugging at httplib level
 # (requests->urllib3->httplib)
@@ -54,7 +54,8 @@ def HandleRequestsException(e):
 def HandleAPIErrors(r):
     """To handle Errors from BTCDE API."""
     if r.status_code != 200 and r.status_code != 201 and r.status_code != 204:
-        content = json.load(r.raw)
+        reader = codecs.getreader("utf-8")
+        content = json.load(reader(r.raw))
         errors = content.get('errors')
         print('Code:     ' + str(errors[0]['code']))
         print('Message:  ' + errors[0]['message'])
