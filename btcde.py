@@ -91,7 +91,7 @@ def APIConnect(conn, method, params, uri):
     hmac_signed = hmac.new(bytearray(conn.api_secret.encode()), msg=hmac_data.encode(), digestmod=hashlib.sha256).hexdigest()
     # set values for header
     header.update({'X-API-KEY': conn.api_key,
-                   'X-API-NONCE': nonce,
+                   'X-API-NONCE': str(nonce),
                    'X-API-SIGNATURE': hmac_signed})
     try:
         if method == 'GET':
