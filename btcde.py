@@ -148,7 +148,7 @@ def showMyOrders(conn, **args):
 
 def showMyOrderDetails(conn, order_id):
     """Details to an own Order."""
-     newuri = orderuri + '/' + order_id
+    newuri = orderuri + '/' + order_id
     params = {'order_id': order_id}
     return APIConnect(conn, 'GET', params, newuri)
 
