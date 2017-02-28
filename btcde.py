@@ -7,9 +7,8 @@ import json
 import hmac
 import hashlib
 import logging
-
-
 import codecs
+
 # these two lines enable debugging at httplib level
 # (requests->urllib3->httplib)
 # you will see the REQUEST, including HEADERS and DATA, and RESPONSE with
@@ -95,17 +94,13 @@ def APIConnect(conn, method, params, uri):
                    'X-API-NONCE': str(nonce),
                    'X-API-SIGNATURE': hmac_signed})
     try:
-
         if method == 'GET':
-
             r = requests.get(url, headers=(header),
                              stream=True, verify=False)
         elif method == 'POST':
-
             r = requests.post(url, headers=(header), data=encoded_string,
                               stream=True, verify=False)
         elif method == 'DELETE':
-
             r = requests.delete(url, headers=(header),
                                 stream=True, verify=False)
         # Handle API Errors
@@ -140,7 +135,7 @@ def createOrder(conn, OrderType, max_amount, price, **args):
 
 def deleteOrder(conn, order_id):
     """Delete an Order."""
-     newuri = orderuri + "/" + order_id
+    newuri = orderuri + "/" + order_id
     params = {'order_id': order_id}
     return APIConnect(conn, 'DELETE', params, newuri)
 
