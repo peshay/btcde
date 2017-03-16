@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/peshay/btcde.svg?branch=testcase)](https://travis-ci.org/peshay/btcde)
 [![GitHub release](https://img.shields.io/github/release/peshay/btcde.svg)]()
 [![license](https://img.shields.io/github/license/peshay/btcde.svg)]()
-[![Beerpay](https://img.shields.io/beerpay/peshay/btcde.svg?style=plastic)]()
+[![Beerpay](https://img.shields.io/beerpay/peshay/btcde.svg)]()
 
 # btcde.py
 
