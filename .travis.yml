@@ -14,7 +14,7 @@ python:
 install:
 - pip install -r requirements.txt
 - python setup.py -q install
-script: btcde.py
+script: pytest
 deploy:
   provider: pypi
   user: peshay
