@@ -13,6 +13,8 @@ python:
   - "pypy"  # PyPy2 2.5.0
   - "pypy3" # Pypy3 2.4.0
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install:
+- pip install -r requirements.txt
+- python setup.py -q install
 # command to run tests
-script: pytest
+script: btcde.py
