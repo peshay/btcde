@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/peshay/btcde.svg?branch=testcase)](https://travis-ci.org/peshay/btcde)
+
 # btcde.py
 
 A Python Module for the [Bitcoin.de Trading API](https://www.bitcoin.de/de/api/marketplace)
