@@ -1,4 +1,11 @@
 [![Build Status](https://travis-ci.org/peshay/btcde.svg?branch=testcase)](https://travis-ci.org/peshay/btcde)
+[![PyPI](https://img.shields.io/pypi/dm/btcde.svg)]()
+[![PyPI](https://img.shields.io/pypi/v/btcde.svg)]()
+[![GitHub release](https://img.shields.io/github/release/peshay/btcde.svg)]()
+[![GitHub tag](https://img.shields.io/github/tag/peshay/btcde.svg)]()
+[![PyPI](https://img.shields.io/pypi/l/btcde.svg)]()
+[![PyPI](https://img.shields.io/pypi/pyversions/btcde.svg)]()
+[![license](https://img.shields.io/github/license/peshay/btcde.svg)]()
 
 # btcde.py
 
