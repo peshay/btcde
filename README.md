@@ -83,3 +83,8 @@ All mandatory parameters have to be passed to a function, all optional are resol
 #### showAccountLedger(conn, **args)
 
 *API Credits Cost: 3*
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/peshay/btcde/badge.svg?style=beer-square)](https://beerpay.io/peshay/btcde)  [![Beerpay](https://beerpay.io/peshay/btcde/make-wish.svg?style=flat-square)](https://beerpay.io/peshay/btcde?focus=wish)
