@@ -1,0 +1,31 @@
+{
+   "orders":
+   [
+     {
+       "order_id': "2EDYNS",
+       "type":"sell",
+       "max_amount": 0.5,
+       "min_amount": 0.2,
+       "price": 250.55,
+       "max_volume": 125.28,
+       "min_volume": 50.11,
+       "end_datetime": "2015-01-20T15:00:00+02:00",
+       "new_order_for_remaining_amount": true,
+       "state": 0,
+        "order_requirements":
+        {
+           "min_trust_level":"silver",
+           "only_kyc_full": true,
+           "payment_option": 1,
+           "seat_of_bank": {"DE", "NL"}
+        },
+        "created_at": "2015-01-10T15:00:00+02:00",
+      },
+   ],
+   "page": {
+       "current": 1,
+       "last": 2
+   },
+   "errors": [],
+   "credits": 15
+}
