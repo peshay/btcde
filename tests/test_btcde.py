@@ -12,7 +12,7 @@ class TestBtcdeApi(TestCase):
     def tearDown(self):
         pass
     
-    patch('btcde.APIConnect')
+    @patch('btcde.APIConnect')
     def test_showOrderbook_buy(self, mock_APIConnect):
         result = btcde.showOrderbook('mock', 'buy')
         expected_arguments = ['mock', 'GET', {'type': 'buy'}, btcde.orderuri]
