@@ -1,8 +1,9 @@
-import unittest 
-from unittest.mock import patch
+from unittest import TestCase 
+from mock import patch
 import btcde
 
-class TestBtcdeApi(unittest.TestCase):
+
+class TestBtcdeApi(TestCase):
     """Test Api Functions."""
     
     def setUp(self):
