@@ -16,6 +16,6 @@ class TestBtcdeApi(TestCase):
     def test_showOrderbook_buy(self, mock_APIConnect):
         result = btcde.showOrderbook('mock', 'buy')
         expected_arguments = ['mock', 'GET', {'type': 'buy'}, btcde.orderuri]
-        for callargs in mock_APIConnect.call_args:
+        for callargs in mock_APIConnect.call_args[0]:
             print(callargs)
-        self.assertEqual(mock_APIConnect.call_args, expected_arguments)
+        self.assertEqual(mock_APIConnect.call_args[0], expected_arguments)
