@@ -33,21 +33,23 @@ class TestBtcdeApi(TestCase):
         result = btcde.createOrder('mock', OrderType, max_amount, price)
         params = {'type': OrderType, 'max_amount': max_amount, 'price': price}
         expected_arguments = ['mock', 'POST', params, btcde.orderuri]
-        actual = self.mock_APIConnect.call_args[0][0]
-        self.assertEqual(actual, expected,
-                         'Argument {} with value {} '
-                         'does not match expected {}'.format(idx,
-                                                             actual,
-                                                             expected))
+        for idx, expected in enumerate(expected_arguments):
+            actual = self.mock_APIConnect.call_args[0][idx]
+            self.assertEqual(actual, expected,
+                             'Argument {} with value {} '
+                             'does not match expected {}'.format(idx,
+                                       actual,
+                                       expected))
 
     def test_deleteOrder(self):
         order_id = '42'
         result = btcde.deleteOrder('mock', order_id)
         params = {'order_id': order_id}
         expected_arguments = ['mock', 'DELETE', params, btcde.orderuri + "/" + order_id]
-        actual = self.mock_APIConnect.call_args[0][0]
-        self.assertEqual(actual, expected,
-                         'Argument {} with value {} '
-                         'does not match expected {}'.format(idx,
-                                                             actual,
-                                                             expected))
+        for idx, expected in enumerate(expected_arguments):
+            actual = self.mock_APIConnect.call_args[0][idx]
+            self.assertEqual(actual, expected,
+                             'Argument {} with value {} '
+                             'does not match expected {}'.format(idx,
+                                       actual,
+                                       expected))
