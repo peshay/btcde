@@ -7,13 +7,13 @@ class TestBtcdeApi(TestCase):
     """Test Api Functions."""
     
     def setUp(self):
-        pass
+        self.patcher = patch('btcde.APIConnect')
+        self.mock_APIConnect = self.patcher.start()
     
     def tearDown(self):
-        pass
+        self.patcher.stop()
     
-    @patch('btcde.APIConnect')
-    def test_showOrderbook_buy(self, mock_APIConnect):
+    def test_showOrderbook_buy(self):
         result = btcde.showOrderbook('mock', 'buy')
         expected_arguments = ['mock', 'GET', {'type': 'buy'}, btcde.orderuri]
         for idx, expected in enumerate(expected_arguments):
