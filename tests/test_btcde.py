@@ -17,7 +17,7 @@ class TestBtcdeApi(TestCase):
         result = btcde.showOrderbook('mock', 'buy')
         expected_arguments = ['mock', 'GET', {'type': 'buy'}, btcde.orderuri]
         for idx, expected in enumerate(expected_arguments):
-            actual = mock_APIConnect.call_args[0][idx]
+            actual = self.mock_APIConnect.call_args[0][idx]
             self.assertEqual(actual, expected,
                              'Argument {} with value {} '
                              'does not match expected {}'.format(idx,
