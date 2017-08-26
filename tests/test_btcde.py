@@ -24,7 +24,7 @@ class TestBtcdeApi(TestCase):
     
     def test_showOrderbook_buy_and_sell(self):
         methods = 'buy', 'sell'
-        for method in method:
+        for method in methods:
             result = btcde.showOrderbook('mock', method)
             expected_arguments = ['mock', 'GET', {'type': method}, btcde.orderuri]
             self.assertArguments(expected_arguments, self.mock_APIConnect)
@@ -47,14 +47,14 @@ class TestBtcdeApi(TestCase):
                                                              
     def test_showMyOrders(self):
         result = btcde.showMyOrders('mock')
-        expected_arguments = ['mock', 'GET', btcde.orderuri + '/my_own']
+        expected_arguments = ['mock', 'GET', {}, btcde.orderuri + '/my_own']
         self.assertArguments(expected_arguments, self.mock_APIConnect)
 
     def test_showMyOrderDetails(self):
         order_id = '42'
         result = btcde.showMyOrderDetails('mock', order_id)
         params = {'order_id': order_id}
-        expected_arguments = ['mock', 'GET', btcde.orderuri + '/' + order_id]
+        expected_arguments = ['mock', 'GET', params, btcde.orderuri + '/' + order_id]
         self.assertArguments(expected_arguments, self.mock_APIConnect)
                                                              
     def test_executeTrade(self):
@@ -68,14 +68,14 @@ class TestBtcdeApi(TestCase):
 
     def test_showMyTrades(self):
         result = btcde.showMyTrades('mock')
-        expected_arguments = ['mock', 'GET', btcde.tradeuri]
+        expected_arguments = ['mock', 'GET', {}, btcde.tradeuri]
         self.assertArguments(expected_arguments, self.mock_APIConnect)
         
     def test_showMyTradeDetails(self):
         trade_id = '42'
         result = btcde.showMyTradeDetails('mock', trade_id)
         params = {'trade_id': trade_id}
-        expected_arguments = ['mock', 'GET', btcde.tradeuri + '/' + trade_id]
+        expected_arguments = ['mock', 'GET', params, btcde.tradeuri + '/' + trade_id]
         self.assertArguments(expected_arguments, self.mock_APIConnect)
 
     def test_showAccountInfo(self):
@@ -111,5 +111,5 @@ class TestBtcdeApi(TestCase):
 
     def test_showAccountLedger(self):
         result = btcde.showAccountLedger('mock')
-        expected_arguments = ['mock', 'GET', btcde.accounturi + '/ledger']
+        expected_arguments = ['mock', 'GET', {}, btcde.accounturi + '/ledger']
         self.assertArguments(expected_arguments, self.mock_APIConnect)
