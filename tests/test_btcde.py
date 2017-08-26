@@ -39,7 +39,7 @@ class TestBtcdeApi(TestCase):
         assertArguments(expected_arguments, self.mock_APIConnect)
 
     def test_deleteOrder(self):
-        order_id = 42
+        order_id = '42'
         result = btcde.deleteOrder('mock', order_id)
         params = {'order_id': order_id}
         expected_arguments = ['mock', 'DELETE', params, btcde.orderuri + "/" + order_id]
@@ -51,7 +51,7 @@ class TestBtcdeApi(TestCase):
         assertArguments(expected_arguments, self.mock_APIConnect)
 
     def test_showMyOrderDetails(self):
-        order_id = 42
+        order_id = '42'
         result = btcde.showMyOrderDetails('mock', order_id)
         params = {'order_id': order_id}
         expected_arguments = ['mock', 'GET', btcde.orderuri + '/' + order_id]
