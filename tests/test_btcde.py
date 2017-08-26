@@ -13,7 +13,7 @@ class TestBtcdeApi(TestCase):
     def tearDown(self):
         self.patcher.stop()
     
-    def assertArguments(expected_arguments, mock_APIConnect):
+    def assertArguments(self, expected_arguments, mock_APIConnect):
         for idx, expected in enumerate(expected_arguments):
             actual = mock_APIConnect.call_args[0][idx]
             self.assertEqual(actual, expected,
