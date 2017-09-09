@@ -65,12 +65,7 @@ def HandleAPIErrors(r):
         return True
 
 
-def APIConnect(conn, method, params, uri):
-    """Transform Parameters to URL"""
-    global nonce
-    # set header
-    header = {'content-type':
-              'application/x-www-form-urlencoded; charset=utf-8'}
+def params_url(params, uri):
     encoded_string = ''
     if params:
         for key, value in sorted(params.items()):
@@ -79,6 +74,15 @@ def APIConnect(conn, method, params, uri):
         url = uri + '?' + encoded_string
     else:
         url = uri
+    return url
+
+def APIConnect(conn, method, params, uri):
+    """Transform Parameters to URL"""
+    global nonce
+    # set header
+    header = {'content-type':
+              'application/x-www-form-urlencoded; charset=utf-8'}
+    url = params_url(params, uri)
     # raise nonce before using
     nonce += 1
     if method == 'POST':

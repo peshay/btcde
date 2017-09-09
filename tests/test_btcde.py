@@ -113,3 +113,28 @@ class TestBtcdeApi(TestCase):
         result = btcde.showAccountLedger('mock')
         expected_arguments = ['mock', 'GET', {}, btcde.accounturi + '/ledger']
         self.assertArguments(expected_arguments, self.mock_APIConnect)
+
+class TestSimpleFunctions(TestCase):
+    
+    def test_params_url(self):
+        sample_params = { 'foo': 'bar', 'bar': 'foo'}
+        result = btcde.params_url(sample_params, 'https://foo.bar')
+        expected_result = 'https://foo.bar?foo=bar&bar=foo'
+        self.assertEquals(result, expected_result)
+    
+    def test_params_url_wo_params(self):
+        result = btcde.params_url({}, 'https://foo.bar')
+        expected_result = 'https://foo.bar'
+        self.assertEquals(result, expected_result)
+        
+        
+class TestApiConnect(TestCase):
+    
+    def setUp(self):
+        self.patcher = patch('requests')
+        self.mock_APIConnect = self.patcher.start()
+    
+    def tearDown(self):
+        self.patcher.stop()
+    
+
