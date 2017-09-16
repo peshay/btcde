@@ -96,21 +96,24 @@ def set_header(url):
                    'X-API-SIGNATURE': hmac_signed }
     return header
     
+def send_request(method):
+    if method == 'GET':
+        r = requests.get(url, headers=(header),
+                         stream=True, verify=False)
+    elif method == 'POST':
+        r = requests.post(url, headers=(header), data=encoded_string,
+                          stream=True, verify=False)
+    elif method == 'DELETE':
+        r = requests.delete(url, headers=(header),
+                            stream=True, verify=False)
+    return r
+    
 def APIConnect(conn, method, params, uri):
     """Transform Parameters to URL"""
-
     url = params_url(params, uri)
     header = set_header(url)
     try:
-        if method == 'GET':
-            r = requests.get(url, headers=(header),
-                             stream=True, verify=False)
-        elif method == 'POST':
-            r = requests.post(url, headers=(header), data=encoded_string,
-                              stream=True, verify=False)
-        elif method == 'DELETE':
-            r = requests.delete(url, headers=(header),
-                                stream=True, verify=False)
+        r = send_request(method)
         # Handle API Errors
         if HandleAPIErrors(r):
             # get results
