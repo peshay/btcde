@@ -76,13 +76,8 @@ def params_url(params, uri):
         url = uri
     return url
 
-def APIConnect(conn, method, params, uri):
-    """Transform Parameters to URL"""
+def set_header(url):
     global nonce
-    # set header
-    header = {'content-type':
-              'application/x-www-form-urlencoded; charset=utf-8'}
-    url = params_url(params, uri)
     # raise nonce before using
     nonce += 1
     if method == 'POST':
@@ -93,10 +88,19 @@ def APIConnect(conn, method, params, uri):
         url + '#' + conn.api_key + \
         '#' + str(nonce) + '#' + md5_encoded_query_string
     hmac_signed = hmac.new(bytearray(conn.api_secret.encode()), msg=hmac_data.encode(), digestmod=hashlib.sha256).hexdigest()
-    # set values for header
-    header.update({'X-API-KEY': conn.api_key,
+    # set header
+    header = {'content-type':
+              'application/x-www-form-urlencoded; charset=utf-8',
+              'X-API-KEY': conn.api_key,
                    'X-API-NONCE': str(nonce),
-                   'X-API-SIGNATURE': hmac_signed})
+                   'X-API-SIGNATURE': hmac_signed }
+    return header
+    
+def APIConnect(conn, method, params, uri):
+    """Transform Parameters to URL"""
+
+    url = params_url(params, uri)
+    header = set_header(url)
     try:
         if method == 'GET':
             r = requests.get(url, headers=(header),
