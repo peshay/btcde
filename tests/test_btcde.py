@@ -129,14 +129,18 @@ class TestSimpleFunctions(TestCase):
         
         
 class TestApiComm(TestCase):
+    
+    def setUp(self):
+        self.fake_url = 'https://foo.bar/apiv1/'
+        btcde.nonce = 9
+        btcde.conn = btcde.Connection('foobar', 'barfoo')
+   
+    def tearDown(self):
+        pass
 
     def test_api_signing_wout_post(self):
         '''Test API signing without POST.'''
-        # set some sample fake data
-        self.fake_url = 'https://foo.bar/apiv1/'
-        btcde.nonce = 9
         btcde.method = ''
-        btcde.conn = btcde.Connection('foobar', 'barfoo')
         self.header = btcde.set_header(self.fake_url)
         self.assertEqual(self.header.get('X-API-KEY'),
                                          'foobar')
@@ -147,12 +151,8 @@ class TestApiComm(TestCase):
         
     def test_api_signing_with_post(self):
         '''Test API signing with POST.'''
-        # set some sample fake data
-        self.fake_url = 'https://foo.bar/apiv1/'
-        btcde.nonce = 9
         btcde.method = 'POST'
         btcde.encoded_string = 'foo&bar'
-        btcde.conn = btcde.Connection('foobar', 'barfoo')
         self.header = btcde.set_header(self.fake_url)
         self.assertEqual(self.header.get('X-API-KEY'),
                                          'foobar')
