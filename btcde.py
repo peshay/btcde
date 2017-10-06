@@ -14,8 +14,8 @@ import codecs
 # you will see the REQUEST, including HEADERS and DATA, and RESPONSE with
 # HEADERS but without DATA.
 # the only thing missing will be the response.body which is not logged.
-import http.client
-http.client.HTTPConnection.debuglevel = 1
+#import http.client
+#http.client.HTTPConnection.debuglevel = 1
 
 
 logging.basicConfig()
@@ -53,7 +53,8 @@ def HandleRequestsException(e):
 
 def HandleAPIErrors(r):
     """To handle Errors from BTCDE API."""
-    if r.status_code != 200 and r.status_code != 201 and r.status_code != 204:
+    valid_status_codes = [200, 201, 204]
+    if r.status_code in valid_status_codes:
         reader = codecs.getreader("utf-8")
         content = json.load(reader(r.raw))
         errors = content.get('errors')

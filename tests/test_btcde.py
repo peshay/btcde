@@ -128,13 +128,42 @@ class TestSimpleFunctions(TestCase):
         self.assertEquals(result, expected_result)
         
         
-class TestApiConnect(TestCase):
-    
-    def setUp(self):
-        self.patcher = patch('requests')
-        self.mock_APIConnect = self.patcher.start()
-    
-    def tearDown(self):
-        self.patcher.stop()
-    
+class TestApiComm(TestCase):
 
+    def test_api_signing_wout_post(self):
+        '''Test API signing without POST.'''
+        # set some sample fake data
+        self.fake_url = 'https://foo.bar/apiv1/'
+        btcde.nonce = 9
+        btcde.method = ''
+        btcde.conn = btcde.Connection('foobar', 'barfoo')
+        self.header = btcde.set_header(self.fake_url)
+        self.assertEqual(self.header.get('X-API-KEY'),
+                                         'foobar')
+        self.assertEqual(self.header.get('X-API-NONCE'),
+                                         '10')
+        self.ApiSign = '51e827c7b856cd243cbcac28aeedb34e0676e7f01d469109e3dbe1553aa40c92'
+        self.assertEqual(self.header.get('X-API-SIGNATURE'), self.ApiSign)
+        
+    def test_api_signing_with_post(self):
+        '''Test API signing with POST.'''
+        # set some sample fake data
+        self.fake_url = 'https://foo.bar/apiv1/'
+        btcde.nonce = 9
+        btcde.method = 'POST'
+        btcde.encoded_string = 'foo&bar'
+        btcde.conn = btcde.Connection('foobar', 'barfoo')
+        self.header = btcde.set_header(self.fake_url)
+        self.assertEqual(self.header.get('X-API-KEY'),
+                                         'foobar')
+        self.assertEqual(self.header.get('X-API-NONCE'),
+                                         '10')
+        self.ApiSign = '165515ed7f21a6480adac31b69edadb9416922b4b411da93bcc45d3288e5a361'
+        self.assertEqual(self.header.get('X-API-SIGNATURE'), self.ApiSign)
+        
+#    def test_api_errors(self):
+#        '''Test for valid API errors.'''
+#        # TODO random return
+#        patch('requests.status_code', return_value=201)
+#        self.assertTrue(btcde.HandleAPIErrors(requests))
+            
