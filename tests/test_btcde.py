@@ -24,25 +24,29 @@ class TestBtcdeApi(TestCase):
     
     def test_showOrderbook_buy_and_sell(self):
         methods = 'buy', 'sell'
-        for method in methods:
-            result = btcde.showOrderbook('mock', method)
-            expected_arguments = ['mock', 'GET', {'type': method}, btcde.orderuri]
-            self.assertArguments(expected_arguments, self.mock_APIConnect)
+        trading_pairs = ['btceur', 'bcheur', 'etheur']
+        for trading_pair in trading_pairs:
+            for method in methods:
+                result = btcde.showOrderbook('mock', method, trading_pair)
+                expected_arguments = ['mock', 'GET', {'type': method, 'trading_pair': trading_pair}, btcde.orderuri]
+                self.assertArguments(expected_arguments, self.mock_APIConnect)
     
     def test_createOrder(self):
         OrderType = 'now'
+        trading_pair = 'btceur'
         max_amount = 5
         price = 10
-        result = btcde.createOrder('mock', OrderType, max_amount, price)
-        params = {'type': OrderType, 'max_amount': max_amount, 'price': price}
+        result = btcde.createOrder('mock', OrderType, trading_pair, max_amount, price)
+        params = {'type': OrderType, 'max_amount': max_amount, 'price': price, 'trading_pair': trading_pair}
         expected_arguments = ['mock', 'POST', params, btcde.orderuri]
         self.assertArguments(expected_arguments, self.mock_APIConnect)
 
     def test_deleteOrder(self):
         order_id = '42'
-        result = btcde.deleteOrder('mock', order_id)
-        params = {'order_id': order_id}
-        expected_arguments = ['mock', 'DELETE', params, btcde.orderuri + "/" + order_id]
+        trading_pair = 'btceur'
+        result = btcde.deleteOrder('mock', order_id, trading_pair)
+        params = {'order_id': order_id, 'trading_pair': trading_pair}
+        expected_arguments = ['mock', 'DELETE', params, btcde.orderuri + "/" + order_id + "/" + trading_pair]
         self.assertArguments(expected_arguments, self.mock_APIConnect)
                                                              
     def test_showMyOrders(self):
@@ -61,8 +65,9 @@ class TestBtcdeApi(TestCase):
         order_id = '42'
         OrderType = 'foobar'
         amount = '73'
-        result = btcde.executeTrade('mock', order_id, OrderType, amount)
-        params = {'order_id': order_id, 'type': OrderType, 'amount': amount}
+        trading_pair = 'btceur'
+        result = btcde.executeTrade('mock', order_id, OrderType, trading_pair, amount)
+        params = {'order_id': order_id, 'type': OrderType, 'amount': amount, 'trading_pair': trading_pair}
         expected_arguments = ['mock', 'POST', params, btcde.tradeuri + '/' + order_id]
         self.assertArguments(expected_arguments, self.mock_APIConnect)
 
@@ -85,27 +90,30 @@ class TestBtcdeApi(TestCase):
         self.assertArguments(expected_arguments, self.mock_APIConnect)
 
     def test_showOrderbookCompact(self):
-        result = btcde.showOrderbookCompact('mock')
-        params = {}
+        trading_pair = 'btceur'
+        result = btcde.showOrderbookCompact('mock', trading_pair)
+        params = {'trading_pair': trading_pair}
         expected_arguments = ['mock', 'GET', params, btcde.orderuri + '/compact']
         self.assertArguments(expected_arguments, self.mock_APIConnect)
 
     def test_showPublicTradeHistory(self):
-        result1 = btcde.showPublicTradeHistory('mock')
-        params = {}
+        trading_pair = 'btceur'
+        result1 = btcde.showPublicTradeHistory('mock', trading_pair)
+        params = {'trading_pair': trading_pair}
         expected_arguments = ['mock', 'GET', params, btcde.tradeuri + '/history']
         self.assertArguments(expected_arguments, self.mock_APIConnect)
         self.tearDown()
         self.setUp()
         since_tid = '3'
-        params = {'since_tid': since_tid}
-        result2 = btcde.showPublicTradeHistory('mock', since_tid)
+        params.update({'since_tid': since_tid})
+        result2 = btcde.showPublicTradeHistory('mock', trading_pair, since_tid)
         expected_arguments = ['mock', 'GET', params, btcde.tradeuri + '/history']
         self.assertArguments(expected_arguments, self.mock_APIConnect) 
 
     def test_showRates(self):
-        result = btcde.showRates('mock')
-        params = {}
+        trading_pair = 'btceur'
+        result = btcde.showRates('mock',trading_pair )
+        params = {'trading_pair': trading_pair}
         expected_arguments = ['mock', 'GET', params, btcde.apihost + '/' + btcde.apiversion + '/rates']
         self.assertArguments(expected_arguments, self.mock_APIConnect)
 
@@ -146,7 +154,7 @@ class TestApiComm(TestCase):
                                          'foobar')
         self.assertEqual(self.header.get('X-API-NONCE'),
                                          '10')
-        self.ApiSign = '51e827c7b856cd243cbcac28aeedb34e0676e7f01d469109e3dbe1553aa40c92'
+        self.ApiSign = 'c494280b62451eeba87804c91dc2422a6f6f5b48d203d6cc94813c6103bc67ee'
         self.assertEqual(self.header.get('X-API-SIGNATURE'), self.ApiSign)
         
     def test_api_signing_with_post(self):
@@ -158,7 +166,7 @@ class TestApiComm(TestCase):
                                          'foobar')
         self.assertEqual(self.header.get('X-API-NONCE'),
                                          '10')
-        self.ApiSign = '165515ed7f21a6480adac31b69edadb9416922b4b411da93bcc45d3288e5a361'
+        self.ApiSign = 'f8f00da62fcabd247f94e488dd752a4f0aaad29506cf2c488ad8c1802b3ef0fe'
         self.assertEqual(self.header.get('X-API-SIGNATURE'), self.ApiSign)
         
 #    def test_api_errors(self):
