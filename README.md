@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/peshay/btcde.svg?branch=master)](https://travis-ci.org/peshay/btcde)
-[![Codecov](https://codecov.io/gh/peshay/btcde/branch/master/graph/badge.svg)](https://codecov.io/gh/peshay/btcde/branch/master)
-[![Scrutinizer](https://scrutinizer-ci.com/g/peshay/btcde/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/peshay/btcde/?branch=master)
+[![Build Status](https://travis-ci.org/peshay/btcde.svg?branch=v2api)](https://travis-ci.org/peshay/btcde)
+[![Codecov](https://codecov.io/gh/peshay/btcde/branch/v2api/graph/badge.svg)](https://codecov.io/gh/peshay/btcde/branch/v2api)
+[![Scrutinizer](https://scrutinizer-ci.com/g/peshay/btcde/badges/quality-score.png?b=v2api)](https://scrutinizer-ci.com/g/peshay/btcde/?branch=v2api)
 [![Python version](https://img.shields.io/pypi/pyversions/btcde.svg)](https://pypi.python.org/pypi/btcde)
-[![license](https://img.shields.io/github/license/peshay/btcde.svg)](https://github.com/peshay/btcde/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/peshay/btcde.svg)](https://github.com/peshay/btcde/blob/v2api/LICENSE)
 [![Beerpay](https://beerpay.io/peshay/btcde/badge.svg?style=beer)](https://beerpay.io/peshay/btcde)
 
 # btcde.py
