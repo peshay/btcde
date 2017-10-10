@@ -35,7 +35,7 @@ class Connection:
 
 # Bitcoin.de API URI
 apihost = 'https://api.bitcoin.de'
-apiversion = 'v1'
+apiversion = 'v2'
 orderuri = apihost + '/' + apiversion + '/' + 'orders'
 tradeuri = apihost + '/' + apiversion + '/' + 'trades'
 accounturi = apihost + '/' + apiversion + '/' + 'account'

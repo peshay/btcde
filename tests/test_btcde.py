@@ -131,7 +131,7 @@ class TestSimpleFunctions(TestCase):
 class TestApiComm(TestCase):
     
     def setUp(self):
-        self.fake_url = 'https://foo.bar/apiv1/'
+        self.fake_url = 'https://foo.bar/apiv2/'
         btcde.nonce = 9
         btcde.conn = btcde.Connection('foobar', 'barfoo')
    
