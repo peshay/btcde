@@ -1,0 +1,27 @@
+{
+     "orders":{
+         "bids": [
+             {
+                 "price":200,
+                 "amount":0.2,
+             },
+             {
+                 "price":205,
+                 "amount":1,
+             },
+         ],
+         "asks": [
+             {
+                 "price":250,
+                 "amount":0.2,
+             },
+             {
+                 "price":265.07,
+                 "amount":0.3102676,
+             },
+          ]
+     },
+
+     "errors":[],
+     "credits":19
+}

@@ -1,0 +1,26 @@
+{
+ "data":
+ {
+     "btc_balance":
+     {
+         "available_amount": "19",
+         "reserved_amount":"1.3",
+         "total_amount": "20.3",
+     },
+     "fidor_reservation":
+     {
+         "total_amount": 50.3,
+         "available_amount":10.3,
+         "reserved_at": "2015-01-15T02:01:25+02:00",
+         "valid_until": "2015-01-20T15:00:00+02:00",
+     },
+     "encrypted_information":
+     {
+         "bic_short": "sdf..",
+         "bic_full": "sdfiojf..",
+         "uid": "Fijsdf3lksjdf..",
+     },
+ },
+ "errors": [],
+ "credits": 12,
+}

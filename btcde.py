@@ -14,8 +14,8 @@ import codecs
 # you will see the REQUEST, including HEADERS and DATA, and RESPONSE with
 # HEADERS but without DATA.
 # the only thing missing will be the response.body which is not logged.
-import http.client
-http.client.HTTPConnection.debuglevel = 1
+#import http.client
+#http.client.HTTPConnection.debuglevel = 1
 
 
 logging.basicConfig()
@@ -24,7 +24,7 @@ requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
-__version__ = '0.1'
+__version__ = '1.4'
 
 
 class Connection:
@@ -53,7 +53,8 @@ def HandleRequestsException(e):
 
 def HandleAPIErrors(r):
     """To handle Errors from BTCDE API."""
-    if r.status_code != 200 and r.status_code != 201 and r.status_code != 204:
+    valid_status_codes = [200, 201, 204]
+    if r.status_code in valid_status_codes:
         reader = codecs.getreader("utf-8")
         content = json.load(reader(r.raw))
         errors = content.get('errors')
@@ -65,12 +66,7 @@ def HandleAPIErrors(r):
         return True
 
 
-def APIConnect(conn, method, params, uri):
-    """Transform Parameters to URL"""
-    global nonce
-    # set header
-    header = {'content-type':
-              'application/x-www-form-urlencoded; charset=utf-8'}
+def params_url(params, uri):
     encoded_string = ''
     if params:
         for key, value in sorted(params.items()):
@@ -79,6 +75,10 @@ def APIConnect(conn, method, params, uri):
         url = uri + '?' + encoded_string
     else:
         url = uri
+    return url
+
+def set_header(url):
+    global nonce
     # raise nonce before using
     nonce += 1
     if method == 'POST':
@@ -89,20 +89,32 @@ def APIConnect(conn, method, params, uri):
         url + '#' + conn.api_key + \
         '#' + str(nonce) + '#' + md5_encoded_query_string
     hmac_signed = hmac.new(bytearray(conn.api_secret.encode()), msg=hmac_data.encode(), digestmod=hashlib.sha256).hexdigest()
-    # set values for header
-    header.update({'X-API-KEY': conn.api_key,
+    # set header
+    header = {'content-type':
+              'application/x-www-form-urlencoded; charset=utf-8',
+              'X-API-KEY': conn.api_key,
                    'X-API-NONCE': str(nonce),
-                   'X-API-SIGNATURE': hmac_signed})
+                   'X-API-SIGNATURE': hmac_signed }
+    return header
+    
+def send_request(method):
+    if method == 'GET':
+        r = requests.get(url, headers=(header),
+                         stream=True, verify=False)
+    elif method == 'POST':
+        r = requests.post(url, headers=(header), data=encoded_string,
+                          stream=True, verify=False)
+    elif method == 'DELETE':
+        r = requests.delete(url, headers=(header),
+                            stream=True, verify=False)
+    return r
+    
+def APIConnect(conn, method, params, uri):
+    """Transform Parameters to URL"""
+    url = params_url(params, uri)
+    header = set_header(url)
     try:
-        if method == 'GET':
-            r = requests.get(url, headers=(header),
-                             stream=True, verify=False)
-        elif method == 'POST':
-            r = requests.post(url, headers=(header), data=encoded_string,
-                              stream=True, verify=False)
-        elif method == 'DELETE':
-            r = requests.delete(url, headers=(header),
-                                stream=True, verify=False)
+        r = send_request(method)
         # Handle API Errors
         if HandleAPIErrors(r):
             # get results

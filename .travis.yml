@@ -1,8 +1,6 @@
 language: python
 python:
 - '2.7'
-- '3.2'
-- '3.3'
 - '3.4'
 - '3.5'
 - '3.6'
@@ -12,8 +10,11 @@ python:
 - pypy3
 install:
 - pip install -r requirements.txt
+- pip install codecov
 - python setup.py -q install
-script: btcde.py
+script: nosetests --with-coverage
+after_success:
+- codecov
 deploy:
   provider: pypi
   user: peshay
