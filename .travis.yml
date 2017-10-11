@@ -28,8 +28,8 @@ jobs:
             tags: false
             condition: $TRAVIS_PYTHON_VERSION = "2.7"
             branches: 
-              only:
-                - /.*/
+              except:
+                - master
     - stage: Release
       deploy:
         - provider: pypi
