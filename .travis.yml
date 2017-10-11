@@ -26,7 +26,7 @@ jobs:
             secure: Kpw58A8Tq2bcBp2sKoz9aHApoVOVIu2sHBFRP5bMP1Z5ELa0TMjjVEZGIcoxmWc0/5388Tn/GHGrWAmBnHBe8BXnb6kSduzOrrzS6iqUdrJ6OZIwxNg5qwO6n3ENUf7PmdUyuYr1OonZynoFJQxcF+837Tl22yRbAi66arhCNitNjDPcQKVTK48znv8q2k7v2vPvJ1HW95sjyT5NfihyQ3ys2VicwiBNEGE3Dk9gxyz7/XenzHlzubTwOIHaCMyNATwCzez2YvRJ6IoeSr+YDpFZx5GvB69dAVuzsmFR2Y2MaA+IBXM09yh3xwyLpSyYn7HYBjkSwp3tyTP1Kgt9D5hcYMz03L+oV1AjdinVKLnoSZL2BTq4i523CjSp7L4tkWWfSUk+QGeiMJh/9p/ymAwqtdIF5dXlI5GwlNiCBCI9JwM0F9sAi0adpXOsxyLk62v8yrgZAxLwPcjhVOn9K+zyhzSx0CqErZDboub0F1Q8m0krlMo3XNbURCefwhpYG5+0qe44K6MBzyhdgnjDLAXE7ADe6T089iSabubqE8HCGR4dYR9oKLiocdhOuPzkheLUMIK2oPopfJTZeV26loW33yVPA9truxqJ4Yq80AncPwAkwhYecagbCgPQapkWXrUdzBevOJuwj5m6+F8egpZjKMfblfkj2Kmgf6D3PxM=
           on:
             tags: false
-            condition: $TRAVIS_PYTHON_VERSION = "3.6"
+            condition: $TRAVIS_PYTHON_VERSION = "2.7"
     - stage: Release
       deploy:
         - provider: pypi
@@ -36,4 +36,4 @@ jobs:
           on:
             tags: true
             branch: master
-            condition: $TRAVIS_PYTHON_VERSION = "3.6"
+            condition: $TRAVIS_PYTHON_VERSION = "2.7"
