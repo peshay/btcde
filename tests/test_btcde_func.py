@@ -42,6 +42,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.XAPIKEY = 'f00b4r'
         self.XAPISECRET = 'b4rf00'
         self.XAPINONCE = int(time.time())
+        btcde.nonce = self.XAPINONCE
         self.conn = btcde.Connection(self.XAPIKEY, self.XAPISECRET)
         
     def tearDown(self):
