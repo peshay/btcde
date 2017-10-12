@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/peshay/btcde.svg?branch=v2api)](https://travis-ci.org/peshay/btcde)
-[![Codecov](https://codecov.io/gh/peshay/btcde/branch/v2api/graph/badge.svg)](https://codecov.io/gh/peshay/btcde/branch/v2api)
-[![Scrutinizer](https://scrutinizer-ci.com/g/peshay/btcde/badges/quality-score.png?b=v2api)](https://scrutinizer-ci.com/g/peshay/btcde/?branch=v2api)
+[![Build Status](https://travis-ci.org/peshay/btcde.svg?branch=get_test_coverage)](https://travis-ci.org/peshay/btcde)
+[![Codecov](https://codecov.io/gh/peshay/btcde/branch/get_test_coverage/graph/badge.svg)](https://codecov.io/gh/peshay/btcde/branch/get_test_coverage)
+[![Scrutinizer](https://scrutinizer-ci.com/g/peshay/btcde/badges/quality-score.png?b=get_test_coverage)](https://scrutinizer-ci.com/g/peshay/btcde/?branch=get_test_coverage)
 [![Python version](https://img.shields.io/pypi/pyversions/btcde.svg)](https://pypi.python.org/pypi/btcde)
-[![license](https://img.shields.io/github/license/peshay/btcde.svg)](https://github.com/peshay/btcde/blob/v2api/LICENSE)
+[![license](https://img.shields.io/github/license/peshay/btcde.svg)](https://github.com/peshay/btcde/blob/get_test_coverage/LICENSE)
 [![Beerpay](https://beerpay.io/peshay/btcde/badge.svg?style=beer)](https://beerpay.io/peshay/btcde)
 
 # btcde.py
@@ -36,7 +36,7 @@ for order in orders:
 ---
 ## API Methods
 
-For more Details on the API Methods, please read [bitcoin.de API Documentation](https://www.bitcoin.de/de/api/tapi/v1/docu)
+For more Details on the API Methods, please read [bitcoin.de API Documentation](https://www.bitcoin.de/de/api/tapi/v2/docu)
 All mandatory parameters have to be passed to a function, all optional are resolved via ```**args```
 
 #### showOrderbook(conn, OrderType, **args)

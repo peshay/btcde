@@ -27,7 +27,7 @@ jobs:
           on:
             tags: false
             condition: $TRAVIS_PYTHON_VERSION = "2.7"
-            branch: master
+            branch: get_test_coverage
     - stage: Release
       deploy:
         - provider: pypi
