@@ -2,7 +2,6 @@ from unittest import TestCase
 from mock import patch
 import btcde
 
-
 class TestBtcdeApi(TestCase):
     """Test Api Functions."""
     
@@ -128,50 +127,9 @@ class TestSimpleFunctions(TestCase):
         sample_params = { 'foo': 'bar', 'bar': 'foo'}
         result = btcde.params_url(sample_params, 'https://foo.bar')
         expected_result = 'https://foo.bar?bar=foo&foo=bar'
-        self.assertEquals(result, expected_result)
+        self.assertEquals(result[0], expected_result)
     
     def test_params_url_wo_params(self):
         result = btcde.params_url({}, 'https://foo.bar')
         expected_result = 'https://foo.bar'
-        self.assertEquals(result, expected_result)
-        
-        
-class TestApiComm(TestCase):
-    
-    def setUp(self):
-        self.fake_url = 'https://foo.bar/apiv2/'
-        btcde.nonce = 9
-        btcde.conn = btcde.Connection('foobar', 'barfoo')
-   
-    def tearDown(self):
-        pass
-
-    def test_api_signing_wout_post(self):
-        '''Test API signing without POST.'''
-        btcde.method = ''
-        self.header = btcde.set_header(self.fake_url)
-        self.assertEqual(self.header.get('X-API-KEY'),
-                                         'foobar')
-        self.assertEqual(self.header.get('X-API-NONCE'),
-                                         '10')
-        self.ApiSign = 'c494280b62451eeba87804c91dc2422a6f6f5b48d203d6cc94813c6103bc67ee'
-        self.assertEqual(self.header.get('X-API-SIGNATURE'), self.ApiSign)
-        
-    def test_api_signing_with_post(self):
-        '''Test API signing with POST.'''
-        btcde.method = 'POST'
-        btcde.encoded_string = 'foo&bar'
-        self.header = btcde.set_header(self.fake_url)
-        self.assertEqual(self.header.get('X-API-KEY'),
-                                         'foobar')
-        self.assertEqual(self.header.get('X-API-NONCE'),
-                                         '10')
-        self.ApiSign = 'f8f00da62fcabd247f94e488dd752a4f0aaad29506cf2c488ad8c1802b3ef0fe'
-        self.assertEqual(self.header.get('X-API-SIGNATURE'), self.ApiSign)
-        
-#    def test_api_errors(self):
-#        '''Test for valid API errors.'''
-#        # TODO random return
-#        patch('requests.status_code', return_value=201)
-#        self.assertTrue(btcde.HandleAPIErrors(requests))
-            
+        self.assertEquals(result[0], expected_result)
