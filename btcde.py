@@ -56,7 +56,7 @@ def HandleRequestsException(e):
 def HandleAPIErrors(r):
     """To handle Errors from BTCDE API."""
     valid_status_codes = [200, 201, 204]
-    if r.status_code in valid_status_codes:
+    if r.status_code not in valid_status_codes:
         reader = codecs.getreader("utf-8")
         content = json.load(reader(r.raw))
         errors = content.get('errors')
@@ -77,9 +77,9 @@ def params_url(params, uri):
         url = uri + '?' + encoded_string
     else:
         url = uri
-    return url
+    return url, encoded_string
 
-def set_header(url):
+def set_header(conn, url, method, encoded_string):
     global nonce
     # raise nonce before using
     nonce += 1
@@ -99,7 +99,7 @@ def set_header(url):
                    'X-API-SIGNATURE': hmac_signed }
     return header
     
-def send_request(method):
+def send_request(url, method, header, encoded_string):
     if method == 'GET':
         r = requests.get(url, headers=(header),
                          stream=True, verify=False)
@@ -113,10 +113,10 @@ def send_request(method):
     
 def APIConnect(conn, method, params, uri):
     """Transform Parameters to URL"""
-    url = params_url(params, uri)
-    header = set_header(url)
+    url, encoded_string = params_url(params, uri)
+    header = set_header(conn, url, method, encoded_string)
     try:
-        r = send_request(method)
+        r = send_request(url, method, header, encoded_string)
         # Handle API Errors
         if HandleAPIErrors(r):
             # get results
