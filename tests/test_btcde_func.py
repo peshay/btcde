@@ -60,14 +60,34 @@ class TestBtcdeAPIDocu(TestCase):
         response = {"order_id": "A1234BC",
                     "errors": [],
                     "credits": 8,}
-        m.post(requests_mock.ANY, json = response, status_code=201)
+        m.post(requests_mock.ANY, json=response, status_code=201)
         btcde.createOrder(self.conn, params.get('type'), params.get('trading_pair'), params.get('max_amount'), params.get('price'))
         history = m.request_history
         request_signature = history[0].headers.get('X-API-SIGNATURE')
         verified_signature = self.verifySignature(btcde.orderuri, 'POST', params)
         self.assertEqual(request_signature, verified_signature)
-        
-        
+             
     def test_signature_get(self, m):
         '''Test the signature on a get request.'''
-        pass
+        params = {'type': 'buy',
+                  'trading_pair': 'btceur',}
+        response = {"orders":{"order_id": "A1B2D3", 
+            "trading_pair": "btceur", "type": "buy",
+            "max_amount":0.5, "min_amount":0.1,
+            "price":230.55, "max_volume":115.28, "min_volume":23.06, 
+            "order_requirements_fullfilled":True, 
+            "trading_partner_information":{
+            "username":"bla", "is_kyc_full":True,
+            "trust_level":"gold", "bank_name":"Sparkasse",
+            "bic":"HASPDEHHXXX", "seat_of_bank":"DE", "rating": 99,
+            "amount_trades": 52}, 
+            "order_requirements":{"min_trust_level":"gold",
+            "only_kyc_full":True, "seat_of_bank":["DE", "NL"],"payment_option":1, }
+            }, "errors":[],
+            "credits":12 }
+        m.get(requests_mock.ANY, json=response, status_code=200)
+        btcde.showOrderbook(self.conn, params.get('type'), params.get('trading_pair'))
+        history = m.request_history
+        request_signature = history[0].headers.get('X-API-SIGNATURE')
+        verified_signature = self.verifySignature(btcde.orderuri, 'GET', params)
+        self.assertEqual(request_signature, verified_signature)
