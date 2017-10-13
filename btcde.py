@@ -35,7 +35,9 @@ class Connection:
 
 # Bitcoin.de API URI
 apihost = 'https://api.bitcoin.de'
-apiversion = 'v1'
+apiversion = 'v2'
+valid_trading_pair = ['btceur', 'bcheur', 'etheur']
+valid_order_type = ['buy', 'sell']
 orderuri = apihost + '/' + apiversion + '/' + 'orders'
 tradeuri = apihost + '/' + apiversion + '/' + 'trades'
 accounturi = apihost + '/' + apiversion + '/' + 'account'
@@ -54,7 +56,7 @@ def HandleRequestsException(e):
 def HandleAPIErrors(r):
     """To handle Errors from BTCDE API."""
     valid_status_codes = [200, 201, 204]
-    if r.status_code in valid_status_codes:
+    if r.status_code not in valid_status_codes:
         reader = codecs.getreader("utf-8")
         content = json.load(reader(r.raw))
         errors = content.get('errors')
@@ -75,9 +77,9 @@ def params_url(params, uri):
         url = uri + '?' + encoded_string
     else:
         url = uri
-    return url
+    return url, encoded_string
 
-def set_header(url):
+def set_header(conn, url, method, encoded_string):
     global nonce
     # raise nonce before using
     nonce += 1
@@ -97,7 +99,7 @@ def set_header(url):
                    'X-API-SIGNATURE': hmac_signed }
     return header
     
-def send_request(method):
+def send_request(url, method, header, encoded_string):
     if method == 'GET':
         r = requests.get(url, headers=(header),
                          stream=True, verify=False)
@@ -111,10 +113,10 @@ def send_request(method):
     
 def APIConnect(conn, method, params, uri):
     """Transform Parameters to URL"""
-    url = params_url(params, uri)
-    header = set_header(url)
+    url, encoded_string = params_url(params, uri)
+    header = set_header(conn, url, method, encoded_string)
     try:
-        r = send_request(method)
+        r = send_request(url, method, header, encoded_string)
         # Handle API Errors
         if HandleAPIErrors(r):
             # get results
@@ -126,29 +128,29 @@ def APIConnect(conn, method, params, uri):
     return result
 
 
-def showOrderbook(conn, OrderType, **args):
+def showOrderbook(conn, OrderType, trading_pair, **args):
     """Search Orderbook for offers."""
     # Build parameters
-    if OrderType == 'buy' or OrderType == 'sell':
-        params = {'type': OrderType}
+    if OrderType in valid_order_type and trading_pair in valid_trading_pair:
+        params = {'type': OrderType, 'trading_pair': trading_pair}
     else:
         print('problem')
     params.update(args)
     return APIConnect(conn, 'GET', params, orderuri)
 
 
-def createOrder(conn, OrderType, max_amount, price, **args):
+def createOrder(conn, OrderType, trading_pair, max_amount, price, **args):
     """Create a new Order."""
     # Build parameters
-    params = {'type': OrderType, 'max_amount': max_amount, 'price': price}
+    params = {'type': OrderType, 'max_amount': max_amount, 'price': price, 'trading_pair': trading_pair}
     params.update(args)
     return APIConnect(conn, 'POST', params, orderuri)
 
 
-def deleteOrder(conn, order_id):
+def deleteOrder(conn, order_id, trading_pair):
     """Delete an Order."""
-    newuri = orderuri + "/" + order_id
-    params = {'order_id': order_id}
+    newuri = orderuri + "/" + order_id + "/" + trading_pair
+    params = {'order_id': order_id, 'trading_pair': trading_pair}
     return APIConnect(conn, 'DELETE', params, newuri)
 
 
@@ -165,10 +167,10 @@ def showMyOrderDetails(conn, order_id):
     return APIConnect(conn, 'GET', params, newuri)
 
 
-def executeTrade(conn, order_id, OrderType, amount):
+def executeTrade(conn, order_id, OrderType, trading_pair, amount):
     """Buy/Sell on a specific Order."""
     newuri = tradeuri + '/' + order_id
-    params = {'order_id': order_id, 'type': OrderType, 'amount': amount}
+    params = {'order_id': order_id, 'type': OrderType, 'trading_pair': trading_pair, 'amount': amount}
     return APIConnect(conn, 'POST', params, newuri)
 
 
@@ -190,25 +192,25 @@ def showAccountInfo(conn):
     return APIConnect(conn, 'GET', params, accounturi)
 
 
-def showOrderbookCompact(conn):
+def showOrderbookCompact(conn, trading_pair):
     """Bids and Asks in compact format."""
-    params = {}
+    params = {'trading_pair': trading_pair}
     return APIConnect(conn, 'GET', params, orderuri + '/compact')
 
 
-def showPublicTradeHistory(conn, since_tid=None):
+def showPublicTradeHistory(conn, trading_pair, since_tid=None):
     """All successful trades of the las 7 days."""
     if since_tid is not None:
-        params = {'since_tid': since_tid}
+        params = {'trading_pair': trading_pair, 'since_tid': since_tid}
     else:
-        params = {}
+        params = {'trading_pair': trading_pair}
     return APIConnect(conn, 'GET', params, tradeuri + '/history')
 
 
-def showRates(conn):
+def showRates(conn, trading_pair):
     """Query of the average rate last 3 and 12 hours."""
     newuri = apihost + '/' + apiversion + '/rates'
-    params = {}
+    params = {'trading_pair': trading_pair}
     return APIConnect(conn, 'GET', params, newuri)
 
 
