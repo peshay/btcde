@@ -27,7 +27,7 @@ import btcde
 api_key = <YourAPIKey>
 api_secret = <YourAPISecret>
 conn = btcde.Connection(api_key, api_secret)
-orderbook = btcde.showOrderbook(conn, 'buy')
+orderbook = btcde.showOrderbook(conn, 'buy', 'btceur')
 print('API Credits Left: ' + str(orderbook.get('credits')))
 orders = orderbook.get('orders')
 for order in orders:
@@ -39,15 +39,15 @@ for order in orders:
 For more Details on the API Methods, please read [bitcoin.de API Documentation](https://www.bitcoin.de/de/api/tapi/v2/docu)
 All mandatory parameters have to be passed to a function, all optional are resolved via ```**args```
 
-#### showOrderbook(conn, OrderType, **args)
+#### showOrderbook(conn, OrderType, trading_pair, **args)
 
 *API Credits Cost: 2*
 
-#### createOrder(conn, OrderType, max_amount, price, **args)
+#### createOrder(conn, OrderType, trading_pair, max_amount, price, **args)
 
 *API Credits Cost: 1*
 
-#### deleteOrder(conn, order_id)
+#### deleteOrder(conn, order_id, trading_pair)
 
 *API Credits Cost: 2*
 
@@ -59,7 +59,7 @@ All mandatory parameters have to be passed to a function, all optional are resol
 
 *API Credits Cost: 2*
 
-#### executeTrade(conn, order_id, OrderType, amount)
+#### executeTrade(conn, order_id, OrderType, trading_pair, amount)
 
 *API Credits Cost: 1*
 
@@ -75,15 +75,15 @@ All mandatory parameters have to be passed to a function, all optional are resol
 
 *API Credits Cost: 2*
 
-#### showOrderbookCompact(conn)
+#### showOrderbookCompact(conn, trading_pair)
 
 *API Credits Cost: 3*
 
-#### showPublicTradeHistory(conn, since_tid=None)
+#### showPublicTradeHistory(conn, trading_pair, since_tid=None)
 
 *API Credits Cost: 3*
 
-#### showRates(conn)
+#### showRates(conn, trading_pair)
 
 *API Credits Cost: 3*
 
