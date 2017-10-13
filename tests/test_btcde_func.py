@@ -91,3 +91,17 @@ class TestBtcdeAPIDocu(TestCase):
         request_signature = history[0].headers.get('X-API-SIGNATURE')
         verified_signature = self.verifySignature(btcde.orderuri, 'GET', params)
         self.assertEqual(request_signature, verified_signature)
+        
+    def test_signature_delete(self, m):
+        '''Test the signature on a delete request.'''
+        order_id = 'A1234BC'
+        trading_pair = 'btceur'
+        params = {'order_id': order_id,
+                  'trading_pair': trading_pair}
+        m.delete(requests_mock.ANY, json={}, status_code=200)
+        btcde.deleteOrder(self.conn, order_id, trading_pair)
+        history = m.request_history
+        request_signature = history[0].headers.get('X-API-SIGNATURE')
+        url = btcde.orderuri + "/" + order_id + "/" + trading_pair
+        verified_signature = self.verifySignature(url, 'DELETE', params)
+        self.assertEqual(request_signature, verified_signature)
