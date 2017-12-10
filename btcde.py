@@ -98,7 +98,7 @@ def set_header(conn, url, method, encoded_string):
                    'X-API-NONCE': str(nonce),
                    'X-API-SIGNATURE': hmac_signed }
     return header
-    
+
 def send_request(url, method, header, encoded_string):
     if method == 'GET':
         r = requests.get(url, headers=(header),
@@ -110,7 +110,7 @@ def send_request(url, method, header, encoded_string):
         r = requests.delete(url, headers=(header),
                             stream=True, verify=False)
     return r
-    
+
 def APIConnect(conn, method, params, uri):
     """Transform Parameters to URL"""
     url, encoded_string = params_url(params, uri)
@@ -214,6 +214,9 @@ def showRates(conn, trading_pair):
     return APIConnect(conn, 'GET', params, newuri)
 
 
-def showAccountLedger(conn, **args):
+def showAccountLedger(conn, currency, **args):
     """Query on Account statement."""
-    return APIConnect(conn, 'GET', args, accounturi + '/ledger')
+    params = {'currency': currency}
+    params.update(args)
+    args.update()
+    return APIConnect(conn, 'GET', params, accounturi + '/ledger')
