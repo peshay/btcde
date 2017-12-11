@@ -9,14 +9,6 @@ import hashlib
 import logging
 import codecs
 
-# these two lines enable debugging at httplib level
-# (requests->urllib3->httplib)
-# you will see the REQUEST, including HEADERS and DATA, and RESPONSE with
-# HEADERS but without DATA.
-# the only thing missing will be the response.body which is not logged.
-#import http.client
-#http.client.HTTPConnection.debuglevel = 1
-
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
@@ -38,6 +30,7 @@ apihost = 'https://api.bitcoin.de'
 apiversion = 'v2'
 valid_trading_pair = ['btceur', 'bcheur', 'etheur']
 valid_order_type = ['buy', 'sell']
+valid_currency = ['btc', 'bch', 'eth']
 orderuri = apihost + '/' + apiversion + '/' + 'orders'
 tradeuri = apihost + '/' + apiversion + '/' + 'trades'
 accounturi = apihost + '/' + apiversion + '/' + 'account'
