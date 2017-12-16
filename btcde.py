@@ -98,7 +98,7 @@ def set_header(conn, url, method, encoded_string):
                    'X-API-NONCE': str(nonce),
                    'X-API-SIGNATURE': hmac_signed }
     return header
-    
+
 def send_request(url, method, header, encoded_string):
     if method == 'GET':
         r = requests.get(url, headers=(header),
@@ -110,7 +110,7 @@ def send_request(url, method, header, encoded_string):
         r = requests.delete(url, headers=(header),
                             stream=True, verify=False)
     return r
-    
+
 def APIConnect(conn, method, params, uri):
     """Transform Parameters to URL"""
     url, encoded_string = params_url(params, uri)
@@ -150,7 +150,7 @@ def createOrder(conn, OrderType, trading_pair, max_amount, price, **args):
 def deleteOrder(conn, order_id, trading_pair):
     """Delete an Order."""
     newuri = orderuri + "/" + order_id + "/" + trading_pair
-    params = {'order_id': order_id, 'trading_pair': trading_pair}
+    params = {}
     return APIConnect(conn, 'DELETE', params, newuri)
 
 
@@ -163,7 +163,7 @@ def showMyOrders(conn, **args):
 def showMyOrderDetails(conn, order_id):
     """Details to an own Order."""
     newuri = orderuri + '/' + order_id
-    params = {'order_id': order_id}
+    params = {}
     return APIConnect(conn, 'GET', params, newuri)
 
 
@@ -182,7 +182,7 @@ def showMyTrades(conn, **args):
 def showMyTradeDetails(conn, trade_id):
     """Details to a specific Trade."""
     newuri = tradeuri + '/' + trade_id
-    params = {'trade_id': trade_id}
+    params = {}
     return APIConnect(conn, 'GET', params, newuri)
 
 
@@ -214,6 +214,9 @@ def showRates(conn, trading_pair):
     return APIConnect(conn, 'GET', params, newuri)
 
 
-def showAccountLedger(conn, **args):
+def showAccountLedger(conn, currency, **args):
     """Query on Account statement."""
-    return APIConnect(conn, 'GET', args, accounturi + '/ledger')
+    params = {'currency': currency}
+    params.update(args)
+    args.update()
+    return APIConnect(conn, 'GET', params, accounturi + '/ledger')

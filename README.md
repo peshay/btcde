@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/peshay/btcde.svg?branch=master)](https://travis-ci.org/peshay/btcde)
-[![Codecov](https://codecov.io/gh/peshay/btcde/branch/master/graph/badge.svg)](https://codecov.io/gh/peshay/btcde/branch/master)
-[![Scrutinizer](https://scrutinizer-ci.com/g/peshay/btcde/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/peshay/btcde/?branch=master)
+[![Build Status](https://travis-ci.org/peshay/btcde.svg?branch=new-test)](https://travis-ci.org/peshay/btcde)
+[![Codecov](https://codecov.io/gh/peshay/btcde/branch/new-test/graph/badge.svg)](https://codecov.io/gh/peshay/btcde/branch/new-test)
+[![Scrutinizer](https://scrutinizer-ci.com/g/peshay/btcde/badges/quality-score.png?b=new-test)](https://scrutinizer-ci.com/g/peshay/btcde/?branch=new-test)
 [![Python version](https://img.shields.io/pypi/pyversions/btcde.svg)](https://pypi.python.org/pypi/btcde)
-[![license](https://img.shields.io/github/license/peshay/btcde.svg)](https://github.com/peshay/btcde/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/peshay/btcde.svg)](https://github.com/peshay/btcde/blob/new-test/LICENSE)
 [![Beerpay](https://beerpay.io/peshay/btcde/badge.svg?style=beer)](https://beerpay.io/peshay/btcde)
 
 # btcde.py
@@ -90,8 +90,3 @@ All mandatory parameters have to be passed to a function, all optional are resol
 #### showAccountLedger(conn, **args)
 
 *API Credits Cost: 3*
-
-## Support on Beerpay
-Hey dude! Help me out for a couple of :beers:!
-
-[![Beerpay](https://beerpay.io/peshay/btcde/badge.svg?style=beer-square)](https://beerpay.io/peshay/btcde)  [![Beerpay](https://beerpay.io/peshay/btcde/make-wish.svg?style=flat-square)](https://beerpay.io/peshay/btcde?focus=wish)
