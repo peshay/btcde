@@ -150,7 +150,7 @@ def createOrder(conn, OrderType, trading_pair, max_amount, price, **args):
 def deleteOrder(conn, order_id, trading_pair):
     """Delete an Order."""
     newuri = orderuri + "/" + order_id + "/" + trading_pair
-    params = {'order_id': order_id, 'trading_pair': trading_pair}
+    params = {}
     return APIConnect(conn, 'DELETE', params, newuri)
 
 
@@ -163,7 +163,7 @@ def showMyOrders(conn, **args):
 def showMyOrderDetails(conn, order_id):
     """Details to an own Order."""
     newuri = orderuri + '/' + order_id
-    params = {'order_id': order_id}
+    params = {}
     return APIConnect(conn, 'GET', params, newuri)
 
 
@@ -182,7 +182,7 @@ def showMyTrades(conn, **args):
 def showMyTradeDetails(conn, trade_id):
     """Details to a specific Trade."""
     newuri = tradeuri + '/' + trade_id
-    params = {'trade_id': trade_id}
+    params = {}
     return APIConnect(conn, 'GET', params, newuri)
 
 
