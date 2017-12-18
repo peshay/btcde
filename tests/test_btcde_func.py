@@ -46,14 +46,11 @@ class TestBtcdeAPIDocu(TestCase):
     def setUp(self):
         self.XAPIKEY = 'f00b4r'
         self.XAPISECRET = 'b4rf00'
-        self.XAPINONCE = int(time.time())
-        btcde.nonce = self.XAPINONCE
         self.conn = btcde.Connection(self.XAPIKEY, self.XAPISECRET)
 
     def tearDown(self):
         del self.XAPIKEY
         del self.XAPISECRET
-        del self.XAPINONCE
         del self.conn
 
     def test_signature_post(self, m):
@@ -66,14 +63,13 @@ class TestBtcdeAPIDocu(TestCase):
                     "errors": [],
                     "credits": 8}
         m.post(requests_mock.ANY, json=response, status_code=201)
-        btcde.createOrder(self.conn,
-                          params.get('type'),
-                          params.get('trading_pair'),
-                          params.get('max_amount'),
-                          params.get('price'))
+        self.conn.createOrder(params.get('type'),
+                              params.get('trading_pair'),
+                              params.get('max_amount'),
+                              params.get('price'))
         history = m.request_history
         request_signature = history[0].headers.get('X-API-SIGNATURE')
-        verified_signature = self.verifySignature(btcde.orderuri,
+        verified_signature = self.verifySignature(self.conn.orderuri,
                                                   'POST',
                                                   params)
         self.assertEqual(request_signature, verified_signature)
@@ -102,12 +98,11 @@ class TestBtcdeAPIDocu(TestCase):
                      }, "errors": [],
                     "credits": 12}
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showOrderbook(self.conn,
-                            params.get('type'),
-                            params.get('trading_pair'))
+        self.conn.showOrderbook(params.get('type'),
+                                params.get('trading_pair'))
         history = m.request_history
         request_signature = history[0].headers.get('X-API-SIGNATURE')
-        verified_signature = self.verifySignature(btcde.orderuri,
+        verified_signature = self.verifySignature(self.conn.orderuri,
                                                   'GET',
                                                   params)
         self.assertEqual(request_signature, verified_signature)
@@ -119,10 +114,10 @@ class TestBtcdeAPIDocu(TestCase):
         params = {'order_id': order_id,
                   'trading_pair': trading_pair}
         m.delete(requests_mock.ANY, json={}, status_code=200)
-        btcde.deleteOrder(self.conn, order_id, trading_pair)
+        self.conn.deleteOrder(order_id, trading_pair)
         history = m.request_history
         request_signature = history[0].headers.get('X-API-SIGNATURE')
-        url = btcde.orderuri + "/" + order_id + "/" + trading_pair
+        url = self.conn.orderuri + "/" + order_id + "/" + trading_pair
         verified_signature = self.verifySignature(url, 'DELETE', params)
         self.assertEqual(request_signature, verified_signature)
 
@@ -174,10 +169,9 @@ class TestBtcdeAPIDocu(TestCase):
            "credits": 12
         }
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showOrderbook(self.conn,
-                            params.get('type'),
-                            params.get('trading_pair'),
-                            price=params.get('price'))
+        self.conn.showOrderbook(params.get('type'),
+                                params.get('trading_pair'),
+                                price=params.get('price'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -198,9 +192,9 @@ class TestBtcdeAPIDocu(TestCase):
                     "errors": [],
                     "credits": 8}
         m.post(requests_mock.ANY, json=response, status_code=201)
-        btcde.createOrder(self.conn, params.get('type'),
-                          params.get('trading_pair'), params.get('max_amount'),
-                          price=params.get('price'))
+        self.conn.createOrder(params.get('type'),
+                              params.get('trading_pair'), params.get('max_amount'),
+                              price=params.get('price'))
         history = m.request_history
         self.assertEqual(history[0].method, "POST")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -215,8 +209,8 @@ class TestBtcdeAPIDocu(TestCase):
         response = {"errors": [],
                     "credits": 5}
         m.delete(requests_mock.ANY, json=response, status_code=200)
-        btcde.deleteOrder(self.conn, params.get('order_id'),
-                          params.get('trading_pair'))
+        self.conn.deleteOrder(params.get('order_id'),
+                              params.get('trading_pair'))
         history = m.request_history
         self.assertEqual(history[0].method, "DELETE")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -263,10 +257,9 @@ class TestBtcdeAPIDocu(TestCase):
                     "credits": 15
                     }
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showMyOrders(self.conn,
-                           type=params.get('type'),
-                           trading_pair=params.get('trading_pair'),
-                           price=params.get('price'))
+        self.conn.showMyOrders(type=params.get('type'),
+                               trading_pair=params.get('trading_pair'),
+                               price=params.get('price'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -303,7 +296,7 @@ class TestBtcdeAPIDocu(TestCase):
                     "credits": 15
                     }
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showMyOrderDetails(self.conn, params.get('order_id'))
+        self.conn.showMyOrderDetails(params.get('order_id'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -324,11 +317,10 @@ class TestBtcdeAPIDocu(TestCase):
         response = {"errors": [],
                     "credits": 8}
         m.post(requests_mock.ANY, json=response, status_code=201)
-        btcde.executeTrade(self.conn,
-                           params.get('order_id'),
-                           params.get('type'),
-                           params.get('trading_pair'),
-                           params.get('amount'))
+        self.conn.executeTrade(params.get('order_id'),
+                               params.get('type'),
+                               params.get('trading_pair'),
+                               params.get('amount'))
         history = m.request_history
         self.assertEqual(history[0].method, "POST")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -363,7 +355,7 @@ class TestBtcdeAPIDocu(TestCase):
                     "credits": 15
                     }
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showMyTrades(self.conn)
+        self.conn.showMyTrades()
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -402,8 +394,8 @@ class TestBtcdeAPIDocu(TestCase):
                     "credits": 15
                     }
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showMyTrades(self.conn, type=params.get('type'),
-                           trading_pairs=params.get('trading_pairs'))
+        self.conn.showMyTrades(type=params.get('type'),
+                               trading_pairs=params.get('trading_pairs'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -447,7 +439,7 @@ class TestBtcdeAPIDocu(TestCase):
                     "credits": 15,
                     }
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showMyTradeDetails(self.conn, params.get('trade_id'))
+        self.conn.showMyTradeDetails(params.get('trade_id'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -459,7 +451,7 @@ class TestBtcdeAPIDocu(TestCase):
         response = {"errors": [],
                     "credits": 5}
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showAccountInfo(self.conn)
+        self.conn.showAccountInfo()
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -472,7 +464,7 @@ class TestBtcdeAPIDocu(TestCase):
         response = {"errors": [],
                     "credits": 5}
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showOrderbookCompact(self.conn, params.get('trading_pair'))
+        self.conn.showOrderbookCompact(params.get('trading_pair'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -501,7 +493,7 @@ class TestBtcdeAPIDocu(TestCase):
                     "credits": 19
                     }
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showPublicTradeHistory(self.conn, params.get('trading_pair'))
+        self.conn.showPublicTradeHistory(params.get('trading_pair'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -521,7 +513,7 @@ class TestBtcdeAPIDocu(TestCase):
                     "credits": 19
                     }
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showRates(self.conn, params.get('trading_pair'))
+        self.conn.showRates(params.get('trading_pair'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -541,7 +533,7 @@ class TestBtcdeAPIDocu(TestCase):
                     "credits": 19
                     }
         m.get(requests_mock.ANY, json=response, status_code=200)
-        btcde.showAccountLedger(self.conn, params.get('currency'))
+        self.conn.showAccountLedger(params.get('currency'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
