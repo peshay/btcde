@@ -8,6 +8,7 @@ import hmac
 import hashlib
 import logging
 import codecs
+import decimal
 
 # these two lines enable debugging at httplib level
 # (requests->urllib3->httplib)
@@ -120,7 +121,7 @@ def APIConnect(conn, method, params, uri):
         # Handle API Errors
         if HandleAPIErrors(r):
             # get results
-            result = r.json()
+            result = r.json(parse_float=decimal.Decimal)
         else:
             result = {}
     except requests.exceptions.RequestException as e:
