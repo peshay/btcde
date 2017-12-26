@@ -24,6 +24,9 @@ requests.packages.urllib3.disable_warnings()
 
 def HandleRequestsException(e):
     """Handle Exception from request."""
+    print(e)
+    print(e[0])
+    print(e[0][0])
     log.warning('{}: {}'.format(e[0][0], e[0][1]))
 
 
