@@ -309,6 +309,21 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertEqual(history[0].url, base_url + url_args)
         self.assertTrue(mock_logger.debug.called)
 
+    def test_showPublicTradeHistory_since(self, mock_logger, m):
+        '''Test the function showPublicTradeHistory with since_tid.'''
+        params = {'trading_pair': 'btceur', 'since_tid': '123'}
+        base_url = 'https://api.bitcoin.de/v2/trades/history'
+        url_args = '?since_tid={}&trading_pair={}'.format(params.get('since_tid'),
+                                                          params.get('trading_pair'))
+        response = self.sampleData('showPublicTradeHistory')
+        m.get(requests_mock.ANY, json=response, status_code=200)
+        self.conn.showPublicTradeHistory(params.get('trading_pair'),
+                                         params.get('since_tid'))
+        history = m.request_history
+        self.assertEqual(history[0].method, "GET")
+        self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
+
     def test_showRates(self, mock_logger, m):
         '''Test the function showRates.'''
         params = {'trading_pair': 'btceur'}
