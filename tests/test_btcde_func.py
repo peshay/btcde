@@ -2,10 +2,12 @@ from unittest import TestCase
 import hashlib
 import hmac
 import requests_mock
+from mock import patch
 import json
 import btcde
 
 
+@patch('btcde.log')
 @requests_mock.Mocker()
 class TestBtcdeAPIDocu(TestCase):
     '''Tests are as in bitcoin.de API documentation.
@@ -60,7 +62,7 @@ class TestBtcdeAPIDocu(TestCase):
         del self.XAPISECRET
         del self.conn
 
-    def test_signature_post(self, m):
+    def test_signature_post(self, mock_logger, m):
         '''Test the signature on a post request.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
@@ -78,8 +80,9 @@ class TestBtcdeAPIDocu(TestCase):
                                                   'POST',
                                                   params)
         self.assertEqual(request_signature, verified_signature)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_signature_get(self, m):
+    def test_signature_get(self, mock_logger, m):
         '''Test the signature on a get request.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur'}
@@ -93,8 +96,9 @@ class TestBtcdeAPIDocu(TestCase):
                                                   'GET',
                                                   params)
         self.assertEqual(request_signature, verified_signature)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_signature_delete(self, m):
+    def test_signature_delete(self, mock_logger, m):
         '''Test the signature on a delete request.'''
         order_id = 'A1234BC'
         trading_pair = 'btceur'
@@ -105,8 +109,9 @@ class TestBtcdeAPIDocu(TestCase):
         url = self.conn.orderuri + "/" + order_id + "/" + trading_pair
         verified_signature = self.verifySignature(url, 'DELETE', {})
         self.assertEqual(request_signature, verified_signature)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_show_orderbook(self, m):
+    def test_show_orderbook(self, mock_logger, m):
         '''Test the function showOrderbook.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
@@ -125,8 +130,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_createOrder(self, m):
+    def test_createOrder(self, mock_logger, m):
         '''Test the function createOrder.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
@@ -146,8 +152,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "POST")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_deleteOrder(self, m):
+    def test_deleteOrder(self, mock_logger, m):
         '''Test the function deleteOrder.'''
         params = {'trading_pair': 'btceur',
                   'order_id': '1337'}
@@ -161,8 +168,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "DELETE")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_showMyOrders(self, m):
+    def test_showMyOrders(self, mock_logger, m):
         '''Test the function showMyOrders.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
@@ -180,8 +188,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_showMyOrderDetails(self, m):
+    def test_showMyOrderDetails(self, mock_logger, m):
         '''Test the function showMyOrderDetails.'''
         params = {'order_id': '1337'}
         base_url = 'https://api.bitcoin.de/v2/orders/{}'\
@@ -193,8 +202,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_executeTrade(self, m):
+    def test_executeTrade(self, mock_logger, m):
         '''Test the function executeTrade.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
@@ -217,8 +227,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "POST")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_showMyTrades(self, m):
+    def test_showMyTrades(self, mock_logger, m):
         '''Test the function showMyTrades.'''
         base_url = 'https://api.bitcoin.de/v2/trades'
         url_args = ''
@@ -228,8 +239,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_showMyTrades_with_params(self, m):
+    def test_showMyTrades_with_params(self, mock_logger, m):
         '''Test the function showMyTrades with parameters.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur'}
@@ -244,8 +256,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_showMyTradeDetails(self, m):
+    def test_showMyTradeDetails(self, mock_logger, m):
         '''Test the function showMyTradeDetails.'''
         params = {'trade_id': '1337'}
         base_url = 'https://api.bitcoin.de/v2/trades'
@@ -256,8 +269,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_showAccountInfo(self, m):
+    def test_showAccountInfo(self, mock_logger, m):
         '''Test the function showAccountInfo.'''
         base_url = 'https://api.bitcoin.de/v2/account'
         url_args = ''
@@ -267,8 +281,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_showOrderbookCompact(self, m):
+    def test_showOrderbookCompact(self, mock_logger, m):
         '''Test the function showOrderbookCompact.'''
         params = {'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/orders/compact'
@@ -279,8 +294,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_showPublicTradeHistory(self, m):
+    def test_showPublicTradeHistory(self, mock_logger, m):
         '''Test the function showPublicTradeHistory.'''
         params = {'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/trades/history'
@@ -291,8 +307,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_showRates(self, m):
+    def test_showRates(self, mock_logger, m):
         '''Test the function showRates.'''
         params = {'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/rates'
@@ -303,8 +320,9 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
 
-    def test_showAccountLedger(self, m):
+    def test_showAccountLedger(self, mock_logger, m):
         '''Test the function showAccountLedger.'''
         params = {'currency': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/account/ledger'
@@ -315,3 +333,4 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)

@@ -9,14 +9,14 @@ import hashlib
 import logging
 import codecs
 
-
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
+log = logging.getLogger(__name__)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
-__version__ = '1.5'
+__version__ = '2.0'
 
 # disable unsecure SSL warning
 requests.packages.urllib3.disable_warnings()
@@ -24,8 +24,7 @@ requests.packages.urllib3.disable_warnings()
 
 def HandleRequestsException(e):
     """Handle Exception from request."""
-    print(e[0][0])
-    print(e[0][1])
+    log.warning('{}: {}'.format(e[0][0], e[0][1]))
 
 
 def HandleAPIErrors(r):
@@ -35,9 +34,9 @@ def HandleAPIErrors(r):
         reader = codecs.getreader("utf-8")
         content = json.load(reader(r.raw))
         errors = content.get('errors')
-        print('Code:     ' + str(errors[0]['code']))
-        print('Message:  ' + errors[0]['message'])
-        print('With URL: ' + r.url)
+        log.warning('API Error Code: {}'.format(str(errors[0]['code'])))
+        log.warning('API Error Message: {}'.format(errors[0]['message']))
+        log.warning('API Error URL: {}'.format(r.url))
         return False
     else:
         return True
@@ -60,19 +59,30 @@ class Connection:
         self.tradeuri = self.apihost + '/' + self.apiversion + '/' + 'trades'
         self.accounturi = self.apihost + '/' + self.apiversion + '/' + 'account'
 
-
+    def create_url(self, params, uri):
+        encoded_string = ''
+        for key, value in sorted(params.items()):
+            encoded_string += str(key) + '=' + str(value) + '&'
+        encoded_string = encoded_string[:-1]
+        url = uri + '?' + encoded_string
+        return url, encoded_string        
 
     def params_url(self, params, uri):
-        encoded_string = ''
         if params:
-            for key, value in sorted(params.items()):
-                encoded_string += str(key) + '=' + str(value) + '&'
-            encoded_string = encoded_string[:-1]
-            url = uri + '?' + encoded_string
+            url, encoded_string = self.create_url(params, uri)
         else:
+            encoded_string = ''
             url = uri
         return url, encoded_string
 
+    def build_hmac_sign(self, md5string, method, url):
+        hmac_data = '{method}#{url}#{key}#{nonce}#{md5}'\
+                    .format(method=method, url=url,
+                            key=self.api_key, nonce=str(self.nonce),
+                            md5=md5string)
+        hmac_signed = hmac.new(bytearray(self.api_secret.encode()), msg=hmac_data.encode(), digestmod=hashlib.sha256).hexdigest()
+        return hmac_signed
+        
     def set_header(self, url, method, encoded_string):
         # raise self.nonce before using
         self.nonce += 1
@@ -80,16 +90,14 @@ class Connection:
             md5_encoded_query_string = hashlib.md5(encoded_string.encode()).hexdigest()
         else:
             md5_encoded_query_string = hashlib.md5(b'').hexdigest()
-        hmac_data = method + '#' + \
-            url + '#' + self.api_key + \
-            '#' + str(self.nonce) + '#' + md5_encoded_query_string
-        hmac_signed = hmac.new(bytearray(self.api_secret.encode()), msg=hmac_data.encode(), digestmod=hashlib.sha256).hexdigest()
+        hmac_signed = self.build_hmac_sign(md5_encoded_query_string,
+                                           method, url)
         # set header
         header = {'content-type':
                   'application/x-www-form-urlencoded; charset=utf-8',
                   'X-API-KEY': self.api_key,
-                       'X-API-NONCE': str(self.nonce),
-                       'X-API-SIGNATURE': hmac_signed }
+                  'X-API-NONCE': str(self.nonce),
+                  'X-API-SIGNATURE': hmac_signed }
         return header
 
     def send_request(self, url, method, header, encoded_string):
@@ -108,6 +116,7 @@ class Connection:
         """Transform Parameters to URL"""
         url, encoded_string = self.params_url(params, uri)
         header = self.set_header(url, method, encoded_string)
+        log.debug('Set Header: {}'.format(header))
         try:
             r = self.send_request(url, method, header, encoded_string)
             # Handle API Errors
