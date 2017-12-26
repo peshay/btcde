@@ -334,3 +334,25 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
         self.assertTrue(mock_logger.debug.called)
+    
+    def test_APIException(self, mock_logger, m):
+        '''Test API Exception.'''
+        params = {'type': 'buy',
+                  'trading_pair': 'btceur',
+                  'max_amount': 10,
+                  'price': 13}
+        base_url = 'https://api.bitcoin.de/v2/orders'
+        url_args = '?max_amount={}&price={}&trading_pair={}&type={}'\
+                   .format(params.get('max_amount'),
+                           params.get('price'),
+                           params.get('trading_pair'),
+                           params.get('type'))
+        response = self.sampleData('error')
+        m.post(requests_mock.ANY, json=response, status_code=400)
+        self.conn.createOrder(params.get('type'),
+                              params.get('trading_pair'), params.get('max_amount'),
+                              price=params.get('price'))
+        history = m.request_history
+        self.assertEqual(history[0].method, "POST")
+        self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
