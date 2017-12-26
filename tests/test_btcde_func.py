@@ -349,8 +349,30 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
         self.assertTrue(mock_logger.debug.called)
+
+
+class TestBtcdeExceptions(TestCase):
+    '''Test for Exception Handling.'''
     
-    def test_APIException(self, mock_logger, m):
+    def sampleData(self, file):
+        '''Retrieve sample data from json files.'''
+        filepath = 'tests/resources/{}.json'.format(file)
+        data = json.load(open(filepath))
+        return data
+        
+    def setUp(self):
+        self.XAPIKEY = 'f00b4r'
+        self.XAPISECRET = 'b4rf00'
+        self.conn = btcde.Connection(self.XAPIKEY, self.XAPISECRET)
+        self.XAPINONCE = self.conn.nonce
+
+    def tearDown(self):
+        del self.XAPIKEY
+        del self.XAPISECRET
+        del self.conn
+
+    @requests_mock.Mocker()
+    def test_APIException(self, m):
         '''Test API Exception.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
@@ -370,4 +392,22 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "POST")
         self.assertEqual(history[0].url, base_url + url_args)
-        self.assertTrue(mock_logger.debug.called)
+        
+    @patch('btcde.log')
+    def test_RequestException(self, mock_logger):
+        '''Test Requests Exception.'''
+        params = {'type': 'buy',
+                  'trading_pair': 'btceur',
+                  'max_amount': 10,
+                  'price': 13}
+        base_url = 'https://api.bitcoin.de/v2/orders'
+        url_args = '?max_amount={}&price={}&trading_pair={}&type={}'\
+                   .format(params.get('max_amount'),
+                           params.get('price'),
+                           params.get('trading_pair'),
+                           params.get('type'))
+        
+        self.conn.createOrder(params.get('type'),
+                              params.get('trading_pair'), params.get('max_amount'),
+                              price=params.get('price'))
+        self.assertTrue(mock_logger.warning.called)
