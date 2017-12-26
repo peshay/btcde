@@ -363,7 +363,7 @@ class TestBtcdeExceptions(TestCase):
     def setUp(self):
         self.XAPIKEY = 'f00b4r'
         self.XAPISECRET = 'b4rf00'
-        self.conn = btcde.Connection(self.XAPIKEY, self.XAPISECRET)
+        self.conn = btcde.Connection(self.XAPIKEY, self.XAPISECRET)      
         self.XAPINONCE = self.conn.nonce
 
     def tearDown(self):
@@ -386,6 +386,7 @@ class TestBtcdeExceptions(TestCase):
                            params.get('type'))
         response = self.sampleData('error')
         m.post(requests_mock.ANY, json=response, status_code=400)
+        print(self.conn.apihost)
         self.conn.createOrder(params.get('type'),
                               params.get('trading_pair'), params.get('max_amount'),
                               price=params.get('price'))
@@ -399,14 +400,9 @@ class TestBtcdeExceptions(TestCase):
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
                   'max_amount': 10,
-                  'price': 13}
-        base_url = 'https://api.bitcoin.de/v2/orders'
-        url_args = '?max_amount={}&price={}&trading_pair={}&type={}'\
-                   .format(params.get('max_amount'),
-                           params.get('price'),
-                           params.get('trading_pair'),
-                           params.get('type'))
-        
+                  'price': 13} 
+        print(self.conn.apihost)
+        self.conn.orderuri = 'https://foo.bar'
         self.conn.createOrder(params.get('type'),
                               params.get('trading_pair'), params.get('max_amount'),
                               price=params.get('price'))

@@ -127,6 +127,7 @@ class Connection:
                 result = {}
         except requests.exceptions.RequestException as e:
             HandleRequestsException(e)
+            result = {}
         return result
 
 
