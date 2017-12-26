@@ -339,7 +339,7 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_showAccountLedger(self, mock_logger, m):
         '''Test the function showAccountLedger.'''
-        params = {'currency': 'btceur'}
+        params = {'currency': 'btc'}
         base_url = 'https://api.bitcoin.de/v2/account/ledger'
         url_args = '?currency={}'.format(params.get('currency'))
         response = self.sampleData('showAccountLedger')
@@ -386,7 +386,6 @@ class TestBtcdeExceptions(TestCase):
                            params.get('type'))
         response = self.sampleData('error')
         m.post(requests_mock.ANY, json=response, status_code=400)
-        print(self.conn.apihost)
         self.conn.createOrder(params.get('type'),
                               params.get('trading_pair'), params.get('max_amount'),
                               price=params.get('price'))
@@ -401,9 +400,23 @@ class TestBtcdeExceptions(TestCase):
                   'trading_pair': 'btceur',
                   'max_amount': 10,
                   'price': 13} 
-        print(self.conn.apihost)
         self.conn.orderuri = 'https://foo.bar'
         self.conn.createOrder(params.get('type'),
                               params.get('trading_pair'), params.get('max_amount'),
                               price=params.get('price'))
         self.assertTrue(mock_logger.warning.called)
+        
+    def test_TradingPairValueException(self):
+        with self.assertRaises(ValueError) as context:
+            self.conn.deleteOrder('123', 'usdeur')
+        self.assertTrue('usdeur is not any of' in str(context.exception))
+
+    def test_OrderTypeValueException(self):
+        with self.assertRaises(ValueError) as context:
+            self.conn.createOrder('fail', 'btceur', '100', '100')
+        self.assertTrue('fail is not any of' in str(context.exception))
+
+    def test_CurrencyValueException(self):
+        with self.assertRaises(ValueError) as context:
+            self.conn.showAccountLedger('usd')
+        self.assertTrue('usd is not any of' in str(context.exception))

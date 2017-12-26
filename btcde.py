@@ -21,6 +21,10 @@ __version__ = '2.0'
 # disable unsecure SSL warning
 requests.packages.urllib3.disable_warnings()
 
+TRADING_PAIRS = ['btceur', 'bcheur', 'etheur']
+ORDER_TYPES = ['buy', 'sell']
+CURRENCIES = ['btc', 'bch', 'eth']
+
 
 def HandleRequestsException(e):
     """Handle Exception from request."""
@@ -42,7 +46,7 @@ def HandleAPIErrors(r):
         return True
 
 
-class Connection:
+class Connection(object):
     """To provide connection credentials to the trading API"""
     def __init__(self, api_key, api_secret):
         self.api_key = api_key
@@ -52,12 +56,42 @@ class Connection:
         # Bitcoin.de API URI
         self.apihost = 'https://api.bitcoin.de'
         self.apiversion = 'v2'
-        self.valid_trading_pair = ['btceur', 'bcheur', 'etheur']
-        self.valid_order_type = ['buy', 'sell']
-        self.valid_currency = ['btc', 'bch', 'eth']
         self.orderuri = self.apihost + '/' + self.apiversion + '/' + 'orders'
         self.tradeuri = self.apihost + '/' + self.apiversion + '/' + 'trades'
         self.accounturi = self.apihost + '/' + self.apiversion + '/' + 'account'
+
+    @property
+    def trading_pair(self):
+        return self._trading_pair
+    
+    @trading_pair.setter
+    def trading_pair(self, d):
+        if d not in TRADING_PAIRS:
+            list_string = ', '.join(TRADING_PAIRS)
+            raise ValueError("{} is not any of {}".format(d, list_string))
+        self._trading_pair = d
+    
+    @property
+    def order_type(self):
+        return self._order_type
+    
+    @order_type.setter
+    def order_type(self, d):
+        if d not in ORDER_TYPES:
+            list_string = ', '.join(ORDER_TYPES)
+            raise ValueError("{} is not any of {}".format(d, list_string))
+        self._order_type = d
+    
+    @property
+    def currency(self):
+        return self._currency
+    
+    @currency.setter
+    def currency(self, d):
+        if d not in CURRENCIES:
+            list_string = ', '.join(CURRENCIES)
+            raise ValueError("{} is not any of {}".format(d, list_string))
+        self._currency = d
 
     def create_url(self, params, uri):
         encoded_string = ''
@@ -131,28 +165,33 @@ class Connection:
         return result
 
 
-    def showOrderbook(self, OrderType, trading_pair, **args):
+    def showOrderbook(self, order_type, trading_pair, **args):
         """Search Orderbook for offers."""
-        # Build parameters
-        if OrderType in self.valid_order_type and trading_pair in self.valid_trading_pair:
-            params = {'type': OrderType, 'trading_pair': trading_pair}
-        else:
-            print('problem')
+        self.order_type = order_type
+        self.trading_pair = trading_pair
+        params = {'type': self.order_type,
+                  'trading_pair': self.trading_pair}
         params.update(args)
         return self.APIConnect('GET', params, self.orderuri)
 
 
-    def createOrder(self, OrderType, trading_pair, max_amount, price, **args):
+    def createOrder(self, order_type, trading_pair, max_amount, price, **args):
         """Create a new Order."""
+        self.order_type = order_type
+        self.trading_pair = trading_pair
         # Build parameters
-        params = {'type': OrderType, 'max_amount': max_amount, 'price': price, 'trading_pair': trading_pair}
+        params = {'type': self.order_type,
+                  'max_amount': max_amount,
+                  'price': price,
+                  'trading_pair': self.trading_pair}
         params.update(args)
         return self.APIConnect('POST', params, self.orderuri)
 
 
     def deleteOrder(self, order_id, trading_pair):
         """Delete an Order."""
-        newuri = self.orderuri + "/" + order_id + "/" + trading_pair
+        self.trading_pair = trading_pair
+        newuri = self.orderuri + "/" + order_id + "/" + self.trading_pair
         params = {}
         return self.APIConnect('DELETE', params, newuri)
 
@@ -170,10 +209,15 @@ class Connection:
         return self.APIConnect('GET', params, newuri)
 
 
-    def executeTrade(self, order_id, OrderType, trading_pair, amount):
+    def executeTrade(self, order_id, order_type, trading_pair, amount):
         """Buy/Sell on a specific Order."""
+        self.order_type = order_type
+        self.trading_pair = trading_pair
         newuri = self.tradeuri + '/' + order_id
-        params = {'order_id': order_id, 'type': OrderType, 'trading_pair': trading_pair, 'amount': amount}
+        params = {'order_id': order_id,
+                  'type': self.order_type,
+                  'trading_pair': self.trading_pair,
+                  'amount': amount}
         return self.APIConnect('POST', params, newuri)
 
 
@@ -197,29 +241,33 @@ class Connection:
 
     def showOrderbookCompact(self, trading_pair):
         """Bids and Asks in compact format."""
-        params = {'trading_pair': trading_pair}
+        self.trading_pair = trading_pair
+        params = {'trading_pair': self.trading_pair}
         return self.APIConnect('GET', params, self.orderuri + '/compact')
 
 
     def showPublicTradeHistory(self, trading_pair, since_tid=None):
         """All successful trades of the las 7 days."""
+        self.trading_pair = trading_pair
         if since_tid is not None:
-            params = {'trading_pair': trading_pair, 'since_tid': since_tid}
+            params = {'trading_pair': self.trading_pair, 'since_tid': since_tid}
         else:
-            params = {'trading_pair': trading_pair}
+            params = {'trading_pair': self.trading_pair}
         return self.APIConnect('GET', params, self.tradeuri + '/history')
 
 
     def showRates(self, trading_pair):
         """Query of the average rate last 3 and 12 hours."""
+        self.trading_pair = trading_pair
         newuri = self.apihost + '/' + self.apiversion + '/rates'
-        params = {'trading_pair': trading_pair}
+        params = {'trading_pair': self.trading_pair}
         return self.APIConnect('GET', params, newuri)
 
 
     def showAccountLedger(self, currency, **args):
         """Query on Account statement."""
-        params = {'currency': currency}
+        self.currency = currency
+        params = {'currency': self.currency}
         params.update(args)
         args.update()
         return self.APIConnect('GET', params, self.accounturi + '/ledger')
