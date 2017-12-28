@@ -136,8 +136,8 @@ class TestBtcdeAPIDocu(TestCase):
         '''Test the function createOrder.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
-                  'max_amount': 10,
-                  'price': 13}
+                  'max_amount': '10',
+                  'price': '10'}
         base_url = 'https://api.bitcoin.de/v2/orders'
         url_args = '?max_amount={}&price={}&trading_pair={}&type={}'\
                    .format(params.get('max_amount'),
@@ -147,8 +147,9 @@ class TestBtcdeAPIDocu(TestCase):
         response = self.sampleData('createOrder')
         m.post(requests_mock.ANY, json=response, status_code=201)
         self.conn.createOrder(params.get('type'),
-                              params.get('trading_pair'), params.get('max_amount'),
-                              price=params.get('price'))
+                              params.get('trading_pair'),
+                              params.get('max_amount'),
+                              params.get('price'))
         history = m.request_history
         self.assertEqual(history[0].method, "POST")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -173,18 +174,15 @@ class TestBtcdeAPIDocu(TestCase):
     def test_showMyOrders(self, mock_logger, m):
         '''Test the function showMyOrders.'''
         params = {'type': 'buy',
-                  'trading_pair': 'btceur',
-                  'price': '1337'}
+                  'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/orders/my_own'
-        url_args = '?price={}&trading_pair={}&type={}'\
-                   .format(params.get('price'),
-                           params.get('trading_pair'),
+        url_args = '?trading_pair={}&type={}'\
+                   .format(params.get('trading_pair'),
                            params.get('type'))
         response = self.sampleData('showMyOrders')
         m.get(requests_mock.ANY, json=response, status_code=200)
         self.conn.showMyOrders(type=params.get('type'),
-                               trading_pair=params.get('trading_pair'),
-                               price=params.get('price'))
+                               trading_pair=params.get('trading_pair'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -246,13 +244,13 @@ class TestBtcdeAPIDocu(TestCase):
         params = {'type': 'buy',
                   'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/trades'
-        url_args = '?trading_pairs={}&type={}'\
-                   .format(params.get('trading_pairs'),
+        url_args = '?trading_pair={}&type={}'\
+                   .format(params.get('trading_pair'),
                            params.get('type'))
         response = self.sampleData('showMyTrades')
         m.get(requests_mock.ANY, json=response, status_code=200)
         self.conn.showMyTrades(type=params.get('type'),
-                               trading_pairs=params.get('trading_pairs'))
+                               trading_pair=params.get('trading_pair'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -318,7 +316,7 @@ class TestBtcdeAPIDocu(TestCase):
         response = self.sampleData('showPublicTradeHistory')
         m.get(requests_mock.ANY, json=response, status_code=200)
         self.conn.showPublicTradeHistory(params.get('trading_pair'),
-                                         params.get('since_tid'))
+                                         since_tid=params.get('since_tid'))
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
