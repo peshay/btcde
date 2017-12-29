@@ -40,85 +40,85 @@ For more Details on the API Methods, please read [bitcoin.de API Documentation](
 All mandatory parameters have to be passed to a function, all optional are resolved via ```**args```
 
 #### showOrderbook(OrderType, trading_pair, **args)
-*Required Parameters:
-  *type
-  *trading_pair
-*Optional Parameters:
-  *amount
-  *price
-  *order_requirements_fullfilled
-  *only_kyc_full
-  *only_express_orders
-  *only_same_bankgroup
-  *only_same_bic
-  *seat_of_bank
+* Required Parameters:
+  * type
+  * trading_pair
+* Optional Parameters:
+  * amount
+  * price
+  * order_requirements_fullfilled
+  * only_kyc_full
+  * only_express_orders
+  * only_same_bankgroup
+  * only_same_bic
+  * seat_of_bank
 
 *API Credits Cost: 2*
 
 #### createOrder(OrderType, trading_pair, max_amount, price, **args)
-*Required Parameters:
-  *type
-  *trading_pair
-*Optional Parameters:
-  *max_amount
-  *price
-  *min_amount
-  *end_datetime
-  *new_order_for_remaining_amount
-  *min_trust_level
-  *only_kyc_full
-  *payment_option
-  *seat_of_bank
+* Required Parameters:
+  * type
+  * trading_pair
+* Optional Parameters:
+  * max_amount
+  * price
+  * min_amount
+  * end_datetime
+  * new_order_for_remaining_amount
+  * min_trust_level
+  * only_kyc_full
+  * payment_option
+  * seat_of_bank
  
 *API Credits Cost: 1*
 
 #### deleteOrder(order_id, trading_pair)
-*Required Parameters:
-  *order_id
-  *trading_pair
+* Required Parameters:
+  * order_id
+  * trading_pair
 
 *API Credits Cost: 2*
 
 #### showMyOrders(**args)
-*Optional Parameters:
-  *type
-  *trading_pair
-  *state
-  *date_start
-  *date_end
-  *page
+* Optional Parameters:
+  * type
+  * trading_pair
+  * state
+  * date_start
+  * date_end
+  * page
   
 *API Credits Cost: 2*
 
 #### showMyOrderDetails(order_id)
-*Required Parameters:
-  *order_id
+* Required Parameters:
+  * order_id
 
 *API Credits Cost: 2*
 
 #### executeTrade(order_id, OrderType, trading_pair, amount)
-*Required Parameters:
-  *order_id
-  *type
-  *trading_pair
-  *amount
+* Required Parameters:
+  * order_id
+  * type
+  * trading_pair
+  * amount
 
 *API Credits Cost: 1*
 
 #### showMyTrades(**args)
-*Optional Parameters:
-  *type
-  *trading_pair
-  *state
-  *date_start
-  *date_end
-  *page
+* Optional Parameters:
+  * type
+  * trading_pair
+  * state
+  * date_start
+  * date_end
+  * page
     
 *API Credits Cost: 3*
 
 #### showMyTradeDetails(trade_id)
-*Required Parameters:
-  *trade_id
+* Required Parameters:
+  * trade_id
 
 *API Credits Cost: 3*
 
@@ -127,32 +127,32 @@ All mandatory parameters have to be passed to a function, all optional are resol
 *API Credits Cost: 2*
 
 #### showOrderbookCompact(trading_pair)
-*Required Parameters:
-  *trading_pair
+* Required Parameters:
+  * trading_pair
 
 *API Credits Cost: 3*
 
 #### showPublicTradeHistory(trading_pair, **args)
-*Required Parameters:
-  *trading_pair
-Optional Parameters:
-  *since_tid
+* Required Parameters:
+  * trading_pair
+* Optional Parameters:
+  * since_tid
 
 *API Credits Cost: 3*
 
 #### showRates(trading_pair)
-*Required Parameters:
-  *trading_pair
+* Required Parameters:
+  * trading_pair
 
 *API Credits Cost: 3*
 
 #### showAccountLedger(currency, **args)
-*Required Parameters:
-  *currency
-Optional Parameters:
-  *type
-  *date_start
-  *date_end
-  *page
+* Required Parameters:
+  * currency
+* Optional Parameters:
+  * type
+  * date_start
+  * date_end
+  * page
 
 *API Credits Cost: 3*
