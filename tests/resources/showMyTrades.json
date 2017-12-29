@@ -2,7 +2,7 @@
    "trades":
    [
      {
-       "trade_id': "2EDYNS",
+       "trade_id": "2EDYNS",
        "type":"sell",
        "amount": 0.5,
        "price": 250.55,
@@ -21,17 +21,17 @@
            "rating": 99,
            "amount_trades": 42,
            "trust_level": "gold",
-           "seat_of_bank": "DE",
+           "seat_of_bank": "DE"
         },
         "payment_method": 1,
         "created_at": "2015-01-10T15:00:00+02:00",
-        "successfully_finished_at": "2015-01-10T15:00:00+02:00",
-     },
+        "successfully_finished_at": "2015-01-10T15:00:00+02:00"
+     }
    ],
    "page": {
        "current": 2,
        "last": 4
    },
    "errors": [],
-   "credits": 15,
+   "credits": 15
 }
