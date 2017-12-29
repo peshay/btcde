@@ -50,7 +50,7 @@ class ParameterBuilder(object):
     
     def error_on_invalid_value(self, value, list):
         if value not in list:
-            list_string = ', '.join(list)
+            list_string = ', '.join(str(x) for x in list)
             raise ValueError("{} is not any of {}".format(value, list_string))
 
     def create_url(self, uri):

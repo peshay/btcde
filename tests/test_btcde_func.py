@@ -63,7 +63,7 @@ class TestBtcdeAPIDocu(TestCase):
         del self.conn
 
     def test_signature_post(self, mock_logger, m):
-        '''Test the signature on a post request.'''
+        '''Test signature on a post request.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
                   'max_amount': 10,
@@ -83,7 +83,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_signature_get(self, mock_logger, m):
-        '''Test the signature on a get request.'''
+        '''Test signature on a get request.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur'}
         response = self.sampleData('showOrderbook_buy')
@@ -99,7 +99,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_signature_delete(self, mock_logger, m):
-        '''Test the signature on a delete request.'''
+        '''Test signature on a delete request.'''
         order_id = 'A1234BC'
         trading_pair = 'btceur'
         m.delete(requests_mock.ANY, json={}, status_code=200)
@@ -112,7 +112,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_show_orderbook(self, mock_logger, m):
-        '''Test the function showOrderbook.'''
+        '''Test function showOrderbook.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
                   'max_amount': 10,
@@ -133,7 +133,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_createOrder(self, mock_logger, m):
-        '''Test the function createOrder.'''
+        '''Test function createOrder.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
                   'max_amount': '10',
@@ -156,7 +156,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_deleteOrder(self, mock_logger, m):
-        '''Test the function deleteOrder.'''
+        '''Test function deleteOrder.'''
         params = {'trading_pair': 'btceur',
                   'order_id': '1337'}
         base_url = 'https://api.bitcoin.de/v2/orders'
@@ -172,7 +172,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_showMyOrders(self, mock_logger, m):
-        '''Test the function showMyOrders.'''
+        '''Test function showMyOrders.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/orders/my_own'
@@ -189,7 +189,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_showMyOrderDetails(self, mock_logger, m):
-        '''Test the function showMyOrderDetails.'''
+        '''Test function showMyOrderDetails.'''
         params = {'order_id': '1337'}
         base_url = 'https://api.bitcoin.de/v2/orders/{}'\
                    .format(params.get('order_id'))
@@ -203,7 +203,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_executeTrade(self, mock_logger, m):
-        '''Test the function executeTrade.'''
+        '''Test function executeTrade.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
                   'amount': '10',
@@ -228,7 +228,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_showMyTrades(self, mock_logger, m):
-        '''Test the function showMyTrades.'''
+        '''Test function showMyTrades.'''
         base_url = 'https://api.bitcoin.de/v2/trades'
         url_args = ''
         response = self.sampleData('showMyTrades')
@@ -240,7 +240,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_showMyTrades_with_params(self, mock_logger, m):
-        '''Test the function showMyTrades with parameters.'''
+        '''Test function showMyTrades with parameters.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/trades'
@@ -257,7 +257,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_showMyTradeDetails(self, mock_logger, m):
-        '''Test the function showMyTradeDetails.'''
+        '''Test function showMyTradeDetails.'''
         params = {'trade_id': '1337'}
         base_url = 'https://api.bitcoin.de/v2/trades'
         url_args = '/{}'.format(params.get('trade_id'))
@@ -270,7 +270,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_showAccountInfo(self, mock_logger, m):
-        '''Test the function showAccountInfo.'''
+        '''Test function showAccountInfo.'''
         base_url = 'https://api.bitcoin.de/v2/account'
         url_args = ''
         response = self.sampleData('showAccountInfo')
@@ -282,7 +282,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_showOrderbookCompact(self, mock_logger, m):
-        '''Test the function showOrderbookCompact.'''
+        '''Test function showOrderbookCompact.'''
         params = {'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/orders/compact'
         url_args = '?trading_pair={}'.format(params.get('trading_pair'))
@@ -295,7 +295,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_showPublicTradeHistory(self, mock_logger, m):
-        '''Test the function showPublicTradeHistory.'''
+        '''Test function showPublicTradeHistory.'''
         params = {'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/trades/history'
         url_args = '?trading_pair={}'.format(params.get('trading_pair'))
@@ -308,7 +308,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_showPublicTradeHistory_since(self, mock_logger, m):
-        '''Test the function showPublicTradeHistory with since_tid.'''
+        '''Test function showPublicTradeHistory with since_tid.'''
         params = {'trading_pair': 'btceur', 'since_tid': '123'}
         base_url = 'https://api.bitcoin.de/v2/trades/history'
         url_args = '?since_tid={}&trading_pair={}'.format(params.get('since_tid'),
@@ -323,7 +323,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_showRates(self, mock_logger, m):
-        '''Test the function showRates.'''
+        '''Test function showRates.'''
         params = {'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/rates'
         url_args = '?trading_pair={}'.format(params.get('trading_pair'))
@@ -336,7 +336,7 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertTrue(mock_logger.debug.called)
 
     def test_showAccountLedger(self, mock_logger, m):
-        '''Test the function showAccountLedger.'''
+        '''Test function showAccountLedger.'''
         params = {'currency': 'btc'}
         base_url = 'https://api.bitcoin.de/v2/account/ledger'
         url_args = '?currency={}'.format(params.get('currency'))
@@ -405,16 +405,51 @@ class TestBtcdeExceptions(TestCase):
         self.assertTrue(mock_logger.warning.called)
         
     def test_TradingPairValueException(self):
+        '''Test wrong traiding_pair Value Exception.'''
         with self.assertRaises(ValueError) as context:
             self.conn.deleteOrder('123', 'usdeur')
         self.assertTrue('usdeur is not any of' in str(context.exception))
 
     def test_OrderTypeValueException(self):
+        '''Test wrong type Value Exception.'''
         with self.assertRaises(ValueError) as context:
             self.conn.createOrder('fail', 'btceur', '100', '100')
         self.assertTrue('fail is not any of' in str(context.exception))
 
     def test_CurrencyValueException(self):
+        '''Test wrong currency Value Exception.'''
         with self.assertRaises(ValueError) as context:
             self.conn.showAccountLedger('usd')
         self.assertTrue('usd is not any of' in str(context.exception))
+
+    def test_BankSeatValueException(self):
+        '''Test wrong seat_of_bank Value Exception.'''
+        with self.assertRaises(ValueError) as context:
+            self.conn.showOrderbook('buy', 'btceur', seat_of_bank='SZ')
+        self.assertTrue('SZ is not any of' in str(context.exception))
+
+    def test_TrustLevelValueException(self):
+        '''Test wrong trust_level Value Exception.'''
+        with self.assertRaises(ValueError) as context:
+            self.conn.createOrder('buy', 'btceur', '100', '100',
+                                   min_trust_level='foo')
+        self.assertTrue('foo is not any of' in str(context.exception))
+
+    def test_PaymentOptionValueException(self):
+        '''Test wrong payment_option Value Exception.'''
+        with self.assertRaises(ValueError) as context:
+            self.conn.createOrder('buy', 'btceur', '100', '100',
+                                   payment_option=4)
+        self.assertTrue('4 is not any of' in str(context.exception))
+
+    def test_StateValueException(self):
+        '''Test wrong state Value Exception.'''
+        with self.assertRaises(ValueError) as context:
+            self.conn.showMyOrders(state=4)
+        self.assertTrue('4 is not any of' in str(context.exception))
+
+    def test_UnknownKeyException(self):
+        '''Test wrong Key Exception.'''
+        with self.assertRaises(KeyError) as context:
+            self.conn.showMyOrders(foo=4)
+        self.assertTrue('foo is not any of' in str(context.exception))
