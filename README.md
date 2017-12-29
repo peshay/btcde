@@ -7,7 +7,7 @@
 
 # btcde.py
 
-A Python Module for the [Bitcoin.de Trading API](https://www.bitcoin.de/de/api/marketplace)
+API Wrapper for [Bitcoin.de Trading API](https://www.bitcoin.de/de/api/marketplace)
 
 Requires: requests
 
@@ -39,54 +39,120 @@ for order in orders:
 For more Details on the API Methods, please read [bitcoin.de API Documentation](https://www.bitcoin.de/de/api/tapi/v2/docu)
 All mandatory parameters have to be passed to a function, all optional are resolved via ```**args```
 
-#### showOrderbook(conn, OrderType, trading_pair, **args)
+#### showOrderbook(OrderType, trading_pair, **args)
+*Required Parameters:
+  *type
+  *trading_pair
+*Optional Parameters:
+  *amount
+  *price
+  *order_requirements_fullfilled
+  *only_kyc_full
+  *only_express_orders
+  *only_same_bankgroup
+  *only_same_bic
+  *seat_of_bank
 
 *API Credits Cost: 2*
 
-#### createOrder(conn, OrderType, trading_pair, max_amount, price, **args)
+#### createOrder(OrderType, trading_pair, max_amount, price, **args)
+*Required Parameters:
+  *type
+  *trading_pair
+*Optional Parameters:
+  *max_amount
+  *price
+  *min_amount
+  *end_datetime
+  *new_order_for_remaining_amount
+  *min_trust_level
+  *only_kyc_full
+  *payment_option
+  *seat_of_bank
+ 
+*API Credits Cost: 1*
+
+#### deleteOrder(order_id, trading_pair)
+*Required Parameters:
+  *order_id
+  *trading_pair
+
+*API Credits Cost: 2*
+
+#### showMyOrders(**args)
+*Optional Parameters:
+  *type
+  *trading_pair
+  *state
+  *date_start
+  *date_end
+  *page
+  
+*API Credits Cost: 2*
+
+#### showMyOrderDetails(order_id)
+*Required Parameters:
+  *order_id
+
+*API Credits Cost: 2*
+
+#### executeTrade(order_id, OrderType, trading_pair, amount)
+*Required Parameters:
+  *order_id
+  *type
+  *trading_pair
+  *amount
 
 *API Credits Cost: 1*
 
-#### deleteOrder(conn, order_id, trading_pair)
+#### showMyTrades(**args)
+*Optional Parameters:
+  *type
+  *trading_pair
+  *state
+  *date_start
+  *date_end
+  *page
+    
+*API Credits Cost: 3*
+
+#### showMyTradeDetails(trade_id)
+*Required Parameters:
+  *trade_id
+
+*API Credits Cost: 3*
+
+#### showAccountInfo()
 
 *API Credits Cost: 2*
 
-#### showMyOrders(conn, **args)
-
-*API Credits Cost: 2*
-
-#### showMyOrderDetails(conn, order_id)
-
-*API Credits Cost: 2*
-
-#### executeTrade(conn, order_id, OrderType, trading_pair, amount)
-
-*API Credits Cost: 1*
-
-#### showMyTrades(conn, **args)
+#### showOrderbookCompact(trading_pair)
+*Required Parameters:
+  *trading_pair
 
 *API Credits Cost: 3*
 
-#### showMyTradeDetails(conn, trade_id)
+#### showPublicTradeHistory(trading_pair, **args)
+*Required Parameters:
+  *trading_pair
+Optional Parameters:
+  *since_tid
 
 *API Credits Cost: 3*
 
-#### showAccountInfo(conn)
-
-*API Credits Cost: 2*
-
-#### showOrderbookCompact(conn, trading_pair)
+#### showRates(trading_pair)
+*Required Parameters:
+  *trading_pair
 
 *API Credits Cost: 3*
 
-#### showPublicTradeHistory(conn, trading_pair, since_tid=None)
-
-*API Credits Cost: 3*
-
-#### showRates(conn, trading_pair)
-
-*API Credits Cost: 3*
-
-#### showAccountLedger(conn, currency, **args)
+#### showAccountLedger(currency, **args)
+*Required Parameters:
+  *currency
+Optional Parameters:
+  *type
+  *date_start
+  *date_end
+  *page
 
 *API Credits Cost: 3*

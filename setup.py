@@ -2,10 +2,10 @@
 """Setup to install Bitcoin.de API Python Module."""
 from distutils.core import setup
 setup(name='btcde',
-      version='1.5',
+      version='2.0',
       py_modules=['btcde'],
       install_requires=['requests', 'future'],
-      description='Provides functions to work with Bitcoin.de Trading API.',
+      description='API Wrapper for Bitcoin.de Trading API.',
       url='https://github.com/peshay/btcde',
       author='Andreas Hubert',
       author_email='anhubert@gmail.com',

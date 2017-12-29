@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""This Module provides the functions from bitcoin.de Trading API"""
+"""API Wrapper for Bitcoin.de Trading API."""
 
 import requests
 import time
