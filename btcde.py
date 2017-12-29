@@ -8,6 +8,7 @@ import hmac
 import hashlib
 import logging
 import codecs
+import decimal
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
