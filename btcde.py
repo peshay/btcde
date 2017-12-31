@@ -17,7 +17,7 @@ requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
-__version__ = '2.0'
+__version__ = '2.1'
 
 # disable unsecure SSL warning
 requests.packages.urllib3.disable_warnings()
@@ -166,7 +166,7 @@ class Connection(object):
             # Handle API Errors
             if HandleAPIErrors(r):
                 # get results
-                result = r.json()
+                result = r.json(parse_float=decimal.Decimal)
             else:
                 result = {}
         except requests.exceptions.RequestException as e:
