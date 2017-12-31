@@ -166,7 +166,7 @@ class Connection(object):
             # Handle API Errors
             if HandleAPIErrors(r):
                 # get results
-                result = r.json()
+                result = r.json(parse_float=decimal.Decimal)
             else:
                 result = {}
         except requests.exceptions.RequestException as e:
