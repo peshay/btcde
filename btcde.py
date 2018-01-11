@@ -93,8 +93,7 @@ def HandleAPIErrors(r):
     """To handle Errors from BTCDE API."""
     valid_status_codes = [200, 201, 204]
     if r.status_code not in valid_status_codes:
-        reader = codecs.getreader("utf-8")
-        content = json.load(reader(r.raw))
+        content = r.json()
         errors = content.get('errors')
         log.warning('API Error Code: {}'.format(str(errors[0]['code'])))
         log.warning('API Error Message: {}'.format(errors[0]['message']))
