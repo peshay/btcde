@@ -27,7 +27,7 @@ import btcde
 api_key = <YourAPIKey>
 api_secret = <YourAPISecret>
 conn = btcde.Connection(api_key, api_secret)
-orderbook = conn.showOrderbook(conn, 'buy', 'btceur')
+orderbook = conn.showOrderbook('buy', 'btceur')
 print('API Credits Left: ' + str(orderbook.get('credits')))
 orders = orderbook.get('orders')
 for order in orders:
