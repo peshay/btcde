@@ -374,7 +374,7 @@ class TestBtcdeExceptions(TestCase):
         '''Test if no exception raises with a non-utf8 response.
         https://github.com/peshay/btcde/issues/12'''
         filepath = 'tests/resources/NonUTF8'
-        with open(filepath, 'rb') as f:
+        with open(filepath, 'r') as f:
             m.post(requests_mock.ANY, content=f.read().encode('utf-16', 'replace'), status_code=403)
         try:
             self.conn.executeTrade('foobar', 'buy', 'btceur', '0')
