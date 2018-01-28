@@ -48,7 +48,7 @@ class ParameterBuilder(object):
                 self.error_on_invalid_value(v, self.PAYMENT_OPTIONS)
             elif k == 'state':
                 self.error_on_invalid_value(v, self.STATES)
-    
+
     def error_on_invalid_value(self, value, list):
         if value not in list:
             list_string = ', '.join(str(x) for x in list)
@@ -65,7 +65,7 @@ class ParameterBuilder(object):
             self.encoded_string = ''
             self.url = uri
 
-    
+
     TRADING_PAIRS = ['btceur', 'bcheur', 'etheur']
     ORDER_TYPES = ['buy', 'sell']
     CURRENCIES = ['btc', 'bch', 'eth']
@@ -93,8 +93,7 @@ def HandleAPIErrors(r):
     """To handle Errors from BTCDE API."""
     valid_status_codes = [200, 201, 204]
     if r.status_code not in valid_status_codes:
-        reader = codecs.getreader("utf-8")
-        content = json.load(reader(r.raw))
+        content = r.json()
         errors = content.get('errors')
         log.warning('API Error Code: {}'.format(str(errors[0]['code'])))
         log.warning('API Error Message: {}'.format(errors[0]['message']))
@@ -125,7 +124,7 @@ class Connection(object):
                             md5=md5string)
         hmac_signed = hmac.new(bytearray(self.api_secret.encode()), msg=hmac_data.encode(), digestmod=hashlib.sha256).hexdigest()
         return hmac_signed
-        
+
     def set_header(self, url, method, encoded_string):
         # raise self.nonce before using
         self.nonce += 1
