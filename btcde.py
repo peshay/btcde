@@ -11,10 +11,8 @@ import codecs
 import decimal
 
 logging.basicConfig()
-logging.getLogger().setLevel(logging.DEBUG)
 log = logging.getLogger(__name__)
 requests_log = logging.getLogger("requests.packages.urllib3")
-requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
 __version__ = '2.2'
