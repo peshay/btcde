@@ -5,6 +5,7 @@ import requests_mock
 from mock import patch
 import json
 import btcde
+from decimal import Decimal
 
 
 @patch('btcde.log')
@@ -347,6 +348,22 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
         self.assertTrue(mock_logger.debug.called)
+
+    def test_decimal_parsing(self, mock_logger, m):
+        '''Test if the decimal parsing calculates correctly.'''
+        params = {'type': 'buy',
+                  'trading_pair': 'btceur',
+                  'max_amount': 10,
+                  'price': 1337}
+        response = self.sampleData('showOrderbook_buy')
+        m.get(requests_mock.ANY, json=response, status_code=200)
+        data = self.conn.showOrderbook(params.get('type'),
+                                       params.get('trading_pair'),
+                                       price=params.get('price'))
+        price = data.get('orders')[0].get('price')
+        self.assertIsInstance(price, Decimal)
+        self.assertEqual(price + Decimal('22.3'), Decimal('2232.2'))
+        self.assertNotEqual(float(price) + float('22.3'), float('2232.2'))
 
 
 class TestBtcdeExceptions(TestCase):
