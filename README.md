@@ -69,7 +69,7 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * only_kyc_full
   * payment_option
   * seat_of_bank
- 
+
 *API Credits Cost: 1*
 
 #### deleteOrder(order_id, trading_pair)
@@ -87,7 +87,7 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * date_start
   * date_end
   * page
-  
+
 *API Credits Cost: 2*
 
 #### showMyOrderDetails(order_id)
@@ -113,7 +113,7 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * date_start
   * date_end
   * page
-    
+
 *API Credits Cost: 3*
 
 #### showMyTradeDetails(trade_id)

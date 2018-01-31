@@ -5,6 +5,7 @@ import requests_mock
 from mock import patch
 import json
 import btcde
+from decimal import Decimal
 
 
 @patch('btcde.log')
@@ -12,7 +13,7 @@ import btcde
 class TestBtcdeAPIDocu(TestCase):
     '''Tests are as in bitcoin.de API documentation.
     https://www.bitcoin.de/de/api/tapi/v2/docu'''
-    
+
     def sampleData(self, file):
         '''Retrieve sample data from json files.'''
         filepath = 'tests/resources/{}.json'.format(file)
@@ -348,26 +349,55 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertEqual(history[0].url, base_url + url_args)
         self.assertTrue(mock_logger.debug.called)
 
+    def test_decimal_parsing(self, mock_logger, m):
+        '''Test if the decimal parsing calculates correctly.'''
+        params = {'type': 'buy',
+                  'trading_pair': 'btceur',
+                  'max_amount': 10,
+                  'price': 1337}
+        response = self.sampleData('showOrderbook_buy')
+        m.get(requests_mock.ANY, json=response, status_code=200)
+        data = self.conn.showOrderbook(params.get('type'),
+                                       params.get('trading_pair'),
+                                       price=params.get('price'))
+        price = data.get('orders')[0].get('price')
+        self.assertIsInstance(price, Decimal)
+        self.assertEqual(price + Decimal('22.3'), Decimal('2232.2'))
+        self.assertNotEqual(float(price) + float('22.3'), float('2232.2'))
+
 
 class TestBtcdeExceptions(TestCase):
     '''Test for Exception Handling.'''
-    
+
     def sampleData(self, file):
         '''Retrieve sample data from json files.'''
         filepath = 'tests/resources/{}.json'.format(file)
         data = json.load(open(filepath))
         return data
-        
+
     def setUp(self):
         self.XAPIKEY = 'f00b4r'
         self.XAPISECRET = 'b4rf00'
-        self.conn = btcde.Connection(self.XAPIKEY, self.XAPISECRET)      
+        self.conn = btcde.Connection(self.XAPIKEY, self.XAPISECRET)
         self.XAPINONCE = self.conn.nonce
 
     def tearDown(self):
         del self.XAPIKEY
         del self.XAPISECRET
         del self.conn
+
+    @requests_mock.Mocker()
+    def test_dont_fail_on_non_utf8(self, m):
+        '''Test if no exception raises with a non-utf8 response.
+        https://github.com/peshay/btcde/issues/12'''
+        filepath = 'tests/resources/NonUTF8'
+        with open(filepath, 'r') as f:
+            m.post(requests_mock.ANY, content=f.read().encode('utf-16', 'replace'), status_code=403)
+        try:
+            self.conn.executeTrade('foobar', 'buy', 'btceur', '0')
+            self.assertTrue(True)
+        except UnicodeDecodeError:
+            self.assertTrue(False)
 
     @requests_mock.Mocker()
     def test_APIException(self, m):
@@ -390,20 +420,20 @@ class TestBtcdeExceptions(TestCase):
         history = m.request_history
         self.assertEqual(history[0].method, "POST")
         self.assertEqual(history[0].url, base_url + url_args)
-        
+
     @patch('btcde.log')
     def test_RequestException(self, mock_logger):
         '''Test Requests Exception.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
                   'max_amount': 10,
-                  'price': 13} 
+                  'price': 13}
         self.conn.orderuri = 'https://foo.bar'
         self.conn.createOrder(params.get('type'),
                               params.get('trading_pair'), params.get('max_amount'),
                               price=params.get('price'))
         self.assertTrue(mock_logger.warning.called)
-        
+
     def test_TradingPairValueException(self):
         '''Test wrong traiding_pair Value Exception.'''
         with self.assertRaises(ValueError) as context:
