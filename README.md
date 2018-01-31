@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/peshay/btcde.svg?branch=2.2)](https://travis-ci.org/peshay/btcde)
-[![Codecov](https://codecov.io/gh/peshay/btcde/branch/2.2/graph/badge.svg)](https://codecov.io/gh/peshay/btcde/branch/2.2)
-[![Scrutinizer](https://scrutinizer-ci.com/g/peshay/btcde/badges/quality-score.png?b=2.2)](https://scrutinizer-ci.com/g/peshay/btcde/?branch=2.2)
+[![Build Status](https://travis-ci.org/peshay/btcde.svg?branch=master)](https://travis-ci.org/peshay/btcde)
+[![Codecov](https://codecov.io/gh/peshay/btcde/branch/master/graph/badge.svg)](https://codecov.io/gh/peshay/btcde/branch/master)
+[![Scrutinizer](https://scrutinizer-ci.com/g/peshay/btcde/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/peshay/btcde/?branch=master)
 [![Python version](https://img.shields.io/pypi/pyversions/btcde.svg)](https://pypi.python.org/pypi/btcde)
-[![license](https://img.shields.io/github/license/peshay/btcde.svg)](https://github.com/peshay/btcde/blob/2.2/LICENSE)
+[![license](https://img.shields.io/github/license/peshay/btcde.svg)](https://github.com/peshay/btcde/blob/master/LICENSE)
 [![Beerpay](https://beerpay.io/peshay/btcde/badge.svg?style=beer)](https://beerpay.io/peshay/btcde)
 
 # btcde.py
@@ -69,7 +69,7 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * only_kyc_full
   * payment_option
   * seat_of_bank
- 
+
 *API Credits Cost: 1*
 
 #### deleteOrder(order_id, trading_pair)
@@ -87,7 +87,7 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * date_start
   * date_end
   * page
-  
+
 *API Credits Cost: 2*
 
 #### showMyOrderDetails(order_id)
@@ -113,7 +113,7 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * date_start
   * date_end
   * page
-    
+
 *API Credits Cost: 3*
 
 #### showMyTradeDetails(trade_id)
