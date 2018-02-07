@@ -125,7 +125,7 @@ class Connection(object):
 
     def set_header(self, url, method, encoded_string):
         # raise self.nonce before using
-        self.nonce += 1
+        self.nonce = int(time.time()*1000) + 1
         if method == 'POST':
             md5_encoded_query_string = hashlib.md5(encoded_string.encode()).hexdigest()
         else:
