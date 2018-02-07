@@ -34,7 +34,7 @@ class TestBtcdeAPIDocu(TestCase):
 
     def verifySignature(self, url, method, params):
         '''To verify API Signature.'''
-        self.XAPINONCE += 1
+        self.XAPINONCE = int(time.time()*1000) + 1
         self.url, self.encoded_string = self.sortParams(url, params)
         if method == 'POST':
             md5_encoded_query_string = hashlib.md5(self.encoded_string.encode()
