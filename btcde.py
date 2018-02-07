@@ -107,7 +107,7 @@ class Connection(object):
         self.api_key = api_key
         self.api_secret = api_secret
         # set initial self.nonce
-        self.nonce = int(time.time())
+        self.nonce = int(time.time() * 1000) # avoid "invalid nonce" error for frequent API calls by raising the number
         # Bitcoin.de API URI
         self.apihost = 'https://api.bitcoin.de'
         self.apiversion = 'v2'
