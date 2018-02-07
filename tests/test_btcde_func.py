@@ -6,6 +6,7 @@ from mock import patch
 import json
 import btcde
 from decimal import Decimal
+import time
 
 
 @patch('btcde.log')
