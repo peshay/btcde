@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.propagate = True
 
-__version__ = '2.2'
+__version__ = '2.3'
 
 # disable unsecure SSL warning
 requests.packages.urllib3.disable_warnings()
