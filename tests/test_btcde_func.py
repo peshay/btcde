@@ -77,8 +77,8 @@ class TestBtcdeAPIDocu(TestCase):
                               params.get('price'))
         history = m.request_history
         request_signature = history[0].headers.get('X-API-SIGNATURE')
-        verified_signature = self.verifySignature(self.conn.orderuri, self.conn.nonce,
-                                                  'POST',
+        verified_signature = self.verifySignature(self.conn.orderuri,
+                                                  'POST', self.conn.nonce,
                                                   params)
         self.assertEqual(request_signature, verified_signature)
         self.assertTrue(mock_logger.debug.called)
@@ -93,8 +93,8 @@ class TestBtcdeAPIDocu(TestCase):
                                 params.get('trading_pair'))
         history = m.request_history
         request_signature = history[0].headers.get('X-API-SIGNATURE')
-        verified_signature = self.verifySignature(self.conn.orderuri, self.conn.nonce,
-                                                  'GET',
+        verified_signature = self.verifySignature(self.conn.orderuri,
+                                                  'GET', self.conn.nonce,
                                                   params)
         self.assertEqual(request_signature, verified_signature)
         self.assertTrue(mock_logger.debug.called)
