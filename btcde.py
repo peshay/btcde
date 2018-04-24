@@ -107,7 +107,7 @@ class Connection(object):
         self.api_key = api_key
         self.api_secret = api_secret
         # set initial self.nonce
-        self.nonce = int(time.time())
+        self.nonce = int(time.time() * 1000000)
         # Bitcoin.de API URI
         self.apihost = 'https://api.bitcoin.de'
         self.apiversion = 'v2'
@@ -125,7 +125,7 @@ class Connection(object):
 
     def set_header(self, url, method, encoded_string):
         # raise self.nonce before using
-        self.nonce += 1
+        self.nonce = int(time.time() * 1000000)
         if method == 'POST':
             md5_encoded_query_string = hashlib.md5(encoded_string.encode()).hexdigest()
         else:

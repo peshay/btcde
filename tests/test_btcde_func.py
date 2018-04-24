@@ -32,9 +32,9 @@ class TestBtcdeAPIDocu(TestCase):
             self.url = url
         return self.url, self.encoded_string
 
-    def verifySignature(self, url, method, params):
+    def verifySignature(self, url, method, nonce, params):
         '''To verify API Signature.'''
-        self.XAPINONCE += 1
+        self.XAPINONCE = nonce
         self.url, self.encoded_string = self.sortParams(url, params)
         if method == 'POST':
             md5_encoded_query_string = hashlib.md5(self.encoded_string.encode()
@@ -78,7 +78,7 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         request_signature = history[0].headers.get('X-API-SIGNATURE')
         verified_signature = self.verifySignature(self.conn.orderuri,
-                                                  'POST',
+                                                  'POST', self.conn.nonce,
                                                   params)
         self.assertEqual(request_signature, verified_signature)
         self.assertTrue(mock_logger.debug.called)
@@ -94,7 +94,7 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         request_signature = history[0].headers.get('X-API-SIGNATURE')
         verified_signature = self.verifySignature(self.conn.orderuri,
-                                                  'GET',
+                                                  'GET', self.conn.nonce,
                                                   params)
         self.assertEqual(request_signature, verified_signature)
         self.assertTrue(mock_logger.debug.called)
@@ -108,7 +108,7 @@ class TestBtcdeAPIDocu(TestCase):
         history = m.request_history
         request_signature = history[0].headers.get('X-API-SIGNATURE')
         url = self.conn.orderuri + "/" + order_id + "/" + trading_pair
-        verified_signature = self.verifySignature(url, 'DELETE', {})
+        verified_signature = self.verifySignature(url, 'DELETE', self.conn.nonce, {})
         self.assertEqual(request_signature, verified_signature)
         self.assertTrue(mock_logger.debug.called)
 
