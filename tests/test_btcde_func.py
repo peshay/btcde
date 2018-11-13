@@ -481,7 +481,7 @@ class TestBtcdeExceptions(TestCase):
     def test_TradeStateValueException(self):
         '''Test wrong state Value Exception.'''
         with self.assertRaises(ValueError) as context:
-            self.conn.showMyTeades(state=-2)
+            self.conn.showMyTrades(state=-2)
         self.assertTrue('-2 is not any of' in str(context.exception))
 
     def test_UnknownKeyException(self):
