@@ -472,11 +472,17 @@ class TestBtcdeExceptions(TestCase):
                                    payment_option=4)
         self.assertTrue('4 is not any of' in str(context.exception))
 
-    def test_StateValueException(self):
+    def test_OrderStateValueException(self):
         '''Test wrong state Value Exception.'''
         with self.assertRaises(ValueError) as context:
-            self.conn.showMyOrders(state=4)
-        self.assertTrue('4 is not any of' in str(context.exception))
+            self.conn.showMyOrders(state=1)
+        self.assertTrue('1 is not any of' in str(context.exception))
+
+    def test_TradeStateValueException(self):
+        '''Test wrong state Value Exception.'''
+        with self.assertRaises(ValueError) as context:
+            self.conn.showMyTeades(state=-2)
+        self.assertTrue('-2 is not any of' in str(context.exception))
 
     def test_UnknownKeyException(self):
         '''Test wrong Key Exception.'''

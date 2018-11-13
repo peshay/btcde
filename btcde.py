@@ -9,6 +9,7 @@ import hashlib
 import logging
 import codecs
 import decimal
+import inspect
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
@@ -45,7 +46,11 @@ class ParameterBuilder(object):
             elif k == 'payment_option':
                 self.error_on_invalid_value(v, self.PAYMENT_OPTIONS)
             elif k == 'state':
-                self.error_on_invalid_value(v, self.STATES)
+                caller = inspect.stack()[1][3]
+                if caller in ["showMyOrders", "showMyOrderDetails"]:
+                    self.error_on_invalid_value(v, self.ORDER_STATES)
+                elif caller in ["showMyTrades", "showMyTradesDetails"]::
+                    self.error_on_invalid_value(v, self.TRADE_STATES)
 
     def error_on_invalid_value(self, value, list):
         if value not in list:
@@ -74,7 +79,8 @@ class ParameterBuilder(object):
                   'MQ', 'NL', 'NO', 'PL', 'PT', 'RO',
                   'SE', 'SI', 'SK']
     TRUST_LEVELS = ['bronze', 'silver', 'gold', 'platin']
-    STATES = [-1, 0, 1]
+    TRADE_STATES = [-1, 0, 1]
+    ORDER_STATES = [-2, -1, 0]
     PAYMENT_OPTIONS = [1, 2, 3]
     TRADE_TYPES = ['all', 'buy', 'sell', 'inpayment',
                    'payout', 'affiliate', 'welcome_btc',
