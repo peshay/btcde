@@ -46,7 +46,7 @@ class ParameterBuilder(object):
             elif k == 'payment_option':
                 self.error_on_invalid_value(v, self.PAYMENT_OPTIONS)
             elif k == 'state':
-                caller = inspect.stack()[1][3]
+                caller = inspect.stack()[2][3]
                 if caller in ["showMyOrders", "showMyOrderDetails"]:
                     self.error_on_invalid_value(v, self.ORDER_STATES)
                 elif caller in ["showMyTrades", "showMyTradesDetails"]:
@@ -61,7 +61,7 @@ class ParameterBuilder(object):
         if self.params:
             self.encoded_string = ''
             for key, value in sorted(self.params.items()):
-                self.encoded_string += str(key) + '="' + str(value) + '"&'
+                self.encoded_string += str(key) + '=' + str(value) + '&'
             self.encoded_string = self.encoded_string[:-1]
             self.url = uri + '?' + self.encoded_string
         else:
