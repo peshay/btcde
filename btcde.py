@@ -51,6 +51,7 @@ class ParameterBuilder(object):
                     self.error_on_invalid_value(v, self.ORDER_STATES)
                 elif caller in ["showMyTrades", "showMyTradesDetails"]:
                     self.error_on_invalid_value(v, self.TRADE_STATES)
+                self.params['state'] = str(v)
 
     def error_on_invalid_value(self, value, list):
         if value not in list:
