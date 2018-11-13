@@ -49,7 +49,7 @@ class ParameterBuilder(object):
                 caller = inspect.stack()[1][3]
                 if caller in ["showMyOrders", "showMyOrderDetails"]:
                     self.error_on_invalid_value(v, self.ORDER_STATES)
-                elif caller in ["showMyTrades", "showMyTradesDetails"]::
+                elif caller in ["showMyTrades", "showMyTradesDetails"]:
                     self.error_on_invalid_value(v, self.TRADE_STATES)
 
     def error_on_invalid_value(self, value, list):
