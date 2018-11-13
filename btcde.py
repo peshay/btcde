@@ -51,7 +51,6 @@ class ParameterBuilder(object):
                     self.error_on_invalid_value(v, self.ORDER_STATES)
                 elif caller in ["showMyTrades", "showMyTradesDetails"]:
                     self.error_on_invalid_value(v, self.TRADE_STATES)
-                self.params['state'] = str(v)
 
     def error_on_invalid_value(self, value, list):
         if value not in list:
@@ -62,7 +61,7 @@ class ParameterBuilder(object):
         if self.params:
             self.encoded_string = ''
             for key, value in sorted(self.params.items()):
-                self.encoded_string += str(key) + '=' + str(value) + '&'
+                self.encoded_string += str(key) + '="' + str(value) + '"&'
             self.encoded_string = self.encoded_string[:-1]
             self.url = uri + '?' + self.encoded_string
         else:
