@@ -6,7 +6,10 @@ from mock import patch
 import json
 import btcde
 from decimal import Decimal
+from future.standard_library import install_aliases
+install_aliases()
 
+from urllib.parse import urlencode
 
 @patch('btcde.log')
 @requests_mock.Mocker()
@@ -24,9 +27,7 @@ class TestBtcdeAPIDocu(TestCase):
         '''To sort params for url string.'''
         self.encoded_string = ''
         if len(params) > 0:
-            for key, value in sorted(params.items()):
-                self.encoded_string += str(key) + '=' + str(value) + '&'
-            self.encoded_string = self.encoded_string[:-1]
+            self.encoded_string = urlencode(params)
             self.url = url + '?' + self.encoded_string
         else:
             self.url = url
@@ -71,10 +72,10 @@ class TestBtcdeAPIDocu(TestCase):
                   'price': 1337}
         response = self.sampleData('createOrder')
         m.post(requests_mock.ANY, json=response, status_code=201)
-        self.conn.createOrder(params.get('type'),
-                              params.get('trading_pair'),
-                              params.get('max_amount'),
-                              params.get('price'))
+        self.conn.createOrder(params['type'],
+                              params['trading_pair'],
+                              params['max_amount'],
+                              params['price'])
         history = m.request_history
         request_signature = history[0].headers.get('X-API-SIGNATURE')
         verified_signature = self.verifySignature(self.conn.orderuri,
@@ -116,13 +117,9 @@ class TestBtcdeAPIDocu(TestCase):
         '''Test function showOrderbook.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
-                  'max_amount': 10,
                   'price': 1337}
         base_url = 'https://api.bitcoin.de/v2/orders'
-        url_args = '?price={}&trading_pair={}&type={}'\
-                   .format(params.get('price'),
-                           params.get('trading_pair'),
-                           params.get('type'))
+        url_args = '?' + urlencode(params)
         response = self.sampleData('showOrderbook_buy')
         m.get(requests_mock.ANY, json=response, status_code=200)
         self.conn.showOrderbook(params.get('type'),
@@ -140,11 +137,7 @@ class TestBtcdeAPIDocu(TestCase):
                   'max_amount': '10',
                   'price': '10'}
         base_url = 'https://api.bitcoin.de/v2/orders'
-        url_args = '?max_amount={}&price={}&trading_pair={}&type={}'\
-                   .format(params.get('max_amount'),
-                           params.get('price'),
-                           params.get('trading_pair'),
-                           params.get('type'))
+        url_args = '?' + urlencode(params)
         response = self.sampleData('createOrder')
         m.post(requests_mock.ANY, json=response, status_code=201)
         self.conn.createOrder(params.get('type'),
@@ -177,9 +170,7 @@ class TestBtcdeAPIDocu(TestCase):
         params = {'type': 'buy',
                   'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/orders/my_own'
-        url_args = '?trading_pair={}&type={}'\
-                   .format(params.get('trading_pair'),
-                           params.get('type'))
+        url_args = '?' + urlencode(params)
         response = self.sampleData('showMyOrders')
         m.get(requests_mock.ANY, json=response, status_code=200)
         self.conn.showMyOrders(type=params.get('type'),
@@ -205,17 +196,13 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_executeTrade(self, mock_logger, m):
         '''Test function executeTrade.'''
-        params = {'type': 'buy',
+        params = {'order_id': '1337',
+                  'type': 'buy',
                   'trading_pair': 'btceur',
-                  'amount': '10',
-                  'order_id': '1337'}
+                  'amount': '10'}
         base_url = 'https://api.bitcoin.de/v2/trades/{}'\
                    .format(params.get('order_id'))
-        url_args = '?amount={}&order_id={}&trading_pair={}&type={}'\
-                   .format(params.get('amount'),
-                           params.get('order_id'),
-                           params.get('trading_pair'),
-                           params.get('type'))
+        url_args = '?' + urlencode(params)
         response = self.sampleData('executeTrade')
         m.get(requests_mock.ANY, json=response, status_code=200)
         m.post(requests_mock.ANY, json=response, status_code=201)
@@ -245,9 +232,7 @@ class TestBtcdeAPIDocu(TestCase):
         params = {'type': 'buy',
                   'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/trades'
-        url_args = '?trading_pair={}&type={}'\
-                   .format(params.get('trading_pair'),
-                           params.get('type'))
+        url_args = '?' + urlencode(params)
         response = self.sampleData('showMyTrades')
         m.get(requests_mock.ANY, json=response, status_code=200)
         self.conn.showMyTrades(type=params.get('type'),
@@ -312,8 +297,7 @@ class TestBtcdeAPIDocu(TestCase):
         '''Test function showPublicTradeHistory with since_tid.'''
         params = {'trading_pair': 'btceur', 'since_tid': '123'}
         base_url = 'https://api.bitcoin.de/v2/trades/history'
-        url_args = '?since_tid={}&trading_pair={}'.format(params.get('since_tid'),
-                                                          params.get('trading_pair'))
+        url_args = '?' + urlencode(params)
         response = self.sampleData('showPublicTradeHistory')
         m.get(requests_mock.ANY, json=response, status_code=200)
         self.conn.showPublicTradeHistory(params.get('trading_pair'),
@@ -338,12 +322,25 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_showAccountLedger(self, mock_logger, m):
         '''Test function showAccountLedger.'''
-        params = {'currency': 'btc'}
+        params = {'currency': 'btc' }
         base_url = 'https://api.bitcoin.de/v2/account/ledger'
         url_args = '?currency={}'.format(params.get('currency'))
         response = self.sampleData('showAccountLedger')
         m.get(requests_mock.ANY, json=response, status_code=200)
-        self.conn.showAccountLedger(params.get('currency'))
+        r = self.conn.showAccountLedger(params.get('currency'))
+        history = m.request_history
+        self.assertEqual(history[0].method, "GET")
+        self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
+
+    def test_urlEncoding(self, mock_logger, m):
+        '''Test URL encoding on parameters.'''
+        params = {'currency': 'btc', 'date_start': '2018-01-01T01:00:00+01:00'}
+        base_url = 'https://api.bitcoin.de/v2/account/ledger'
+        url_args = '?' + urlencode(params)
+        response = self.sampleData('showAccountLedger')
+        m.get(requests_mock.ANY, json=response, status_code=200)
+        r = self.conn.showAccountLedger(params['currency'], date_start="2018-01-01T01:00:00+01:00")
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -407,11 +404,7 @@ class TestBtcdeExceptions(TestCase):
                   'max_amount': 10,
                   'price': 13}
         base_url = 'https://api.bitcoin.de/v2/orders'
-        url_args = '?max_amount={}&price={}&trading_pair={}&type={}'\
-                   .format(params.get('max_amount'),
-                           params.get('price'),
-                           params.get('trading_pair'),
-                           params.get('type'))
+        url_args = '?' + urlencode(params)
         response = self.sampleData('error')
         m.post(requests_mock.ANY, json=response, status_code=400)
         self.conn.createOrder(params.get('type'),

@@ -10,6 +10,12 @@ import logging
 import codecs
 import decimal
 import inspect
+import urllib
+
+from future.standard_library import install_aliases
+install_aliases()
+
+from urllib.parse import urlencode
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
@@ -59,10 +65,7 @@ class ParameterBuilder(object):
 
     def create_url(self, uri):
         if self.params:
-            self.encoded_string = ''
-            for key, value in sorted(self.params.items()):
-                self.encoded_string += str(key) + '=' + str(value) + '&'
-            self.encoded_string = self.encoded_string[:-1]
+            self.encoded_string = urlencode(self.params)
             self.url = uri + '?' + self.encoded_string
         else:
             self.encoded_string = ''
@@ -195,9 +198,9 @@ class Connection(object):
         """Create a new Order."""
         # Build parameters
         params = {'type': order_type,
+                  'trading_pair': trading_pair,
                   'max_amount': max_amount,
-                  'price': price,
-                  'trading_pair': trading_pair}
+                  'price': price}
         params.update(args)
         avail_params = ['type', 'trading_pair', 'max_amount', 'price',
                         'min_amount', 'new_order_for_remaining_amount',
