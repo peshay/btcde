@@ -346,6 +346,38 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertEqual(history[0].url, base_url + url_args)
         self.assertTrue(mock_logger.debug.called)
 
+    def test_allowed_pairs(self, mock_logger, m):
+        '''Test the allowed trading pairs.'''
+        i = 0
+        for pair in ['btceur', 'bcheur', 'etheur', 'btgeur', 'bsveur']:
+            params = {'trading_pair': pair}
+            base_url = 'https://api.bitcoin.de/v2/rates'
+            url_args = '?trading_pair={}'.format(params.get('trading_pair'))
+            response = self.sampleData('showRates')
+            m.get(requests_mock.ANY, json=response, status_code=200)
+            self.conn.showRates(params.get('trading_pair'))
+            history = m.request_history
+            self.assertEqual(history[i].method, "GET")
+            self.assertEqual(history[i].url, base_url + url_args)
+            self.assertTrue(mock_logger.debug.called)
+            i += 1
+
+    def test_allowed_currency(self, mock_logger, m):
+        '''Test the allowed currencies.'''
+        i = 0
+        for curr in ['btc', 'bch', 'eth', 'btg', 'bsv']:
+            params = {'currency': curr}
+            base_url = 'https://api.bitcoin.de/v2/account/ledger'
+            url_args = '?currency={}'.format(params.get('currency'))
+            response = self.sampleData('showAccountLedger')
+            m.get(requests_mock.ANY, json=response, status_code=200)
+            self.conn.showAccountLedger(params.get('currency'))
+            history = m.request_history
+            self.assertEqual(history[i].method, "GET")
+            self.assertEqual(history[i].url, base_url + url_args)
+            self.assertTrue(mock_logger.debug.called)
+            i += 1
+
     def test_decimal_parsing(self, mock_logger, m):
         '''Test if the decimal parsing calculates correctly.'''
         params = {'type': 'buy',

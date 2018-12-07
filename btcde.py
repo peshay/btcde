@@ -72,9 +72,9 @@ class ParameterBuilder(object):
             self.url = uri
 
 
-    TRADING_PAIRS = ['btceur', 'bcheur', 'etheur', 'btgeur']
+    TRADING_PAIRS = ['btceur', 'bcheur', 'etheur', 'btgeur', 'bsveur']
     ORDER_TYPES = ['buy', 'sell']
-    CURRENCIES = ['btc', 'bch', 'eth', 'btg']
+    CURRENCIES = ['btc', 'bch', 'eth', 'btg', 'bsv']
     BANK_SEATS = ['AT', 'BE', 'BG', 'CH', 'CY', 'CZ',
                   'DE', 'DK', 'EE', 'ES', 'FI', 'FR',
                   'GB', 'GR', 'HR', 'HU', 'IE', 'IS',
