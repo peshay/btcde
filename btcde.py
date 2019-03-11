@@ -312,7 +312,7 @@ class Connection(object):
         params = {'currency': currency}
         params.update(args)
         avail_params = ['currency', 'type',
-                        'date_start', 'date_end', 'page']
+                        'datetime_start', 'datetime_end', 'page']
         p = ParameterBuilder(avail_params, params,
                              self.accounturi + '/ledger')
         return self.APIConnect('GET', p)
