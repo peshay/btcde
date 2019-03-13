@@ -335,12 +335,12 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_urlEncoding(self, mock_logger, m):
         '''Test URL encoding on parameters.'''
-        params = {'currency': 'btc', 'date_start': '2018-01-01T01:00:00+01:00'}
+        params = {'currency': 'btc', 'datetime_start': '2018-01-01T01:00:00+01:00'}
         base_url = 'https://api.bitcoin.de/v2/account/ledger'
         url_args = '?' + urlencode(params)
         response = self.sampleData('showAccountLedger')
         m.get(requests_mock.ANY, json=response, status_code=200)
-        r = self.conn.showAccountLedger(params['currency'], date_start="2018-01-01T01:00:00+01:00")
+        r = self.conn.showAccountLedger(params['currency'], datetime_start="2018-01-01T01:00:00+01:00")
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
