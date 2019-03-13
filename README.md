@@ -151,8 +151,8 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * currency
 * Optional Parameters:
   * type
-  * date_start
-  * date_end
+  * datetime_start
+  * datetime_end
   * page
 
 *API Credits Cost: 3*
