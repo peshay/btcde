@@ -65,7 +65,7 @@ class ParameterBuilder(object):
 
     def create_url(self, uri):
         if self.params:
-            self.encoded_string = urlencode(self.params)
+            self.encoded_string = urlencode(sorted(self.params.items()))
             self.url = uri + '?' + self.encoded_string
         else:
             self.encoded_string = ''
