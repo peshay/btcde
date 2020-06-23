@@ -66,10 +66,10 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_signature_post(self, mock_logger, m):
         '''Test signature on a post request.'''
-        params = {'type': 'buy',
+        params = {'max_amount': 10,
+                  'price': 1337,
                   'trading_pair': 'btceur',
-                  'max_amount': 10,
-                  'price': 1337}
+                  'type': 'buy' }
         response = self.sampleData('createOrder')
         m.post(requests_mock.ANY, json=response, status_code=201)
         self.conn.createOrder(params['type'],
@@ -86,8 +86,8 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_signature_get(self, mock_logger, m):
         '''Test signature on a get request.'''
-        params = {'type': 'buy',
-                  'trading_pair': 'btceur'}
+        params = {'trading_pair': 'btceur',
+                   'type': 'buy' }
         response = self.sampleData('showOrderbook_buy')
         m.get(requests_mock.ANY, json=response, status_code=200)
         self.conn.showOrderbook(params.get('type'),
@@ -115,9 +115,9 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_show_orderbook(self, mock_logger, m):
         '''Test function showOrderbook.'''
-        params = {'type': 'buy',
+        params = {'price': 1337,
                   'trading_pair': 'btceur',
-                  'price': 1337}
+                  'type': 'buy'}
         base_url = 'https://api.bitcoin.de/v2/orders'
         url_args = '?' + urlencode(params)
         response = self.sampleData('showOrderbook_buy')
@@ -132,10 +132,11 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_createOrder(self, mock_logger, m):
         '''Test function createOrder.'''
-        params = {'type': 'buy',
+        params = {'max_amount': '10',
+                  'price': '10',
                   'trading_pair': 'btceur',
-                  'max_amount': '10',
-                  'price': '10'}
+                  'type': 'buy'
+                  }
         base_url = 'https://api.bitcoin.de/v2/orders'
         url_args = '?' + urlencode(params)
         response = self.sampleData('createOrder')
@@ -167,8 +168,8 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_showMyOrders(self, mock_logger, m):
         '''Test function showMyOrders.'''
-        params = {'type': 'buy',
-                  'trading_pair': 'btceur'}
+        params = {'trading_pair': 'btceur',
+                  'type': 'buy' }
         base_url = 'https://api.bitcoin.de/v2/orders/my_own'
         url_args = '?' + urlencode(params)
         response = self.sampleData('showMyOrders')
@@ -196,10 +197,10 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_executeTrade(self, mock_logger, m):
         '''Test function executeTrade.'''
-        params = {'order_id': '1337',
-                  'type': 'buy',
+        params = {'amount': '10',
+                  'order_id': '1337',
                   'trading_pair': 'btceur',
-                  'amount': '10'}
+                  'type': 'buy'}
         base_url = 'https://api.bitcoin.de/v2/trades/{}'\
                    .format(params.get('order_id'))
         url_args = '?' + urlencode(params)
@@ -229,8 +230,8 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_showMyTrades_with_params(self, mock_logger, m):
         '''Test function showMyTrades with parameters.'''
-        params = {'type': 'buy',
-                  'trading_pair': 'btceur'}
+        params = {'trading_pair': 'btceur',
+                  'type': 'buy' }
         base_url = 'https://api.bitcoin.de/v2/trades'
         url_args = '?' + urlencode(params)
         response = self.sampleData('showMyTrades')
@@ -295,7 +296,7 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_showPublicTradeHistory_since(self, mock_logger, m):
         '''Test function showPublicTradeHistory with since_tid.'''
-        params = {'trading_pair': 'btceur', 'since_tid': '123'}
+        params = {'since_tid': '123', 'trading_pair': 'btceur'}
         base_url = 'https://api.bitcoin.de/v2/trades/history'
         url_args = '?' + urlencode(params)
         response = self.sampleData('showPublicTradeHistory')
@@ -431,10 +432,10 @@ class TestBtcdeExceptions(TestCase):
     @requests_mock.Mocker()
     def test_APIException(self, m):
         '''Test API Exception.'''
-        params = {'type': 'buy',
+        params = {'max_amount': 10,
+                  'price': 13,
                   'trading_pair': 'btceur',
-                  'max_amount': 10,
-                  'price': 13}
+                  'type': 'buy' }
         base_url = 'https://api.bitcoin.de/v2/orders'
         url_args = '?' + urlencode(params)
         response = self.sampleData('error')
