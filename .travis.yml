@@ -1,9 +1,9 @@
 language: python
 python:
-- '3.6'
 - '3.8'
-- '3.9-dev'
-- 'nightly'
+- '3.6'
+- 3.9-dev
+- nightly
 install:
 - pip install -r requirements.txt
 - pip install -r tests/requirements.txt
@@ -13,24 +13,25 @@ after_success:
 - codecov
 jobs:
   include:
-    - stage: Test-Release
-      deploy:
-        - provider: pypi
-          server: https://test.pypi.org/legacy/
-          user: peshay
-          password:
-            secure: Kpw58A8Tq2bcBp2sKoz9aHApoVOVIu2sHBFRP5bMP1Z5ELa0TMjjVEZGIcoxmWc0/5388Tn/GHGrWAmBnHBe8BXnb6kSduzOrrzS6iqUdrJ6OZIwxNg5qwO6n3ENUf7PmdUyuYr1OonZynoFJQxcF+837Tl22yRbAi66arhCNitNjDPcQKVTK48znv8q2k7v2vPvJ1HW95sjyT5NfihyQ3ys2VicwiBNEGE3Dk9gxyz7/XenzHlzubTwOIHaCMyNATwCzez2YvRJ6IoeSr+YDpFZx5GvB69dAVuzsmFR2Y2MaA+IBXM09yh3xwyLpSyYn7HYBjkSwp3tyTP1Kgt9D5hcYMz03L+oV1AjdinVKLnoSZL2BTq4i523CjSp7L4tkWWfSUk+QGeiMJh/9p/ymAwqtdIF5dXlI5GwlNiCBCI9JwM0F9sAi0adpXOsxyLk62v8yrgZAxLwPcjhVOn9K+zyhzSx0CqErZDboub0F1Q8m0krlMo3XNbURCefwhpYG5+0qe44K6MBzyhdgnjDLAXE7ADe6T089iSabubqE8HCGR4dYR9oKLiocdhOuPzkheLUMIK2oPopfJTZeV26loW33yVPA9truxqJ4Yq80AncPwAkwhYecagbCgPQapkWXrUdzBevOJuwj5m6+F8egpZjKMfblfkj2Kmgf6D3PxM=
-          on:
-            tags: false
-            condition: $TRAVIS_PYTHON_VERSION = "3.8"
-            branch: get_test_coverage
-    - stage: Release
-      deploy:
-        - provider: pypi
-          user: peshay
-          password:
-            secure: Kpw58A8Tq2bcBp2sKoz9aHApoVOVIu2sHBFRP5bMP1Z5ELa0TMjjVEZGIcoxmWc0/5388Tn/GHGrWAmBnHBe8BXnb6kSduzOrrzS6iqUdrJ6OZIwxNg5qwO6n3ENUf7PmdUyuYr1OonZynoFJQxcF+837Tl22yRbAi66arhCNitNjDPcQKVTK48znv8q2k7v2vPvJ1HW95sjyT5NfihyQ3ys2VicwiBNEGE3Dk9gxyz7/XenzHlzubTwOIHaCMyNATwCzez2YvRJ6IoeSr+YDpFZx5GvB69dAVuzsmFR2Y2MaA+IBXM09yh3xwyLpSyYn7HYBjkSwp3tyTP1Kgt9D5hcYMz03L+oV1AjdinVKLnoSZL2BTq4i523CjSp7L4tkWWfSUk+QGeiMJh/9p/ymAwqtdIF5dXlI5GwlNiCBCI9JwM0F9sAi0adpXOsxyLk62v8yrgZAxLwPcjhVOn9K+zyhzSx0CqErZDboub0F1Q8m0krlMo3XNbURCefwhpYG5+0qe44K6MBzyhdgnjDLAXE7ADe6T089iSabubqE8HCGR4dYR9oKLiocdhOuPzkheLUMIK2oPopfJTZeV26loW33yVPA9truxqJ4Yq80AncPwAkwhYecagbCgPQapkWXrUdzBevOJuwj5m6+F8egpZjKMfblfkj2Kmgf6D3PxM=
-          on:
-            tags: true
-            branch: master
-            condition: $TRAVIS_PYTHON_VERSION = "3.8"
+  - stage: Test-Release
+    deploy:
+    - provider: pypi
+      server: https://test.pypi.org/legacy/
+      user: __token__
+      password:
+        secure: h/wc+642BHl/T7zlgH3B5fbpp7lttVLd13yIwJoi+YAXuZiX/w5fd2uQNnr3Kh9JAaaM2ZXDpn0Xo8y7gq8pmrrQ0IMy6Df4rKUkznLXxNt3/1yLuXGPLrBESoPUM0HRqJIUBwrJuEFS4JrKaHPf018li7+/Re93MSDPKhXSaJhzVFiwmCVDpeNWptREnrfE0FqzY+dq//w+Tac/ABp+oFTQ/IVfg1atxJbxk0sErG6CAImCOYA4mxDhBeFcJC+03jRCazHmPjrDGHjktRVU2s1CcCLzO5U1/IuzXV5bSoC8Nd58wFzfZbt3uZogvqaCK9iDez6ojbPBjcXHpM+oEYxI3MQxQo6UGBCd6uhEfjKX02GLVAY5zucQujqqRVZWnWwt3BHHzfW8NF7XBp0bYDTAgmVOhBW6I+bQPmC7mJiffnhaM/V6yQINc9wdAMAePAVA7X0AkmKgD8779lvorAegzTifUQXx8uqabH3UT5uTUavMO+WH+utpYH7gKxmO5kO1L6Efut42QknNfAgmqzRqbTpGdgk8jqs0BOjNcMJ0kJeWDJeEMtiYRm64l/CPy2OC6WU2xipfVYr30r2s/LDFUHfvwvSSkiZTFhmj9PtJzjrmbIvEcd9hnYuqf19U89IKMJ2G31Z/hql0dzTJ0Rbk5ElgRvp4b0vnVwyjmp0=
+      on:
+        tags: false
+        condition: $TRAVIS_PYTHON_VERSION = "3.8"
+        all_branches: true
+  - stage: Release
+    deploy:
+    - provider: pypi
+      user: __token__
+      password:
+        secure: nFrQuHCsnZ2OM5L7EfHZSOOI4YQl3d6XIlC/9uIZpHiNJ6LA/VyYxIk6xkDNvAG+2t2XtnCxtrYeffhUowz9cQl0fANvZX48K1MpRRsxLbjHREt5raZLomvcDZDZtjOul2aiFt44I+kZwo26+T99gjQM3ydwypRkXfmIpGuhovJ2qm+l1LvKcYb+7A8wsl2AH59Ky8iuFZKGSCRdK5gzNdslZVwYn9fa+excsDLScwVWBCDyszh83NXWmhpFIAMCq+XrduL2fYEN5TZ6vAMY6gHZetLYeiAoHtRMEabeTmcN8iMA/UVOZ0PewUIzx0Hy+/VUiCyggT1pZK1hNFGsy7VF5JLaerpkgj/jDeWbwEyOzXV8NHP9nOG7Xin5BVhza7gu/9JSm1QCSO9Zqa/HOtcTUmc6mYxpO7MjTGGkJNM30uApMmmXTw0BrESyXI1axwroSy1zJXw2ku6nzOwgpbjwtjTBFEf9rG3+PKf0obNaj818Gc5VC9XCMUA04CNH2VWIOKbZWm9ohKZzY+IPYqWaStP1rbuIfahnAFZVLd+Q5MTVnAo+nm2wu2ACIa05ztjaAeb0jE9E5C5mhHaetWcZaAO+HaNC0CEyz1JdJn3fPEHrMTskkvRwUoj1c2qnRYfjh9vFq3aPoqtiE3Af4ipMH+b1qfgN4IzwSLOH4l4=
+      on:
+        tags: true
+        branch: master
+        condition: $TRAVIS_PYTHON_VERSION = "3.8"
+
