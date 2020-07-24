@@ -16,14 +16,14 @@ jobs:
   - stage: Test-Release
     deploy:
     - provider: pypi
-      server: https://test.pypi.org/
+      server: https://test.pypi.org/legacy/
       user: __token__
       password:
         secure: h/wc+642BHl/T7zlgH3B5fbpp7lttVLd13yIwJoi+YAXuZiX/w5fd2uQNnr3Kh9JAaaM2ZXDpn0Xo8y7gq8pmrrQ0IMy6Df4rKUkznLXxNt3/1yLuXGPLrBESoPUM0HRqJIUBwrJuEFS4JrKaHPf018li7+/Re93MSDPKhXSaJhzVFiwmCVDpeNWptREnrfE0FqzY+dq//w+Tac/ABp+oFTQ/IVfg1atxJbxk0sErG6CAImCOYA4mxDhBeFcJC+03jRCazHmPjrDGHjktRVU2s1CcCLzO5U1/IuzXV5bSoC8Nd58wFzfZbt3uZogvqaCK9iDez6ojbPBjcXHpM+oEYxI3MQxQo6UGBCd6uhEfjKX02GLVAY5zucQujqqRVZWnWwt3BHHzfW8NF7XBp0bYDTAgmVOhBW6I+bQPmC7mJiffnhaM/V6yQINc9wdAMAePAVA7X0AkmKgD8779lvorAegzTifUQXx8uqabH3UT5uTUavMO+WH+utpYH7gKxmO5kO1L6Efut42QknNfAgmqzRqbTpGdgk8jqs0BOjNcMJ0kJeWDJeEMtiYRm64l/CPy2OC6WU2xipfVYr30r2s/LDFUHfvwvSSkiZTFhmj9PtJzjrmbIvEcd9hnYuqf19U89IKMJ2G31Z/hql0dzTJ0Rbk5ElgRvp4b0vnVwyjmp0=
       on:
         tags: false
         condition: $TRAVIS_PYTHON_VERSION = "3.8"
-        branch: get_test_coverage
+        all_branches: true
   - stage: Release
     deploy:
     - provider: pypi
