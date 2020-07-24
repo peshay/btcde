@@ -16,7 +16,7 @@ jobs:
   - stage: Test-Release
     deploy:
     - provider: pypi
-      server: https://test.pypi.org/simple/
+      server: https://test.pypi.org/
       user: __token__
       password:
         secure: nFrQuHCsnZ2OM5L7EfHZSOOI4YQl3d6XIlC/9uIZpHiNJ6LA/VyYxIk6xkDNvAG+2t2XtnCxtrYeffhUowz9cQl0fANvZX48K1MpRRsxLbjHREt5raZLomvcDZDZtjOul2aiFt44I+kZwo26+T99gjQM3ydwypRkXfmIpGuhovJ2qm+l1LvKcYb+7A8wsl2AH59Ky8iuFZKGSCRdK5gzNdslZVwYn9fa+excsDLScwVWBCDyszh83NXWmhpFIAMCq+XrduL2fYEN5TZ6vAMY6gHZetLYeiAoHtRMEabeTmcN8iMA/UVOZ0PewUIzx0Hy+/VUiCyggT1pZK1hNFGsy7VF5JLaerpkgj/jDeWbwEyOzXV8NHP9nOG7Xin5BVhza7gu/9JSm1QCSO9Zqa/HOtcTUmc6mYxpO7MjTGGkJNM30uApMmmXTw0BrESyXI1axwroSy1zJXw2ku6nzOwgpbjwtjTBFEf9rG3+PKf0obNaj818Gc5VC9XCMUA04CNH2VWIOKbZWm9ohKZzY+IPYqWaStP1rbuIfahnAFZVLd+Q5MTVnAo+nm2wu2ACIa05ztjaAeb0jE9E5C5mhHaetWcZaAO+HaNC0CEyz1JdJn3fPEHrMTskkvRwUoj1c2qnRYfjh9vFq3aPoqtiE3Af4ipMH+b1qfgN4IzwSLOH4l4=
