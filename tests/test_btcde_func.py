@@ -110,6 +110,54 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertEqual(request_signature, verified_signature)
         self.assertTrue(mock_logger.debug.called)
 
+    def test_add_to_address_pool(self, mock_logger, m):
+        '''Test function addToAddressPool.'''
+        currency = 'dash'
+        params = { 'address': '1337',
+                   'amount_usages': 3,
+                   'comment': 'foobar' }
+        base_url = f'https://api.bitcoin.de/v4/{currency}/address'
+        url_args = '?' + urlencode(params)
+        response = self.sampleData('minimal')
+        m.post(requests_mock.ANY, json=response, status_code=201)
+        self.conn.addToAddressPool(currency, params['address'],
+                                   amount_usages=params['amount_usages'],
+                                   comment=params['comment'])
+        history = m.request_history
+        self.assertEqual(history[0].method, "POST")
+        self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
+
+    def test_list_address_pool(self, mock_logger, m):
+        '''Test function listAddressPool.'''
+        currency = 'dash'
+        params = { "comment": "foobar",
+                   "page": 3,
+                   "usable": 1 }
+        base_url = f'https://api.bitcoin.de/v4/{currency}/address'
+        url_args = '?' + urlencode(params)
+        response = self.sampleData('listAddressPool')
+        m.get(requests_mock.ANY, json=response, status_code=200)
+        self.conn.listAddressPool(currency, usable=params['usable'],
+                                  comment=params['comment'], page=params['page'])
+        history = m.request_history
+        self.assertEqual(history[0].method, "GET")
+        self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
+
+    def test_remove_from_address_pool(self, mock_logger, m):
+        '''Test function removeFromAddressPool.'''
+        currency = 'dash'
+        address = '1337'
+        base_url = f'https://api.bitcoin.de/v4/{currency}/address/{address}'
+        response = self.sampleData('minimal')
+        m.delete(requests_mock.ANY, json=response, status_code=200)
+        self.conn.removeFromAddressPool(currency, address)
+        history = m.request_history
+        self.assertEqual(history[0].method, "DELETE")
+        self.assertEqual(history[0].url, base_url)
+        self.assertTrue(mock_logger.debug.called)
+
     def test_show_orderbook(self, mock_logger, m):
         '''Test function showOrderbook.'''
         trading_pair = 'btceur'
