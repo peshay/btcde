@@ -12,9 +12,6 @@ import decimal
 import inspect
 import urllib
 
-from future.standard_library import install_aliases
-install_aliases()
-
 from urllib.parse import urlencode
 
 logging.basicConfig()
@@ -22,10 +19,7 @@ log = logging.getLogger(__name__)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.propagate = True
 
-__version__ = '2.4'
-
-# disable unsecure SSL warning
-requests.packages.urllib3.disable_warnings()
+__version__ = '4.0'
 
 class ParameterBuilder(object):
     '''To verify given parameters for API.'''
