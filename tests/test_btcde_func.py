@@ -308,6 +308,85 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url)
         self.assertTrue(mock_logger.debug.called)
+
+    def test_markCoinsAsTransferred(self, mock_logger, m):
+        '''Test function markCoinsAsTransferred.'''
+        trading_pair = 'btceur'
+        trade_id = '1337'
+        params = { 'amount_currency_to_trade_after_fee': 0.1337}
+        url_args = '?' + urlencode(params)
+        base_url = f'https://api.bitcoin.de/v4/{trading_pair}/trades/{trade_id}/mark_coins_as_transferred'
+        response = self.sampleData('markCoinsAsTransferred')
+        m.post(requests_mock.ANY, json=response, status_code=200)
+        self.conn.markCoinsAsTransferred(trading_pair, trade_id, params['amount_currency_to_trade_after_fee'])
+        history = m.request_history
+        self.assertEqual(history[0].method, "POST")
+        self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
+
+    def test_markTradeAsPaid(self, mock_logger, m):
+        '''Test function markTradeAsPaid.'''
+        trading_pair = 'btceur'
+        trade_id = '1337'
+        params = { 'volume_currency_to_pay_after_fee': 0.1337}
+        url_args = '?' + urlencode(params)
+        base_url = f'https://api.bitcoin.de/v4/{trading_pair}/trades/{trade_id}/mark_trade_as_paid'
+        response = self.sampleData('markCoinsAsTransferred')
+        m.post(requests_mock.ANY, json=response, status_code=200)
+        self.conn.markTradeAsPaid(trading_pair, trade_id, params['volume_currency_to_pay_after_fee'])
+        history = m.request_history
+        self.assertEqual(history[0].method, "POST")
+        self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
+
+    def test_markCoinsAsReceived(self, mock_logger, m):
+        '''Test function markCoinsAsReceived.'''
+        trading_pair = 'btceur'
+        trade_id = '1337'
+        params = { 'amount_currency_to_trade_after_fee': 0.1337, 'rating': 'positive'}
+        url_args = '?' + urlencode(params)
+        base_url = f'https://api.bitcoin.de/v4/{trading_pair}/trades/{trade_id}/mark_coins_as_received'
+        response = self.sampleData('markCoinsAsTransferred')
+        m.post(requests_mock.ANY, json=response, status_code=200)
+        self.conn.markCoinsAsReceived(trading_pair, trade_id,
+                                      params['amount_currency_to_trade_after_fee'],
+                                      params['rating'])
+        history = m.request_history
+        self.assertEqual(history[0].method, "POST")
+        self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
+
+    def test_markTradeAsPaymentReceived(self, mock_logger, m):
+        '''Test function markTradeAsPaymentReceived.'''
+        trading_pair = 'btceur'
+        trade_id = '1337'
+        params = { 'is_paid_from_correct_bank_account': True, 'rating': 'positive',
+                   'volume_currency_to_pay_after_fee': 0.1337 }
+        url_args = '?' + urlencode(params)
+        base_url = f'https://api.bitcoin.de/v4/{trading_pair}/trades/{trade_id}/mark_trade_as_payment_received'
+        response = self.sampleData('markCoinsAsTransferred')
+        m.post(requests_mock.ANY, json=response, status_code=200)
+        self.conn.markTradeAsPaymentReceived(trading_pair, trade_id,
+                                      params['volume_currency_to_pay_after_fee'],
+                                      params['rating'],
+                                      params['is_paid_from_correct_bank_account'])
+        history = m.request_history
+        self.assertEqual(history[0].method, "POST")
+        self.assertEqual(history[0].url, base_url + url_args)
+        self.assertTrue(mock_logger.debug.called)
+
+    def test_addTradeRating(self, mock_logger, m):
+        '''Test function addTradeRating.'''
+        trading_pair = 'btceur'
+        trade_id = '1337'
+        params = { 'rating': 'positive' }
+        url_args = '?' + urlencode(params)
+        base_url = f'https://api.bitcoin.de/v4/{trading_pair}/trades/{trade_id}/add_trade_rating'
+        response = self.sampleData('markCoinsAsTransferred')
+        m.post(requests_mock.ANY, json=response, status_code=200)
+        self.conn.addTradeRating(trading_pair, trade_id, params['rating'])
+        history = m.request_history
+        self.assertEqual(history[0].method, "POST")
         self.assertEqual(history[0].url, base_url + url_args)
         self.assertTrue(mock_logger.debug.called)
 

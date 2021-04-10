@@ -167,6 +167,48 @@ All mandatory parameters have to be passed to a function, all optional are resol
 
 *API Credits Cost: 3*
 
+#### markCoinsAsTransferred(trading_pair, trade_id, amount_currency_to_trade_after_fee)
+* Required Parameters:
+  * trading_pair
+  * trade_id
+  * amount_currency_to_trade_after_fee
+
+*API Credits Cost: 1*
+
+#### markTradeAsPaid(trading_pair, trade_id, volume_currency_to_pay_after_fee)
+* Required Parameters:
+  * trading_pair
+  * trade_id
+  * volume_currency_to_pay_after_fee
+
+*API Credits Cost: 1*
+
+#### markCoinsAsReceived(trading_pair, trade_id, amount_currency_to_trade_after_fee, rating)
+* Required Parameters:
+  * trading_pair
+  * trade_id
+  * amount_currency_to_trade_after_fee
+  * rating
+
+*API Credits Cost: 1*
+
+#### markTradeAsPaymentReceived(trading_pair, trade_id, volume_currency_to_pay_after_fee, rating, is_paid_from_correct_bank_account)
+* Required Parameters:
+  * trading_pair
+  * trade_id
+  * volume_currency_to_pay_after_fee
+  * rating
+  * is_paid_from_correct_bank_account
+
+*API Credits Cost: 1*
+
+#### addTradeRating(trading_pair, trade_id, rating)
+* Required Parameters:
+  * trading_pair
+  * trade_id
+  * rating
+
+*API Credits Cost: 1*
 #### showAccountInfo()
 
 *API Credits Cost: 2*
