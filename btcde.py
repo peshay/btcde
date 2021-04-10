@@ -42,7 +42,7 @@ class ParameterBuilder(object):
             if k == 'trading_pair':
                 self.error_on_invalid_value(v, self.TRADING_PAIRS)
             elif k == 'type':
-                self.error_on_invalid_value(v, self.ORDER_TYPES)
+                self.error_on_invalid_value(v, self.TRADE_TYPES)
             elif k == 'currency':
                 self.error_on_invalid_value(v, self.CURRENCIES)
             elif k == 'seat_of_bank':
@@ -72,9 +72,11 @@ class ParameterBuilder(object):
             self.url = uri
 
 
-    TRADING_PAIRS = ['btceur', 'bcheur', 'etheur', 'btgeur', 'bsveur']
+    TRADING_PAIRS = ['btceur', 'bcheur', 'etheur', 'btgeur', 'bsveur', 'ltceur',
+                     'iotabtc', 'dashbtc', 'gntbtc', 'ltcbtc']
     ORDER_TYPES = ['buy', 'sell']
-    CURRENCIES = ['btc', 'bch', 'eth', 'btg', 'bsv']
+    CURRENCIES = ['btc', 'bch', 'eth', 'btg', 'bsv', 'ltc',
+                  'iota', 'dash', 'gnt']
     BANK_SEATS = ['AT', 'BE', 'BG', 'CH', 'CY', 'CZ',
                   'DE', 'DK', 'EE', 'ES', 'FI', 'FR',
                   'GB', 'GR', 'HR', 'HU', 'IE', 'IS',
@@ -119,10 +121,8 @@ class Connection(object):
         self.nonce = int(time.time() * 1000000)
         # Bitcoin.de API URI
         self.apihost = 'https://api.bitcoin.de'
-        self.apiversion = 'v2'
-        self.orderuri = self.apihost + '/' + self.apiversion + '/' + 'orders'
-        self.tradeuri = self.apihost + '/' + self.apiversion + '/' + 'trades'
-        self.accounturi = self.apihost + '/' + self.apiversion + '/' + 'account'
+        self.apiversion = 'v4'
+        self.apibase = f'{self.apihost}/{self.apiversion}/'
 
     def build_hmac_sign(self, md5string, method, url):
         hmac_data = '{method}#{url}#{key}#{nonce}#{md5}'\
@@ -182,46 +182,44 @@ class Connection(object):
 
     def showOrderbook(self, order_type, trading_pair, **args):
         """Search Orderbook for offers."""
-        params = {'type': order_type,
-                  'trading_pair': trading_pair}
+        uri = f'{self.apibase}{trading_pair}/orderbook'
+        params = {'type': order_type}
         params.update(args)
-        avail_params = ['type', 'trading_pair', 'amount', 'price',
+        avail_params = ['type', 'trading_pair', 'amount_currency_to_trade', 'price',
                         'order_requirements_fullfilled',
-                        'only_kyc_full', 'only_express_orders',
-                        'only_same_bankgroup', 'only_same_bic',
-                        'seat_of_bank']
-        p = ParameterBuilder(avail_params, params, self.orderuri)
+                        'only_kyc_full', 'only_express_orders', 'payment_option',
+                        'sepa_option', 'only_same_bankgroup', 'only_same_bic',
+                        'seat_of_bank', 'page_size']
+        p = ParameterBuilder(avail_params, params, uri)
         return self.APIConnect('GET', p)
 
 
-    def createOrder(self, order_type, trading_pair, max_amount, price, **args):
+    def createOrder(self, order_type, trading_pair, max_amount_currency_to_trade, price, **args):
         """Create a new Order."""
+        uri = f'{self.apibase}{trading_pair}/orders'
         # Build parameters
         params = {'type': order_type,
-                  'trading_pair': trading_pair,
-                  'max_amount': max_amount,
+                  'max_amount_currency_to_trade': max_amount_currency_to_trade,
                   'price': price}
         params.update(args)
-        avail_params = ['type', 'trading_pair', 'max_amount', 'price',
-                        'min_amount', 'new_order_for_remaining_amount',
+        avail_params = ['type', 'max_amount_currency_to_trade', 'price',
+                        'min_amount_currency_to_trade', 'end_datetime',
+                        'new_order_for_remaining_amount', 'trading_pair',
                         'min_trust_level', 'only_kyc_full', 'payment_option',
-                        'seat_of_bank']
-        p = ParameterBuilder(avail_params, params, self.orderuri)
+                        'sepa_option', 'seat_of_bank']
+        p = ParameterBuilder(avail_params, params, uri)
+        p.verify_keys_and_values(avail_params, {'trading_pair': trading_pair})
         return self.APIConnect('POST', p)
-
 
     def deleteOrder(self, order_id, trading_pair):
         """Delete an Order."""
         # Build parameters
-        params = {'order_id': order_id,
-                  'trading_pair': trading_pair}
+        uri = f'{self.apibase}{trading_pair}/orders/{order_id}'
         avail_params = ['order_id', 'trading_pair']
-        newuri = self.orderuri + "/" + order_id + "/" + trading_pair
-        p = ParameterBuilder(avail_params, params, newuri)
-        p.encoded_string = ''
-        p.url = newuri
+        params = { 'order_id': order_id, 'trading_pair': trading_pair}
+        p = ParameterBuilder({}, {}, uri)
+        p.verify_keys_and_values(avail_params, params)
         return self.APIConnect('DELETE', p)
-
 
     def showMyOrders(self, **args):
         """Query and Filter own Orders."""
@@ -229,90 +227,102 @@ class Connection(object):
         params = args
         avail_params = ['type', 'trading_pair', 'state',
                         'date_start', 'date_end', 'page']
-        newuri = self.orderuri + '/my_own'
-        p = ParameterBuilder(avail_params, params, newuri)
+        if params.get("trading_pair"):
+            uri = f'{self.apibase}{params["trading_pair"]}/orders'
+            del params["trading_pair"]
+        else:
+            uri = f'{self.apibase}orders'
+        p = ParameterBuilder(avail_params, params, uri)
         return self.APIConnect('GET', p)
 
-
-    def showMyOrderDetails(self, order_id):
+    def showMyOrderDetails(self, trading_pair, order_id):
         """Details to an own Order."""
-        newuri = self.orderuri + '/' + order_id
-        p = ParameterBuilder({}, {}, newuri)
+        uri = f'{self.apibase}{trading_pair}/orders/{order_id}'
+        p = ParameterBuilder({}, {}, uri)
         return self.APIConnect('GET', p)
 
-
-    def executeTrade(self, order_id, order_type, trading_pair, amount):
+    def executeTrade(self, trading_pair, order_id, order_type, amount):
         """Buy/Sell on a specific Order."""
-        newuri = self.tradeuri + '/' + order_id
-        params = {'order_id': order_id,
-                  'type': order_type,
-                  'trading_pair': trading_pair,
-                  'amount': amount}
-        avail_params = ['order_id', 'type', 'trading_pair',
-                        'amount']
-        p = ParameterBuilder(avail_params, params, newuri)
+        uri = f'{self.apibase}{trading_pair}/trades/{order_id}'
+        params = { 'type': order_type,
+                   'amount_currency_to_trade': amount}
+        avail_params = ['type', 'amount_currency_to_trade']
+        p = ParameterBuilder(avail_params, params, uri)
         return self.APIConnect('POST', p)
-
 
     def showMyTrades(self, **args):
         """Query and Filter on past Trades."""
         # Build parameters
         params = args
         avail_params = ['type', 'trading_pair', 'state',
-                        'date_start', 'date_end', 'page']
-        p = ParameterBuilder(avail_params, params, self.tradeuri)
+                        'only_trades_with_action_for_payment_or_transfer_required',
+                        'payment_method', 'date_start', 'date_end', 'page']
+        if params.get("trading_pair"):
+            uri = f'{self.apibase}{params["trading_pair"]}/trades'
+            del params["trading_pair"]
+        else:
+            uri = f'{self.apibase}trades'
+        p = ParameterBuilder(avail_params, params, uri)
         return self.APIConnect('GET', p)
 
-
-    def showMyTradeDetails(self, trade_id):
+    def showMyTradeDetails(self, trading_pair, trade_id):
         """Details to a specific Trade."""
-        newuri = self.tradeuri + '/' + trade_id
-        params = {}
-        p = ParameterBuilder({}, {}, newuri)
+        params = {'trading_pair': trading_pair, 'trade_id': trade_id}
+        avail_params = [ 'trading_pair', 'trade_id' ]
+        uri = f'{self.apibase}{trading_pair}/trades/{trade_id}'
+        p = ParameterBuilder({}, {}, uri)
+        p.verify_keys_and_values(avail_params, params)
         return self.APIConnect('GET', p)
 
 
     def showAccountInfo(self):
         """Query on Account Infos."""
-        p = ParameterBuilder({}, {}, self.accounturi)
+        uri = f'{self.apibase}account'
+        p = ParameterBuilder({}, {}, uri)
         return self.APIConnect('GET', p)
-
 
     def showOrderbookCompact(self, trading_pair):
         """Bids and Asks in compact format."""
         params = {'trading_pair': trading_pair}
-        # Build parameters
         avail_params = ['trading_pair']
-        p = ParameterBuilder(avail_params, params,
-                             self.orderuri + '/compact')
+        uri = f'{self.apibase}{trading_pair}/orderbook/compact'
+        # Build parameters
+        p = ParameterBuilder({}, {}, uri)
+        p.verify_keys_and_values(avail_params, params)
         return self.APIConnect('GET', p)
-
 
     def showPublicTradeHistory(self, trading_pair, **args):
-        """All successful trades of the las 7 days."""
-        params = {'trading_pair': trading_pair}
+        """All successful trades of the last 24 hours."""
+        params = { 'trading_pair': trading_pair }
         params.update(args)
         avail_params = ['trading_pair', 'since_tid']
-        p = ParameterBuilder(avail_params, params,
-                             self.tradeuri + '/history')
+        uri = f'{self.apibase}{trading_pair}/trades/history'
+        if params.get('since_tid'):
+            del params["trading_pair"]
+            p = ParameterBuilder(avail_params, params, uri)
+        else:
+            p = ParameterBuilder({}, {}, uri)
+        p.verify_keys_and_values(avail_params, params)
         return self.APIConnect('GET', p)
-
 
     def showRates(self, trading_pair):
         """Query of the average rate last 3 and 12 hours."""
-        newuri = self.apihost + '/' + self.apiversion + '/rates'
+        uri = f'{self.apibase}{trading_pair}/rates'
         params = {'trading_pair': trading_pair}
         avail_params = ['trading_pair']
-        p = ParameterBuilder(avail_params, params, newuri)
+        # Build parameters
+        p = ParameterBuilder({}, {}, uri)
+        p.verify_keys_and_values(avail_params, params)
         return self.APIConnect('GET', p)
-
 
     def showAccountLedger(self, currency, **args):
         """Query on Account statement."""
         params = {'currency': currency}
         params.update(args)
+        uri = f'{self.apibase}{currency}/account/ledger'
         avail_params = ['currency', 'type',
                         'datetime_start', 'datetime_end', 'page']
-        p = ParameterBuilder(avail_params, params,
-                             self.accounturi + '/ledger')
+        p = ParameterBuilder(avail_params, params, uri)
+        del params['currency']
+        p = ParameterBuilder(avail_params, params, uri)
         return self.APIConnect('GET', p)
