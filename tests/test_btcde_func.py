@@ -42,12 +42,8 @@ class TestBtcdeAPIDocu(TestCase):
                                                    ).hexdigest()
         else:
             md5_encoded_query_string = hashlib.md5(b'').hexdigest()
-        hmac_data = '{method}#{url}#{key}#{nonce}#{md5}'\
-                    .format(method=method,
-                            url=self.url,
-                            key=self.XAPIKEY,
-                            nonce=str(self.XAPINONCE),
-                            md5=md5_encoded_query_string)
+        hmac_data = '#'.join([method, self.url, self.XAPIKEY,
+                             str(self.XAPINONCE), md5_encoded_query_string])
         hmac_signed = hmac.new(bytearray(self.XAPISECRET.encode()),
                                msg=hmac_data.encode(),
                                digestmod=hashlib.sha256).hexdigest()
