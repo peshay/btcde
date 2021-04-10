@@ -36,7 +36,7 @@ for order in orders:
 ---
 ## API Methods
 
-For more Details on the API Methods, please read [bitcoin.de API Documentation](https://www.bitcoin.de/de/api/tapi/v2/docu)
+For more Details on the API Methods, please read [bitcoin.de API Documentation](https://www.bitcoin.de/de/api/tapi/doc)
 All mandatory parameters have to be passed to a function, all optional are resolved via ```**args```
 
 #### addToAddressPool(currency, address, **args):

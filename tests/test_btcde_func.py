@@ -6,8 +6,6 @@ from mock import patch
 import json
 import btcde
 from decimal import Decimal
-from future.standard_library import install_aliases
-install_aliases()
 
 from urllib.parse import urlencode
 
@@ -15,7 +13,7 @@ from urllib.parse import urlencode
 @requests_mock.Mocker()
 class TestBtcdeAPIDocu(TestCase):
     '''Tests are as in bitcoin.de API documentation.
-    https://www.bitcoin.de/de/api/tapi/v2/docu'''
+    https://www.bitcoin.de/de/api/tapi/doc'''
 
     def sampleData(self, file):
         '''Retrieve sample data from json files.'''
