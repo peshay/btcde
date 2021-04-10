@@ -387,6 +387,17 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertEqual(history[0].url, base_url + url_args)
         self.assertTrue(mock_logger.debug.called)
 
+    def test_showPermissions(self, mock_logger, m):
+        '''Test function showPermissions.'''
+        base_url = f'https://api.bitcoin.de/v4/permissions'
+        response = self.sampleData('showPermissions')
+        m.get(requests_mock.ANY, json=response, status_code=200)
+        self.conn.showPermissions()
+        history = m.request_history
+        self.assertEqual(history[0].method, "GET")
+        self.assertEqual(history[0].url, base_url)
+        self.assertTrue(mock_logger.debug.called)
+
     def test_urlEncoding(self, mock_logger, m):
         '''Test URL encoding on parameters.'''
         currency = 'btc'
