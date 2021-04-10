@@ -180,6 +180,32 @@ class Connection(object):
             result = {}
         return result
 
+    def addToAddressPool(self, currency, address, **args):
+        """Add address to pool"""
+        uri = f'{self.apibase}{currency}/address'
+        params = {'address': address}
+        params.update(args)
+        avail_params = ['address', 'amount_usages', 'comment']
+        p = ParameterBuilder(avail_params, params, uri)
+        return self.APIConnect('POST', p)
+
+    def removeFromAddressPool(self, currency, address):
+        """Remove address from pool"""
+        uri = f'{self.apibase}{currency}/address/{address}'
+        params = {'currency': currency, 'address': address}
+        avail_params = ['currency', 'address']
+        p = ParameterBuilder({}, {}, uri)
+        p.verify_keys_and_values(avail_params, params)
+        return self.APIConnect('DELETE', p)
+
+    def listAddressPool(self, currency, **args):
+        """List address pool"""
+        uri = f'{self.apibase}{currency}/address'
+        params = args
+        avail_params = ['usable', 'comment', 'page']
+        p = ParameterBuilder(avail_params, params, uri)
+        return self.APIConnect('GET', p)
+
     def showOrderbook(self, order_type, trading_pair, **args):
         """Search Orderbook for offers."""
         uri = f'{self.apibase}{trading_pair}/orderbook'
