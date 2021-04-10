@@ -308,6 +308,67 @@ class Connection(object):
         p.verify_keys_and_values(avail_params, params)
         return self.APIConnect('GET', p)
 
+    def markCoinsAsTransferred(self, trading_pair, trade_id, amount_currency_to_trade_after_fee):
+        """Mark trade as transferred."""
+        params = {'amount_currency_to_trade_after_fee': amount_currency_to_trade_after_fee,
+                  'trading_pair': trading_pair, 'trade_id': trade_id}
+
+        avail_params = [ 'trading_pair', 'trade_id', 'amount_currency_to_trade_after_fee' ]
+        uri = f'{self.apibase}{trading_pair}/trades/{trade_id}/mark_coins_as_transferred'
+        p = ParameterBuilder(avail_params,
+            {'amount_currency_to_trade_after_fee': amount_currency_to_trade_after_fee}, uri)
+        p.verify_keys_and_values(avail_params, params)
+        return self.APIConnect('POST', p)
+
+    def markTradeAsPaid(self, trading_pair, trade_id, volume_currency_to_pay_after_fee):
+        """Mark traded as paid."""
+        params = {'volume_currency_to_pay_after_fee': volume_currency_to_pay_after_fee,
+                  'trading_pair': trading_pair, 'trade_id': trade_id}
+
+        avail_params = [ 'trading_pair', 'trade_id', 'volume_currency_to_pay_after_fee' ]
+        uri = f'{self.apibase}{trading_pair}/trades/{trade_id}/mark_trade_as_paid'
+        p = ParameterBuilder(avail_params,
+            {'volume_currency_to_pay_after_fee': volume_currency_to_pay_after_fee}, uri)
+        p.verify_keys_and_values(avail_params, params)
+        return self.APIConnect('POST', p)
+
+    def markCoinsAsReceived(self, trading_pair, trade_id, amount_currency_to_trade_after_fee, rating):
+        """Mark coins as received."""
+        params = {'amount_currency_to_trade_after_fee': amount_currency_to_trade_after_fee,
+                  'trading_pair': trading_pair, 'trade_id': trade_id, 'rating': rating}
+        params_post = {'amount_currency_to_trade_after_fee': amount_currency_to_trade_after_fee,
+                       'rating': rating}
+        avail_params = [ 'trading_pair', 'trade_id', 'amount_currency_to_trade_after_fee', 'rating' ]
+        uri = f'{self.apibase}{trading_pair}/trades/{trade_id}/mark_coins_as_received'
+        p = ParameterBuilder(avail_params, params_post, uri)
+        p.verify_keys_and_values(avail_params, params)
+        return self.APIConnect('POST', p)
+
+    def markTradeAsPaymentReceived(self, trading_pair, trade_id,
+                                   volume_currency_to_pay_after_fee, rating,
+                                   is_paid_from_correct_bank_account):
+        """Mark coins as received."""
+        params = {'volume_currency_to_pay_after_fee': volume_currency_to_pay_after_fee,
+                  'trading_pair': trading_pair, 'trade_id': trade_id, 'rating': rating}
+        params_post = {'volume_currency_to_pay_after_fee': volume_currency_to_pay_after_fee,
+                       'rating': rating,
+                       'is_paid_from_correct_bank_account': is_paid_from_correct_bank_account}
+        avail_params = [ 'trading_pair', 'trade_id', 'volume_currency_to_pay_after_fee',
+                         'rating', 'is_paid_from_correct_bank_account' ]
+        uri = f'{self.apibase}{trading_pair}/trades/{trade_id}/mark_trade_as_payment_received'
+        p = ParameterBuilder(avail_params, params_post, uri)
+        p.verify_keys_and_values(avail_params, params)
+        return self.APIConnect('POST', p)
+
+    def addTradeRating(self, trading_pair, trade_id, rating):
+        """Mark coins as received."""
+        params = {'trading_pair': trading_pair, 'trade_id': trade_id, 'rating': rating}
+        params_post = {'rating': rating}
+        avail_params = [ 'trading_pair', 'trade_id', 'rating' ]
+        uri = f'{self.apibase}{trading_pair}/trades/{trade_id}/add_trade_rating'
+        p = ParameterBuilder(avail_params, params_post, uri)
+        p.verify_keys_and_values(avail_params, params)
+        return self.APIConnect('POST', p)
 
     def showAccountInfo(self):
         """Query on Account Infos."""
