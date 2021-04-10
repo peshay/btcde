@@ -111,7 +111,6 @@ def HandleAPIErrors(r):
     else:
         return True
 
-
 class Connection(object):
     """To provide connection credentials to the trading API"""
     def __init__(self, api_key, api_secret):
@@ -125,10 +124,7 @@ class Connection(object):
         self.apibase = f'{self.apihost}/{self.apiversion}/'
 
     def build_hmac_sign(self, md5string, method, url):
-        hmac_data = '{method}#{url}#{key}#{nonce}#{md5}'\
-                    .format(method=method, url=url,
-                            key=self.api_key, nonce=str(self.nonce),
-                            md5=md5string)
+        hmac_data = '#'.join([method, url, self.api_key, str(self.nonce), md5string])
         hmac_signed = hmac.new(bytearray(self.api_secret.encode()), msg=hmac_data.encode(), digestmod=hashlib.sha256).hexdigest()
         return hmac_signed
 
