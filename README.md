@@ -7,7 +7,7 @@
 
 # btcde.py
 
-API Wrapper for [Bitcoin.de Trading API](https://www.bitcoin.de/de/api/marketplace)
+API Wrapper for [Bitcoin.de Trading API](https://www.bitcoin.de/de/api/tapi/doc)
 
 Requires: requests
 
