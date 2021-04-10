@@ -44,30 +44,34 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * type
   * trading_pair
 * Optional Parameters:
-  * amount
+  * amount_currency_to_trade
   * price
   * order_requirements_fullfilled
   * only_kyc_full
   * only_express_orders
+  * payment_option
+  * sepa_option
   * only_same_bankgroup
   * only_same_bic
   * seat_of_bank
+  * page_size
 
 *API Credits Cost: 2*
 
-#### createOrder(OrderType, trading_pair, max_amount, price, **args)
+#### createOrder(OrderType, trading_pair, max_amount_currency_to_trade, price, **args)
 * Required Parameters:
   * type
   * trading_pair
-* Optional Parameters:
-  * max_amount
+  * max_amount_currency_to_trade
   * price
-  * min_amount
+* Optional Parameters:
+  * min_amount_currency_to_trade
   * end_datetime
   * new_order_for_remaining_amount
   * min_trust_level
   * only_kyc_full
   * payment_option
+  * sepa_option
   * seat_of_bank
 
 *API Credits Cost: 1*
@@ -90,8 +94,9 @@ All mandatory parameters have to be passed to a function, all optional are resol
 
 *API Credits Cost: 2*
 
-#### showMyOrderDetails(order_id)
+#### showMyOrderDetails(trading_pair, order_id)
 * Required Parameters:
+  * trading_pair
   * order_id
 
 *API Credits Cost: 2*
@@ -101,7 +106,9 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * order_id
   * type
   * trading_pair
-  * amount
+  * amount_currency_to_trade
+* Optional Parameters:
+  * payment_option
 
 *API Credits Cost: 1*
 
@@ -110,15 +117,18 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * type
   * trading_pair
   * state
+  * only_trades_with_action_for_payment_or_transfer_required
+  * payment_method
   * date_start
   * date_end
   * page
 
 *API Credits Cost: 3*
 
-#### showMyTradeDetails(trade_id)
+#### showMyTradeDetails(trading_pair, trade_id)
 * Required Parameters:
   * trade_id
+  * trading_pair
 
 *API Credits Cost: 3*
 
