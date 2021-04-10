@@ -86,6 +86,13 @@ All mandatory parameters have to be passed to a function, all optional are resol
 
 *API Credits Cost: 2*
 
+#### showOrderDetails(trading_pair, order_id, **args)
+* Required Parameters:
+  * trading_pair
+  * order_id
+
+*API Credits Cost: 2*
+
 #### createOrder(OrderType, trading_pair, max_amount_currency_to_trade, price, **args)
 * Required Parameters:
   * type

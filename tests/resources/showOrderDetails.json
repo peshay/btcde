@@ -1,0 +1,66 @@
+{
+    "order":{
+        "order_id": "A1B2D3",
+        "trading_pair":"btceur",
+        "type": "buy",
+        "max_amount":0.5,
+        "min_amount":0.1,
+        "price":230.55,
+        "max_volume":115.28,
+        "min_volume":23.06,
+        "order_requirements":{
+            "min_trust_level":"gold",
+            "only_kyc_full":true,
+            "seat_of_bank":[
+                "DE",
+                "NL"
+            ],
+            "payment_option":1
+        },
+        "trading_partner_information":{
+            "username":"mustermann",
+            "is_kyc_full":true,
+            "trust_level":"gold",
+            "bank_name":"Sparkasse",
+            "bic":"HASPDEHHXXX",
+            "seat_of_bank":"DE",
+            "rating": 99,
+            "amount_trades": 52
+        },
+
+        "order_requirements_fullfilled":true,
+       "order_id":"82NW88",
+       "trading_pair":"btceur",
+       "is_external_wallet_order":false,
+       "type":"sell",
+       "max_amount_currency_to_trade":"0.015",
+       "min_amount_currency_to_trade":"0.015",
+       "price":8660,
+       "max_volume_currency_to_pay":129.9,
+       "min_volume_currency_to_pay":129.9,
+       "order_requirements":{
+          "min_trust_level":"bronze",
+          "only_kyc_full":true,
+          "seat_of_bank":[ "AT", "DE" ],
+          "payment_option":3
+       },
+       "trading_partner_information":{
+          "username":"MusterMann",
+          "is_kyc_full":true,
+          "trust_level":"gold",
+          "bank_name":"Fidor Bank",
+          "bic":"FDDODEMMXXX",
+          "seat_of_bank":"DE",
+          "amount_trades":90,
+          "rating":97
+       },
+       "order_requirements_fullfilled":true,
+       "sepa_option":0
+    },
+    "errors":[
+
+    ],
+    "credits":12,
+    "errors":[],
+    "credits":62
+ }
