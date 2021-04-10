@@ -360,3 +360,9 @@ class Connection(object):
         del params['currency']
         p = ParameterBuilder(avail_params, params, uri)
         return self.APIConnect('GET', p)
+
+    def showPermissions(self):
+        """Show permissions that are allowed for used API key"""
+        uri = f'{self.apibase}permissions'
+        p = ParameterBuilder({}, {}, uri)
+        return self.APIConnect('GET', p)

@@ -201,3 +201,7 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * page
 
 *API Credits Cost: 3*
+
+#### showPermissions()
+
+*API Credits Cost: 2*

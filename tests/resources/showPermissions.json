@@ -1,0 +1,10 @@
+{
+    "permissions": [
+        "showOrderbook",
+        "createOrder",
+        "executeTrade",
+        "showPermissions"
+     ],
+    "errors": [],
+    "credits": 5
+}
