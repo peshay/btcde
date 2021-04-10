@@ -219,6 +219,14 @@ class Connection(object):
         p = ParameterBuilder(avail_params, params, uri)
         return self.APIConnect('GET', p)
 
+    def showOrderDetails(self, trading_pair, order_id):
+        """Show details for an offer."""
+        uri = f'{self.apibase}{trading_pair}/orders/public/details/{order_id}'
+        params = {'trading_pair': trading_pair, 'order_id': order_id}
+        avail_params = ['trading_pair', 'order_id']
+        p = ParameterBuilder({}, {}, uri)
+        p.verify_keys_and_values(avail_params, params)
+        return self.APIConnect('GET', p)
 
     def createOrder(self, order_type, trading_pair, max_amount_currency_to_trade, price, **args):
         """Create a new Order."""

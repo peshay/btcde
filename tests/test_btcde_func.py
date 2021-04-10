@@ -175,6 +175,20 @@ class TestBtcdeAPIDocu(TestCase):
         self.assertEqual(history[0].url, base_url + url_args)
         self.assertTrue(mock_logger.debug.called)
 
+    def test_showOrderDetails(self, mock_logger, m):
+        '''Test function showOrderDetails.'''
+        params = {'trading_pair': 'btceur',
+                  'order_id': '1337'}
+        base_url = (f'https://api.bitcoin.de/v4/{params["trading_pair"]}'
+                   f'/orders/public/details/{params["order_id"]}')
+        response = self.sampleData('showOrderDetails')
+        m.get(requests_mock.ANY, json=response, status_code=200)
+        self.conn.showOrderDetails(params['trading_pair'], params['order_id'])
+        history = m.request_history
+        self.assertEqual(history[0].method, "GET")
+        self.assertEqual(history[0].url, base_url)
+        self.assertTrue(mock_logger.debug.called)
+
     def test_createOrder(self, mock_logger, m):
         '''Test function createOrder.'''
         trading_pair = 'btceur'
