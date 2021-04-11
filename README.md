@@ -15,11 +15,14 @@ Requires: requests
 
 You can install the btcde module via pip
 
-    pip install btcde
+```bash
+pip install btcde
+```
 
 ## How to Use
 
 This is an example how you can use it in a python script
+
 ```python
 #! /usr/bin/env python
 import btcde
@@ -28,18 +31,31 @@ api_key = <YourAPIKey>
 api_secret = <YourAPISecret>
 conn = btcde.Connection(api_key, api_secret)
 orderbook = conn.showOrderbook('buy', 'btceur')
-print('API Credits Left: ' + str(orderbook.get('credits')))
-orders = orderbook.get('orders')
+print(f'API Credits Left: {orderbook["credits"]}')
+orders = orderbook['orders']
 for order in orders:
-    print('Order ID: ' + str(order.get('order_id')) + '\tPrice: ' + str(order.get('price')) + ' EUR')
+    print(f'Order ID: {order["order_id"]} \tPrice: {order["price"]} EUR')
 ```
+
 ---
+
 ## API Methods
 
 For more Details on the API Methods, please read [bitcoin.de API Documentation](https://www.bitcoin.de/de/api/tapi/doc)
+
 All mandatory parameters have to be passed to a function, all optional are resolved via ```**args```
 
-#### addToAddressPool(currency, address, **args):
+Following Methodds are not yet implemented. If you like to get those implemented as well, please [join the development project for version 4.1](https://github.com/peshay/btcde/projects/5)
+
+* Functions for Withdrawal
+* Functions for Deposit
+* Crypto-to-Crypto trades
+* Websocket-API
+
+### Addresspool
+
+#### addToAddressPool(currency, address, **args)
+
 * Required Parameters:
   * currency
   * address
@@ -47,16 +63,18 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * amount_usages
   * comment
 
-*API Credits Cost: 2*
+*API Credits Cost:* 2
 
-#### removeFromAddressPool(currency, address):
+#### removeFromAddressPool(currency, address)
+
 * Required Parameters:
   * currency
   * address
 
-*API Credits Cost: 2*
+*API Credits Cost:* 2
 
-#### listAddressPool(currency):
+#### listAddressPool(currency)
+
 * Required Parameters:
   * currency
   * address
@@ -65,9 +83,12 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * comment
   * page
 
-*API Credits Cost: 2*
+*API Credits Cost:* 2
+
+### Orders
 
 #### showOrderbook(OrderType, trading_pair, **args)
+
 * Required Parameters:
   * type
   * trading_pair
@@ -84,16 +105,18 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * seat_of_bank
   * page_size
 
-*API Credits Cost: 2*
+*API Credits Cost:* 2
 
 #### showOrderDetails(trading_pair, order_id, **args)
+
 * Required Parameters:
   * trading_pair
   * order_id
 
-*API Credits Cost: 2*
+*API Credits Cost:* 2
 
 #### createOrder(OrderType, trading_pair, max_amount_currency_to_trade, price, **args)
+
 * Required Parameters:
   * type
   * trading_pair
@@ -109,16 +132,18 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * sepa_option
   * seat_of_bank
 
-*API Credits Cost: 1*
+*API Credits Cost:* 1
 
 #### deleteOrder(order_id, trading_pair)
+
 * Required Parameters:
   * order_id
   * trading_pair
 
-*API Credits Cost: 2*
+*API Credits Cost:* 2
 
 #### showMyOrders(**args)
+
 * Optional Parameters:
   * type
   * trading_pair
@@ -127,16 +152,20 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * date_end
   * page
 
-*API Credits Cost: 2*
+*API Credits Cost:* 2
 
 #### showMyOrderDetails(trading_pair, order_id)
+
 * Required Parameters:
   * trading_pair
   * order_id
 
-*API Credits Cost: 2*
+*API Credits Cost:* 2
+
+### Trades
 
 #### executeTrade(order_id, OrderType, trading_pair, amount)
+
 * Required Parameters:
   * order_id
   * type
@@ -145,9 +174,10 @@ All mandatory parameters have to be passed to a function, all optional are resol
 * Optional Parameters:
   * payment_option
 
-*API Credits Cost: 1*
+*API Credits Cost:* 1
 
 #### showMyTrades(**args)
+
 * Optional Parameters:
   * type
   * trading_pair
@@ -158,41 +188,48 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * date_end
   * page
 
-*API Credits Cost: 3*
+*API Credits Cost:* 3
 
 #### showMyTradeDetails(trading_pair, trade_id)
+
 * Required Parameters:
   * trade_id
   * trading_pair
 
-*API Credits Cost: 3*
+*API Credits Cost:* 3
+
+### miscellaneous
 
 #### markCoinsAsTransferred(trading_pair, trade_id, amount_currency_to_trade_after_fee)
+
 * Required Parameters:
   * trading_pair
   * trade_id
   * amount_currency_to_trade_after_fee
 
-*API Credits Cost: 1*
+*API Credits Cost:* 1
 
 #### markTradeAsPaid(trading_pair, trade_id, volume_currency_to_pay_after_fee)
+
 * Required Parameters:
   * trading_pair
   * trade_id
   * volume_currency_to_pay_after_fee
 
-*API Credits Cost: 1*
+*API Credits Cost:* 1
 
 #### markCoinsAsReceived(trading_pair, trade_id, amount_currency_to_trade_after_fee, rating)
+
 * Required Parameters:
   * trading_pair
   * trade_id
   * amount_currency_to_trade_after_fee
   * rating
 
-*API Credits Cost: 1*
+*API Credits Cost:* 1
 
 #### markTradeAsPaymentReceived(trading_pair, trade_id, volume_currency_to_pay_after_fee, rating, is_paid_from_correct_bank_account)
+
 * Required Parameters:
   * trading_pair
   * trade_id
@@ -200,40 +237,46 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * rating
   * is_paid_from_correct_bank_account
 
-*API Credits Cost: 1*
+*API Credits Cost:* 1
 
 #### addTradeRating(trading_pair, trade_id, rating)
+
 * Required Parameters:
   * trading_pair
   * trade_id
   * rating
 
-*API Credits Cost: 1*
+*API Credits Cost:* 1
+
 #### showAccountInfo()
 
-*API Credits Cost: 2*
+*API Credits Cost:* 2
 
 #### showOrderbookCompact(trading_pair)
+
 * Required Parameters:
   * trading_pair
 
-*API Credits Cost: 3*
+*API Credits Cost:* 3
 
 #### showPublicTradeHistory(trading_pair, **args)
+
 * Required Parameters:
   * trading_pair
 * Optional Parameters:
   * since_tid
 
-*API Credits Cost: 3*
+*API Credits Cost:* 3
 
 #### showRates(trading_pair)
+
 * Required Parameters:
   * trading_pair
 
-*API Credits Cost: 3*
+*API Credits Cost:* 3
 
 #### showAccountLedger(currency, **args)
+
 * Required Parameters:
   * currency
 * Optional Parameters:
@@ -242,8 +285,44 @@ All mandatory parameters have to be passed to a function, all optional are resol
   * datetime_end
   * page
 
-*API Credits Cost: 3*
+*API Credits Cost:* 3
 
 #### showPermissions()
 
-*API Credits Cost: 2*
+*API Credits Cost:* 2
+
+### Deposit
+
+#### requestDepositAddress
+
+Not yet implemented!
+
+#### showDeposit
+
+Not yet implemented!
+
+#### showDeposits
+
+Not yet implemented!
+
+### Withdrawal
+
+#### createWithdrawal
+
+Not yet implemented!
+
+### deleteWithdrawal
+
+Not yet implemented!
+
+#### showWithdrawal
+
+Not yet implemented!
+
+#### showWithdrawalMinNetworkFee
+
+Not yet implemented!
+
+#### showWithdrawals
+
+Not yet implemented!
