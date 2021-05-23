@@ -116,6 +116,7 @@ class Connection(object):
         self.apihost = 'https://api.bitcoin.de'
         self.apiversion = 'v4'
         self.apibase = f'{self.apihost}/{self.apiversion}/'
+        self.verify = True  # avoid warnings for ssl-cert
 
     def build_hmac_sign(self, md5string, method, url):
         hmac_data = '#'.join([method, url, self.api_key, str(self.nonce), md5string])
@@ -139,16 +140,18 @@ class Connection(object):
                   'X-API-SIGNATURE': hmac_signed }
         return header
 
-    def send_request(self, url, method, header, encoded_string):
+    def send_request(self, url, method, header, encoded_string, verify=None):
+        if not verify:
+            verify=self.verify
         if method == 'GET':
             r = requests.get(url, headers=(header),
-                             stream=True, verify=False)
+                             stream=True, verify=verify)
         elif method == 'POST':
             r = requests.post(url, headers=(header), data=encoded_string,
-                              stream=True, verify=False)
+                              stream=True, verify=verify)
         elif method == 'DELETE':
             r = requests.delete(url, headers=(header),
-                                stream=True, verify=False)
+                                stream=True, verify=verify)
         return r
 
     def APIConnect(self, method, params):
