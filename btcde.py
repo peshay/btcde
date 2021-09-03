@@ -18,7 +18,7 @@ logging.basicConfig()
 log = logging.getLogger(__name__)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.propagate = True
-
+ssl_verify = True
 __version__ = '4.0'
 
 class ParameterBuilder(object):
@@ -66,11 +66,11 @@ class ParameterBuilder(object):
             self.url = uri
 
 
-    TRADING_PAIRS = ['btceur', 'bcheur', 'etheur', 'btgeur', 'bsveur', 'ltceur',
-                     'iotabtc', 'dashbtc', 'gntbtc', 'ltcbtc']
+    TRADING_PAIRS = ['btceur', 'bcheur', 'etheur', 'btgeur', 'bsveur', 'ltceur', 'xrpeur', 'dogeeur',
+                     'iotabtc', 'dashbtc', 'gntbtc', 'ltcbtc', 'xrpbtc', 'dogebtc']
     ORDER_TYPES = ['buy', 'sell']
     CURRENCIES = ['btc', 'bch', 'eth', 'btg', 'bsv', 'ltc',
-                  'iota', 'dash', 'gnt']
+                  'iota', 'dash', 'gnt', 'xrp', 'doge']
     BANK_SEATS = ['AT', 'BE', 'BG', 'CH', 'CY', 'CZ',
                   'DE', 'DK', 'EE', 'ES', 'FI', 'FR',
                   'GB', 'GR', 'HR', 'HU', 'IE', 'IS',
@@ -142,13 +142,13 @@ class Connection(object):
     def send_request(self, url, method, header, encoded_string):
         if method == 'GET':
             r = requests.get(url, headers=(header),
-                             stream=True, verify=False)
+                             stream=True, verify=ssl_verify)
         elif method == 'POST':
             r = requests.post(url, headers=(header), data=encoded_string,
-                              stream=True, verify=False)
+                              stream=True, verify=ssl_verify)
         elif method == 'DELETE':
             r = requests.delete(url, headers=(header),
-                                stream=True, verify=False)
+                                stream=True, verify=ssl_verify)
         return r
 
     def APIConnect(self, method, params):
