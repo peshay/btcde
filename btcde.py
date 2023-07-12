@@ -67,10 +67,10 @@ class ParameterBuilder(object):
 
 
     TRADING_PAIRS = ['btceur', 'bcheur', 'etheur', 'btgeur', 'bsveur', 'ltceur',
-                     'iotabtc', 'dashbtc', 'gntbtc', 'ltcbtc']
+                     'iotabtc', 'dashbtc', 'gntbtc', 'ltcbtc', 'xrpeur']
     ORDER_TYPES = ['buy', 'sell']
     CURRENCIES = ['btc', 'bch', 'eth', 'btg', 'bsv', 'ltc',
-                  'iota', 'dash', 'gnt']
+                  'iota', 'dash', 'gnt', 'xrp']
     BANK_SEATS = ['AT', 'BE', 'BG', 'CH', 'CY', 'CZ',
                   'DE', 'DK', 'EE', 'ES', 'FI', 'FR',
                   'GB', 'GR', 'HR', 'HU', 'IE', 'IS',
