@@ -6,6 +6,9 @@ from mock import patch
 import json
 import btcde
 from decimal import Decimal
+from mock import patch
+from unittest.mock import patch
+
 
 from urllib.parse import urlencode
 
@@ -489,7 +492,7 @@ class TestBtcdeAPIDocu(TestCase):
         '''Test the allowed trading pairs.'''
         i = 0
         for pair in ['btceur', 'bcheur', 'etheur', 'btgeur', 'bsveur', 'ltceur',
-                     'iotabtc', 'dashbtc', 'gntbtc', 'ltcbtc', 'xrpeur' ]:
+                     'iotabtc', 'dashbtc', 'gntbtc', 'ltcbtc', 'xrpeur', 'usdteur', 'btcusdt', 'ethusdt' ]:
             params = {'trading_pair': pair}
             base_url = f'https://api.bitcoin.de/v4/{pair}/rates'
             response = self.sampleData('showRates')
@@ -505,7 +508,7 @@ class TestBtcdeAPIDocu(TestCase):
         '''Test the allowed currencies.'''
         i = 0
         for curr in ['btc', 'bch', 'eth', 'btg', 'bsv', 'ltc',
-                     'iota', 'dash', 'gnt', 'xrp']:
+                     'iota', 'dash', 'gnt', 'xrp', 'usdt']:
             base_url = f'https://api.bitcoin.de/v4/{curr}/account/ledger'
             url_args = '?currency={}'.format(curr)
             response = self.sampleData('showAccountLedger')
