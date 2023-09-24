@@ -53,7 +53,7 @@ class TestBtcdeAPIDocu(TestCase):
     def setUp(self):
         self.XAPIKEY = 'f00b4r'
         self.XAPISECRET = 'b4rf00'
-        self.conn = btcde.Connection(self.XAPIKEY, self.XAPISECRET)
+        self.conn = btcde.Connection(self.XAPIKEY, self.XAPISECRET, ssl_verify=True)
         self.XAPINONCE = self.conn.nonce
 
     def tearDown(self):
@@ -549,7 +549,7 @@ class TestBtcdeExceptions(TestCase):
     def setUp(self):
         self.XAPIKEY = 'f00b4r'
         self.XAPISECRET = 'b4rf00'
-        self.conn = btcde.Connection(self.XAPIKEY, self.XAPISECRET)
+        self.conn = btcde.Connection(self.XAPIKEY, self.XAPISECRET, ssl_verify=True)
         self.XAPINONCE = self.conn.nonce
 
     def tearDown(self):

@@ -107,7 +107,7 @@ def HandleAPIErrors(r):
 
 class Connection(object):
     """To provide connection credentials to the trading API"""
-    def __init__(self, api_key, api_secret):
+    def __init__(self, api_key, api_secret, ssl_verify=False):
         self.api_key = api_key
         self.api_secret = api_secret
         # set initial self.nonce
@@ -116,6 +116,7 @@ class Connection(object):
         self.apihost = 'https://api.bitcoin.de'
         self.apiversion = 'v4'
         self.apibase = f'{self.apihost}/{self.apiversion}/'
+        self.ssl_verify = ssl_verify # avoid warnings for ssl-cert
 
     def build_hmac_sign(self, md5string, method, url):
         hmac_data = '#'.join([method, url, self.api_key, str(self.nonce), md5string])
@@ -142,13 +143,13 @@ class Connection(object):
     def send_request(self, url, method, header, encoded_string):
         if method == 'GET':
             r = requests.get(url, headers=(header),
-                             stream=True, verify=False)
+                             stream=True, verify=self.ssl_verify)
         elif method == 'POST':
             r = requests.post(url, headers=(header), data=encoded_string,
-                              stream=True, verify=False)
+                              stream=True, verify=self.ssl_verify)
         elif method == 'DELETE':
             r = requests.delete(url, headers=(header),
-                                stream=True, verify=False)
+                                stream=True, verify=self.ssl_verify)
         return r
 
     def APIConnect(self, method, params):
