@@ -30,7 +30,8 @@ import btcde
 # create a object for the connection settings
 api_key = <YourAPIKey>
 api_secret = <YourAPISecret>
-conn = btcde.Connection(api_key, api_secret)
+# ssl_verify - Set to True or False to enable or disable SSL verification
+conn = btcde.Connection(api_key, api_secret, ssl_verify=True)
 orderbook = conn.showOrderbook('buy', 'btceur')
 print(f'API Credits Left: {orderbook["credits"]}')
 orders = orderbook['orders']
