@@ -1,2 +1,5 @@
 codecov
 requests_mock
+mock
+pytest-cov
+pytest
