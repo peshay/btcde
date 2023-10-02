@@ -19,7 +19,7 @@ log = logging.getLogger(__name__)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.propagate = True
 
-__version__ = '4.0'
+__version__ = '4.1'
 
 class ParameterBuilder(object):
     '''To verify given parameters for API.'''
