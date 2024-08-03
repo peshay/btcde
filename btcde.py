@@ -266,12 +266,14 @@ class Connection(object):
         p = ParameterBuilder({}, {}, uri)
         return self.APIConnect('GET', p)
 
-    def executeTrade(self, trading_pair, order_id, order_type, amount):
+    def executeTrade(self, trading_pair, order_id, order_type, amount, payment_option=2):
         """Buy/Sell on a specific Order."""
         uri = f'{self.apibase}{trading_pair}/trades/{order_id}'
         params = { 'type': order_type,
-                   'amount_currency_to_trade': amount}
-        avail_params = ['type', 'amount_currency_to_trade']
+                   'amount_currency_to_trade': amount,
+                   'payment_option': payment_option
+                 } 
+        avail_params = ['type', 'amount_currency_to_trade', 'payment_option']
         p = ParameterBuilder(avail_params, params, uri)
         return self.APIConnect('POST', p)
 
