@@ -252,7 +252,9 @@ class TestBtcdeAPIDocu(TestCase):
         trading_pair = 'btceur'
         order_id = '1337'
         params = {'amount_currency_to_trade': '10',
-                  'type': 'buy'}
+                  'payment_option' : 2,
+                  'type': 'buy',
+                  }
         base_url = f'https://api.bitcoin.de/v4/{trading_pair}/trades/{order_id}'
         url_args = '?' + urlencode(params)
         response = self.sampleData('minimal')
