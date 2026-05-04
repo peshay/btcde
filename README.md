@@ -2,7 +2,7 @@
 
 > Python SDK modernization for bitcoin.de with explicit separation between read-only surfaces and trading/write risk.
 
-[![Build Status](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/peshay/btcde/actions)
+[![CI](https://github.com/peshay/btcde/actions/workflows/ci.yml/badge.svg)](https://github.com/peshay/btcde/actions/workflows/ci.yml)
 [![Python version](https://img.shields.io/pypi/pyversions/btcde.svg)](https://pypi.python.org/pypi/btcde)
 [![license](https://img.shields.io/github/license/peshay/btcde.svg)](https://github.com/peshay/btcde/blob/master/LICENSE)
 
