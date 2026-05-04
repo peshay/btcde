@@ -3,14 +3,11 @@
 
 import requests
 import time
-import json
 import hmac
 import hashlib
 import logging
-import codecs
 import decimal
 import inspect
-import urllib
 
 from urllib.parse import urlencode
 
