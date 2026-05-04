@@ -1,12 +1,12 @@
+# btcde.py
+
+> Python SDK modernization for bitcoin.de with explicit separation between read-only surfaces and trading/write risk.
+
 [![Build Status](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/peshay/btcde/actions)
-[![Codecov](https://codecov.io/gh/peshay/btcde/branch/master/graph/badge.svg)](https://codecov.io/gh/peshay/btcde/branch/master)
-[![Scrutinizer](https://scrutinizer-ci.com/g/peshay/btcde/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/peshay/btcde/?branch=master)
 [![Python version](https://img.shields.io/pypi/pyversions/btcde.svg)](https://pypi.python.org/pypi/btcde)
 [![license](https://img.shields.io/github/license/peshay/btcde.svg)](https://github.com/peshay/btcde/blob/master/LICENSE)
 
-![example branch parameter](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master
-
-# btcde.py
+[![Support via bunq](https://img.shields.io/badge/Support-bunq-00A1E0?style=flat-square&logo=bunq&logoColor=white)](https://bunq.me/ahu)
 
 API Wrapper for [Bitcoin.de Trading API](https://www.bitcoin.de/de/api/tapi/doc)
 
@@ -328,3 +328,7 @@ Not yet implemented!
 #### showWithdrawals
 
 Not yet implemented!
+
+## Support
+
+Voluntary support helps fund ongoing freelance maintenance of this SDK. Support payments are appreciated but do not automatically create an entitlement to support, feature delivery, consulting, SLA, or invoice-based engagement.
