@@ -2,11 +2,9 @@ from unittest import TestCase
 import hashlib
 import hmac
 import requests_mock
-from mock import patch
 import json
 import btcde
 from decimal import Decimal
-from mock import patch
 from unittest.mock import patch
 
 
@@ -467,7 +465,7 @@ class TestBtcdeAPIDocu(TestCase):
 
     def test_showPermissions(self, mock_logger, m):
         '''Test function showPermissions.'''
-        base_url = f'https://api.bitcoin.de/v4/permissions'
+        base_url = 'https://api.bitcoin.de/v4/permissions'
         response = self.sampleData('showPermissions')
         m.get(requests_mock.ANY, json=response, status_code=200)
         self.conn.showPermissions()
@@ -484,7 +482,7 @@ class TestBtcdeAPIDocu(TestCase):
         url_args = '?' + urlencode(params)
         response = self.sampleData('showAccountLedger')
         m.get(requests_mock.ANY, json=response, status_code=200)
-        r = self.conn.showAccountLedger(currency, datetime_start="2018-01-01T01:00:00+01:00")
+        self.conn.showAccountLedger(currency, datetime_start="2018-01-01T01:00:00+01:00")
         history = m.request_history
         self.assertEqual(history[0].method, "GET")
         self.assertEqual(history[0].url, base_url + url_args)
@@ -512,7 +510,7 @@ class TestBtcdeAPIDocu(TestCase):
         for curr in ['btc', 'bch', 'eth', 'btg', 'bsv', 'ltc',
                      'iota', 'dash', 'gnt', 'xrp', 'usdt']:
             base_url = f'https://api.bitcoin.de/v4/{curr}/account/ledger'
-            url_args = '?currency={}'.format(curr)
+            '?currency={}'.format(curr)
             response = self.sampleData('showAccountLedger')
             m.get(requests_mock.ANY, json=response, status_code=200)
             self.conn.showAccountLedger(curr)
