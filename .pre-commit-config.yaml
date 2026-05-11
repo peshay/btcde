@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: public-artifact-hygiene
+        name: public artifact hygiene
+        entry: python tools/check_public_artifacts.py
+        language: python
+        pass_filenames: true
+        files: '(^|/)([^/]+[.](md|rst|txt|ya?ml|toml|ini|cfg|json)|MANIFEST|LICENSE)$'
