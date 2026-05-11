@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Check public-facing repository artifacts for unsafe disclosure patterns."""
-from __future__ import annotations
-
 import argparse
 import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from typing import List, Optional, Pattern, Tuple
 
 
 PUBLIC_SUFFIXES = {
@@ -38,10 +37,10 @@ SKIP_DIRS = {
 class Rule:
     code: str
     description: str
-    pattern: re.Pattern[str]
+    pattern: Pattern
 
 
-def _rx(value: str, flags: int = re.IGNORECASE) -> re.Pattern[str]:
+def _rx(value: str, flags: int = re.IGNORECASE) -> Pattern:
     return re.compile(value, flags)
 
 
@@ -102,8 +101,8 @@ def is_probably_binary(path: Path) -> bool:
     return b"\0" in chunk
 
 
-def public_artifact_paths(root: Path) -> list[Path]:
-    paths: list[Path] = []
+def public_artifact_paths(root: Path) -> List[Path]:
+    paths = []  # type: List[Path]
     for path in root.rglob("*"):
         if path.is_dir():
             continue
@@ -122,14 +121,14 @@ def should_scan(path: Path) -> bool:
     return path.suffix.lower() in PUBLIC_SUFFIXES or path.name in {"MANIFEST", "LICENSE"}
 
 
-def line_col(text: str, offset: int) -> tuple[int, int]:
+def line_col(text: str, offset: int) -> Tuple[int, int]:
     line = text.count("\n", 0, offset) + 1
     line_start = text.rfind("\n", 0, offset) + 1
     return line, offset - line_start + 1
 
 
-def check_text(label: str, text: str) -> list[str]:
-    failures: list[str] = []
+def check_text(label: str, text: str) -> List[str]:
+    failures = []  # type: List[str]
     for rule in RULES:
         for match in rule.pattern.finditer(text):
             line, col = line_col(text, match.start())
@@ -137,7 +136,7 @@ def check_text(label: str, text: str) -> list[str]:
     return failures
 
 
-def decode_path(path: Path) -> str | None:
+def decode_path(path: Path) -> Optional[str]:
     if is_probably_binary(path):
         return None
     try:
@@ -146,7 +145,7 @@ def decode_path(path: Path) -> str | None:
         return path.read_text(encoding="utf-8", errors="replace")
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(
         description="Check public-facing artifacts for local paths, prompts, secrets, and malformed escaped newlines."
     )
@@ -155,7 +154,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--label", default="<stdin>", help="Label to use with --stdin diagnostics.")
     args = parser.parse_args(argv)
 
-    failures: list[str] = []
+    failures = []  # type: List[str]
     if args.stdin:
         failures.extend(check_text(args.label, sys.stdin.read()))
     else:
