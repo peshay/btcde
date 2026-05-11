@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: public-artifact-hygiene
+        name: Public artifact hygiene guard
+        entry: python3 tools/check_public_artifacts.py
+        language: system
+        pass_filenames: true
+        types: [text]

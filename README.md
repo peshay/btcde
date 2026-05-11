@@ -20,6 +20,31 @@ You can install the btcde module via pip
 pip install btcde
 ```
 
+## Development artifact guard
+
+This repository uses pre-commit to keep public artifacts safe to publish.
+Install the hook once after cloning:
+
+```sh
+python3 -m pip install pre-commit
+pre-commit install --install-hooks
+```
+
+Run the full check locally before opening a PR:
+
+```sh
+pre-commit run --all-files
+```
+
+If it reports a problem, fix the file it names and rerun the same command.
+For one file, you can also run:
+
+```sh
+pre-commit run public-artifact-hygiene --files path/to/file
+```
+
+The guard blocks accidental literal backslash-n text where real line breaks belong, local machine paths, and obvious secret or auth-token values. Replace real values with placeholders or environment-variable references before publishing.
+
 ## How to Use
 
 This is an example how you can use it in a python script
