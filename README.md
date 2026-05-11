@@ -12,6 +12,10 @@ API Wrapper for [Bitcoin.de Trading API](https://www.bitcoin.de/de/api/tapi/doc)
 
 Requires: requests
 
+## Contributor checks
+
+Before publishing pull request text, comments, commit messages, or docs, run the [public artifact hygiene guard](docs/public-artifact-hygiene.md). It is available through pre-commit and runs in CI.
+
 ## Install btcde.py
 
 You can install the btcde module via pip
