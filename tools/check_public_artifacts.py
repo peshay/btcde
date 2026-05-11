@@ -58,7 +58,7 @@ RULES = [
     Rule(
         "local-user-path",
         "local workstation path",
-        _rx(r"(?:/Users/[A-Za-z0-9_.-]+\b|/mnt/data\b|C:\\\\Users\\\\[A-Za-z0-9_.-]+)"),
+        _rx(r"(?:/Users/[A-Za-z0-9_.-]+\b|/mnt/data\b|C:\\Users\\[A-Za-z0-9_.-]+)"),
     ),
     Rule(
         "prompt-leakage",
