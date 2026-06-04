@@ -6,7 +6,7 @@ The `master` branch and the latest release on PyPI are the actively supported li
 ## Reporting a Vulnerability
 Please do not open public issues for security vulnerabilities.
 
-Report privately to the maintainer and include:
+Report privately by email to security@ahu.services and include:
 - affected component or function
 - impact and attack scenario
 - reproduction steps
