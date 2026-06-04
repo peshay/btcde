@@ -334,6 +334,13 @@ Not yet implemented!
 
 Not yet implemented!
 
+## Governance
+
+- Contribution guide: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Security policy: [SECURITY.md](SECURITY.md)
+- AI-agent guide: [AGENTS.md](AGENTS.md)
+- License: [LICENSE](LICENSE)
+
 ## Support
 
 If this Python SDK is useful to you, you can [support its ongoing maintenance via bunq](https://bunq.me/ahuservices?description=btcde-maintenance-support). Support is voluntary and appreciated, but does not create any entitlement to support, features, consulting, an SLA, or invoice-based work.
