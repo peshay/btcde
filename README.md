@@ -3,10 +3,11 @@
 > Python SDK modernization for bitcoin.de with explicit separation between read-only surfaces and trading/write risk.
 
 [![CI](https://github.com/peshay/btcde/actions/workflows/ci.yml/badge.svg)](https://github.com/peshay/btcde/actions/workflows/ci.yml)
-[![Python version](https://img.shields.io/pypi/pyversions/btcde.svg)](https://pypi.python.org/pypi/btcde)
-[![license](https://img.shields.io/github/license/peshay/btcde.svg)](https://github.com/peshay/btcde/blob/master/LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/btcde)](https://pypi.org/project/btcde/)
+[![Python version](https://img.shields.io/pypi/pyversions/btcde)](https://pypi.org/project/btcde/)
+[![License](https://img.shields.io/github/license/peshay/btcde)](LICENSE)
 
-[![Support via bunq](https://img.shields.io/badge/Support-bunq-00A1E0?style=flat-square&logo=bunq&logoColor=white)](https://bunq.me/ahu)
+[![Support via bunq](https://img.shields.io/badge/Support-bunq-00A1E0?style=flat-square&logo=bunq&logoColor=white)](https://bunq.me/ahuservices?description=btcde-maintenance-support)
 
 API Wrapper for [Bitcoin.de Trading API](https://www.bitcoin.de/de/api/tapi/doc)
 
@@ -333,6 +334,13 @@ Not yet implemented!
 
 Not yet implemented!
 
+## Governance
+
+- Contribution guide: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Security policy: [SECURITY.md](SECURITY.md)
+- AI-agent guide: [AGENTS.md](AGENTS.md)
+- License: [LICENSE](LICENSE)
+
 ## Support
 
-Voluntary support helps fund ongoing freelance maintenance of this SDK. Support payments are appreciated but do not automatically create an entitlement to support, feature delivery, consulting, SLA, or invoice-based engagement.
+If this Python SDK is useful to you, you can [support its ongoing maintenance via bunq](https://bunq.me/ahuservices?description=btcde-maintenance-support). Support is voluntary and appreciated, but does not create any entitlement to support, features, consulting, an SLA, or invoice-based work.
