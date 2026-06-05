@@ -3,6 +3,8 @@
 > Python SDK modernization for bitcoin.de with explicit separation between read-only surfaces and trading/write risk.
 
 [![CI](https://github.com/peshay/btcde/actions/workflows/ci.yml/badge.svg)](https://github.com/peshay/btcde/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=peshay_btcde&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=peshay_btcde)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=peshay_btcde&metric=coverage)](https://sonarcloud.io/summary/new_code?id=peshay_btcde)
 [![PyPI version](https://img.shields.io/pypi/v/btcde)](https://pypi.org/project/btcde/)
 [![Python version](https://img.shields.io/pypi/pyversions/btcde)](https://pypi.org/project/btcde/)
 [![License](https://img.shields.io/github/license/peshay/btcde)](LICENSE)
