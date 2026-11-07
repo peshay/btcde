@@ -46,6 +46,27 @@ for order in orders:
     print(f'Order ID: {order["order_id"]} \tPrice: {order["price"]} EUR')
 ```
 
+### Handling API errors
+
+By default, API error responses are logged and return an empty dictionary. Set
+`raise_api_errors=True` to raise `btcde.APIError` so your application can handle
+errors such as insufficient API credits:
+
+```python
+conn = btcde.Connection(api_key, api_secret, ssl_verify=True, raise_api_errors=True)
+try:
+    rates = conn.showRates('btceur')
+except btcde.APIError as error:
+    for detail in error.errors:
+        print(detail['code'], detail['message'])
+    print(error.response.status_code)
+    print(error.response.headers.get('Retry-After'))
+```
+
+`error.errors` contains the complete API error list, and `error.response` is the
+original `requests.Response`. The option applies to server-reported API errors;
+transport failures retain their existing logging and empty-dictionary behavior.
+
 ---
 
 ## API Methods

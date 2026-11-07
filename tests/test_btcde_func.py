@@ -589,7 +589,9 @@ class TestBtcdeExceptions(TestCase):
         self.assertEqual(history[0].url, base_url + url_args)
 
     @patch('btcde.log')
-    def test_RequestException(self, mock_logger):
+    @patch('btcde.Connection.send_request',
+           side_effect=btcde.requests.exceptions.ConnectionError('fixture connection error'))
+    def test_RequestException(self, mock_send, mock_logger):
         '''Test Requests Exception.'''
         params = {'type': 'buy',
                   'trading_pair': 'btceur',
@@ -599,6 +601,7 @@ class TestBtcdeExceptions(TestCase):
         self.conn.createOrder(params.get('type'),
                               params.get('trading_pair'), params.get('max_amount'),
                               price=params.get('price'))
+        mock_send.assert_called_once()
         self.assertTrue(mock_logger.warning.called)
 
     def test_TradingPairValueException(self):

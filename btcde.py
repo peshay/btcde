@@ -89,12 +89,23 @@ def HandleRequestsException(e):
     log.warning(e)
 
 
-def HandleAPIErrors(r):
+class APIError(Exception):
+    """An API error response, including its error list and HTTP response."""
+    def __init__(self, response, errors):
+        self.response = response
+        self.errors = errors
+        message = '; '.join(f"{error['code']}: {error['message']}" for error in errors)
+        super().__init__(message)
+
+
+def HandleAPIErrors(r, raise_api_errors=False):
     """To handle Errors from BTCDE API."""
     valid_status_codes = [200, 201, 204]
     if r.status_code not in valid_status_codes:
         content = r.json()
         errors = content.get('errors')
+        if raise_api_errors:
+            raise APIError(r, errors)
         log.warning('API Error Code: {}'.format(str(errors[0]['code'])))
         log.warning('API Error Message: {}'.format(errors[0]['message']))
         log.warning('API Error URL: {}'.format(r.url))
@@ -104,7 +115,7 @@ def HandleAPIErrors(r):
 
 class Connection(object):
     """To provide connection credentials to the trading API"""
-    def __init__(self, api_key, api_secret, ssl_verify=False):
+    def __init__(self, api_key, api_secret, ssl_verify=False, raise_api_errors=False):
         self.api_key = api_key
         self.api_secret = api_secret
         # set initial self.nonce
@@ -114,6 +125,7 @@ class Connection(object):
         self.apiversion = 'v4'
         self.apibase = f'{self.apihost}/{self.apiversion}/'
         self.ssl_verify = ssl_verify # avoid warnings for ssl-cert
+        self.raise_api_errors = raise_api_errors
 
     def build_hmac_sign(self, md5string, method, url):
         hmac_data = '#'.join([method, url, self.api_key, str(self.nonce), md5string])
@@ -158,7 +170,7 @@ class Connection(object):
             r = self.send_request(params.url, method, header,
                                   params.encoded_string)
             # Handle API Errors
-            if HandleAPIErrors(r):
+            if HandleAPIErrors(r, raise_api_errors=self.raise_api_errors):
                 # get results
                 result = r.json(parse_float=decimal.Decimal)
             else:
